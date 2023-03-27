@@ -1,5 +1,5 @@
 
-<p> 
+<p align="center">
 <img src="https://papik.pro/uploads/posts/2023-01/1674153837_papik-pro-p-lapa-sobaki-risunok-5.png" width="200" alt="Shelter Logo">
 </p>
 
