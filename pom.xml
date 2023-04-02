@@ -28,10 +28,11 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.github.pengrad/java-telegram-bot-api -->
         <dependency>
-            <groupId>com.gitHub.pengrad</groupId>
+            <groupId>com.github.pengrad</groupId>
             <artifactId>java-telegram-bot-api</artifactId>
-            <version>6.0.1</version>
+            <version>6.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -59,20 +60,20 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.8.2</version>
+            <version>5.9.2</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots</artifactId>
-            <version>6.0.1</version>
+            <version>6.5.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.6.8</version>
+            <version>1.6.15</version>
         </dependency>
     </dependencies>
 
