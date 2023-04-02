@@ -4,25 +4,19 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "client")
-public class User {
+@Table(name = "client_dog")
+public class ClientDog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "name")
     private String name;
 
-    @Column(name = "middle_name")
-    private String middleName;
-
-    @Column(name = "last_name")
-    private String lastName;
-
-    @Column(name = "user_name")
-    private String userName;
+    @Column(name = "chat_id")
+    private Integer chatId;
 
     @Column(name = "phone_number")
     private String phoneNumber;
@@ -30,14 +24,23 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    public User() {
+    @Column(name = "year_of_birth")
+    private Integer yearOfBirth;
+
+    @Column(name = "dog_id")
+    private Integer dogId;
+
+    @Column(name = "status")
+    private String status;
+
+    public ClientDog() {
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -49,28 +52,12 @@ public class User {
         this.name = name;
     }
 
-    public String getMiddleName() {
-        return middleName;
+    public Integer getChatId() {
+        return chatId;
     }
 
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setChatId(Integer chatId) {
+        this.chatId = chatId;
     }
 
     public String getPhoneNumber() {
@@ -89,12 +76,36 @@ public class User {
         this.email = email;
     }
 
+    public Integer getYearOfBirth() {
+        return yearOfBirth;
+    }
+
+    public void setYearOfBirth(Integer yearOfBirth) {
+        this.yearOfBirth = yearOfBirth;
+    }
+
+    public Integer getDogId() {
+        return dogId;
+    }
+
+    public void setDogId(Integer dogId) {
+        this.dogId = dogId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id);
+        ClientDog clientDog = (ClientDog) o;
+        return Objects.equals(id, clientDog.id);
     }
 
     @Override

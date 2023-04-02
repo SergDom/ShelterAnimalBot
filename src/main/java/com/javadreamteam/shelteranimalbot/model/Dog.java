@@ -4,16 +4,19 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "pet")
-public class Pet {
+@Table(name = "dog")
+public class Dog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "name")
     private String name;
+
+    @Column(name = "bread")
+    private String breed;
 
     @Column(name = "age")
     private Integer age;
@@ -21,14 +24,14 @@ public class Pet {
     @Column(name = "info")
     private String info;
 
-    public Pet() {
+    public Dog() {
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -38,6 +41,14 @@ public class Pet {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getBreed() {
+        return breed;
+    }
+
+    public void setBreed(String breed) {
+        this.breed = breed;
     }
 
     public Integer getAge() {
@@ -60,8 +71,8 @@ public class Pet {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Pet pet = (Pet) o;
-        return Objects.equals(id, pet.id);
+        Dog dog = (Dog) o;
+        return Objects.equals(id, dog.id);
     }
 
     @Override
