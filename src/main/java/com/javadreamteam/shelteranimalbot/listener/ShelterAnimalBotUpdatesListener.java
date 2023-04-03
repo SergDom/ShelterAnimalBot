@@ -1,5 +1,8 @@
 package com.javadreamteam.shelteranimalbot.listener;
 
+import static com.javadreamteam.shelteranimalbot.keyboard.KeyboardConstant.*;
+
+import com.javadreamteam.shelteranimalbot.keyboard.KeyboardConstant;
 import com.javadreamteam.shelteranimalbot.keyboard.KeyboardShelter;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
@@ -9,43 +12,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 
+
 @Service
 public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
     private static final Logger logger = LoggerFactory.getLogger(ShelterAnimalBotUpdatesListener.class);
-
-    private static final String START = "/start";
-
-    private static final String WELCOME = ", Приветствую! Выберете нужный пункт меню!";
-
-    private static final String INFO_ABOUT_BOT = "Информация о возможностях бота \n- Бот может показать информацию о приюте \n" +
-            "- Покажет какие документы нужны \n- Бот может принимать ежедневный отчет о питомце\n" +
-            "- Может передать контактные данные волонтерам для связи \n" + "";
-
-    private static final String SHELTER_ABOUT = "Информация о приюте: ...";
-
-    private static final String SHELTER_CONTACTS = "Адрес приюта: ...";
-
-    private static final String SHELTER_RULES = "Правила поведения в приюте: ...";
-
-    private static final String CALL_VOLUNTEERS = "Волонтер вам поможет: ...";
-
-    private static final String HOW_TAKE_A_PET = "Как взять питомца: ...";
-
 
     private final TelegramBot telegramBot;
 
     private final KeyboardShelter keyboardShelter;
 
+
     public ShelterAnimalBotUpdatesListener(TelegramBot telegramBot, KeyboardShelter keyboardShelter) {
         this.telegramBot = telegramBot;
         this.keyboardShelter = keyboardShelter;
-
     }
 
     @PostConstruct
@@ -68,7 +52,7 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                     sendMessage(chatId, nameUser + WELCOME);
                     keyboardShelter.sendMenu(chatId);
                     break;
-
+// Главное меню
                 case "Информация о боте":
                     sendMessage(chatId, INFO_ABOUT_BOT);
                     break;
@@ -81,7 +65,7 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                         throw new RuntimeException(e);
                     }
                     break;
-
+// Меню о приюте
                 case "Контакты":
                     sendMessage(chatId, SHELTER_CONTACTS);
                     break;
@@ -93,7 +77,7 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                         throw new RuntimeException(e);
                     }
                     break;
-
+// Меню как взять питомца
                 case "Как взять питомца":
                     keyboardShelter.menuTakeAnimal(chatId);
                     break;
@@ -103,10 +87,34 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                     keyboardShelter.menuAdviseAnimal(chatId);
                     break;
 
+                case "Документы":
+                    sendMessage(chatId, DOCUMENTS);
+                    break;
+                case "Причины отказа":
+                    sendMessage(chatId, REFUSE);
+                    break;
+                case "Транспортировка":
+                    sendMessage(chatId, TRANSPORT);
+                    break;
+                case "Кинологи":
+                    sendMessage(chatId, CYNOLOGIST);
+                    break;
+                case "Кинологи дома":
+                    sendMessage(chatId, CYNOLOGIST_HOME);
+                    break;
+                case "Щенок":
+                    sendMessage(chatId, PUPPY);
+                    break;
+                case "Взрослый":
+                    sendMessage(chatId, ADULT);
+                    break;
+                case "С ограничениями":
+                    sendMessage(chatId, DISABLE_PET);
+                    break;
+// Общие кнопки
                 case "Позвать волонтера":
                     sendMessage(chatId, CALL_VOLUNTEERS);
                     break;
-
 
                 case "Вернуться в меню":
                     keyboardShelter.sendMenu(chatId);
