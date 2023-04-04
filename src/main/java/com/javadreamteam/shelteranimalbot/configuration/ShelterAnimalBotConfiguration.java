@@ -12,7 +12,7 @@ public class ShelterAnimalBotConfiguration {
     private String token;
 
     @Bean
-    public TelegramBot animalShelterBot() {
+    public TelegramBot telegramBot() {
         TelegramBot bot = new TelegramBot(token);
         bot.execute(new DeleteMyCommands());
         return bot;
