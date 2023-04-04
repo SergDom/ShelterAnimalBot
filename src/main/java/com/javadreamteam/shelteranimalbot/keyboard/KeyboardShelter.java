@@ -71,6 +71,9 @@ public class KeyboardShelter {
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(
                 new KeyboardButton("Советы и рекомендации"));
         replyKeyboardMarkup.addRow(
+                new KeyboardButton("Документы"),
+                new KeyboardButton("Причины отказа"));
+        replyKeyboardMarkup.addRow(
                 new KeyboardButton("Оставить контакты").requestContact(true),
                 new KeyboardButton("Позвать волонтера"));
         replyKeyboardMarkup.addRow(new KeyboardButton("Вернуться в меню"));
@@ -84,9 +87,6 @@ public class KeyboardShelter {
     public void menuAdviseAnimal(long chatId) {
         logger.info("Method menuAdviseAnimal has been run: {}, {}", chatId, "вызвали Советы и рекомендации");
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(
-                new KeyboardButton("Документы"),
-                new KeyboardButton("Причины отказа"));
-        replyKeyboardMarkup.addRow(
                 new KeyboardButton("Транспортировка"),
                 new KeyboardButton("Кинологи"),
                 new KeyboardButton("Кинологи дома"));

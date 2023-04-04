@@ -45,103 +45,108 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
             String textUpdate = update.message().text();
             Integer messageId = update.message().messageId();
             long chatId = update.message().chat().id();
+            try {
 
-            switch (textUpdate) {
+                switch (textUpdate) {
 
-                case START:
-                    sendMessage(chatId, nameUser + WELCOME);
-                    keyboardShelter.sendMenu(chatId);
-                    break;
+                    case START:
+                        sendMessage(chatId, nameUser + WELCOME);
+                        keyboardShelter.sendMenu(chatId);
+                        break;
 // Главное меню
-                case "Информация о боте":
-                    sendMessage(chatId, INFO_ABOUT_BOT);
-                    break;
+                    case "Информация о боте":
+                        sendMessage(chatId, INFO_ABOUT_BOT);
+                        break;
 
-                case "Информация о приюте":
-                    keyboardShelter.menuInfoShelter(chatId);
-                    try {
-                        keyboardShelter.sendPhoto(chatId, "/static/SHELTER_LOGO.png", SHELTER_ABOUT);
-                    } catch (URISyntaxException | IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    break;
+                    case "Информация о приюте":
+                        keyboardShelter.menuInfoShelter(chatId);
+                        try {
+                            keyboardShelter.sendPhoto(chatId, "/static/SHELTER_LOGO.png", SHELTER_ABOUT);
+                        } catch (URISyntaxException | IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        break;
 // Меню о приюте
-                case "Контакты":
-                    sendMessage(chatId, SHELTER_CONTACTS);
-                    break;
+                    case "Контакты":
+                        sendMessage(chatId, SHELTER_CONTACTS);
+                        break;
 
-                case "Правила поведения":
-                    try {
-                        keyboardShelter.sendPhoto(chatId, "/static/SHELTER_RULES.png", SHELTER_RULES);
-                    } catch (URISyntaxException | IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    break;
+                    case "Правила поведения":
+                        try {
+                            keyboardShelter.sendPhoto(chatId, "/static/SHELTER_RULES.png", SHELTER_RULES);
+                        } catch (URISyntaxException | IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        break;
 // Меню как взять питомца
-                case "Как взять питомца":
-                    keyboardShelter.menuTakeAnimal(chatId);
-                    break;
+                    case "Как взять питомца":
+                        keyboardShelter.menuTakeAnimal(chatId);
+                        break;
 
-                case "Советы и рекомендации":
-                    sendMessage(chatId, nameUser + WELCOME);
-                    keyboardShelter.menuAdviseAnimal(chatId);
-                    break;
+                    case "Советы и рекомендации":
+                        sendMessage(chatId, nameUser + WELCOME);
+                        keyboardShelter.menuAdviseAnimal(chatId);
+                        break;
 
-                case "Документы":
-                    sendMessage(chatId, DOCUMENTS);
-                    break;
-                case "Причины отказа":
-                    sendMessage(chatId, REFUSE);
-                    break;
-                case "Транспортировка":
-                    sendMessage(chatId, TRANSPORT);
-                    break;
-                case "Кинологи":
-                    sendMessage(chatId, CYNOLOGIST);
-                    break;
-                case "Кинологи дома":
-                    sendMessage(chatId, CYNOLOGIST_HOME);
-                    break;
-                case "Щенок":
-                    sendMessage(chatId, PUPPY);
-                    break;
-                case "Взрослый":
-                    sendMessage(chatId, ADULT);
-                    break;
-                case "С ограничениями":
-                    sendMessage(chatId, DISABLE_PET);
-                    break;
+                    case "Документы":
+                        sendMessage(chatId, DOCUMENTS);
+                        break;
+                    case "Причины отказа":
+                        sendMessage(chatId, REFUSE);
+                        break;
+                    case "Транспортировка":
+                        sendMessage(chatId, TRANSPORT);
+                        break;
+                    case "Кинологи":
+                        sendMessage(chatId, CYNOLOGIST);
+                        break;
+                    case "Кинологи дома":
+                        sendMessage(chatId, CYNOLOGIST_HOME);
+                        break;
+                    case "Щенок":
+                        sendMessage(chatId, PUPPY);
+                        break;
+                    case "Взрослый":
+                        sendMessage(chatId, ADULT);
+                        break;
+                    case "С ограничениями":
+                        sendMessage(chatId, DISABLE_PET);
+                        break;
 // Общие кнопки
-                case "Позвать волонтера":
-                    sendMessage(chatId, CALL_VOLUNTEERS);
-                    break;
+                    case "Позвать волонтера":
+                        sendMessage(chatId, CALL_VOLUNTEERS);
+                        break;
 
-                case "Вернуться в меню":
-                    keyboardShelter.sendMenu(chatId);
-                    break;
+                    case "Вернуться в меню":
+                        keyboardShelter.sendMenu(chatId);
+                        break;
 
-                case "":
-                    System.out.println("Нельзя");
-                    sendMessage(chatId, "Пустое сообщение");
-                    break;
+                    case "":
+                        System.out.println("Нельзя");
+                        sendMessage(chatId, "Пустое сообщение");
+                        break;
 
-                default:
-                    sendReplyMessage(chatId, "Я не знаю такой команды", messageId);
-                    break;
+                    default:
+                        sendReplyMessage(chatId, "Я не знаю такой команды", messageId);
+                        break;
+                }
             }
-        });
-        return UpdatesListener.CONFIRMED_UPDATES_ALL;
-    }
+            catch (Exception e) {
+                logger.error((e.getMessage()), e);
+            }
+            });
+            return UpdatesListener.CONFIRMED_UPDATES_ALL;
+        }
 
 
-    public void sendReplyMessage(Long chatId, String messageText, Integer messageId) {
-        SendMessage sendMessage = new SendMessage(chatId, messageText);
-        sendMessage.replyToMessageId(messageId);
-        telegramBot.execute(sendMessage);
-    }
+        public void sendReplyMessage (Long chatId, String messageText, Integer messageId){
+            SendMessage sendMessage = new SendMessage(chatId, messageText);
+            sendMessage.replyToMessageId(messageId);
+            telegramBot.execute(sendMessage);
+        }
 
-    public void sendMessage(long chatId, String text) {
-        SendMessage message = new SendMessage(chatId, text);
-        telegramBot.execute(message);
+        public void sendMessage ( long chatId, String text){
+            SendMessage message = new SendMessage(chatId, text);
+            telegramBot.execute(message);
+        }
     }
-}

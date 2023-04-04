@@ -15,7 +15,7 @@ public class Dog {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "bread")
+    @Column(name = "breed")
     private String breed;
 
     @Column(name = "age")
@@ -78,5 +78,16 @@ public class Dog {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Dog{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", breed='" + breed + '\'' +
+                ", age=" + age +
+                ", info='" + info + '\'' +
+                '}';
     }
 }

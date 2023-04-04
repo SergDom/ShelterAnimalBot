@@ -27,11 +27,12 @@ public class ClientDog {
     @Column(name = "year_of_birth")
     private Integer yearOfBirth;
 
-    @Column(name = "dog_id")
-    private Integer dogId;
-
     @Column(name = "status")
     private String status;
+
+    @OneToOne
+    @JoinColumn(name = "dog_id")
+    private Dog dog;
 
     public ClientDog() {
     }
@@ -84,14 +85,6 @@ public class ClientDog {
         this.yearOfBirth = yearOfBirth;
     }
 
-    public Integer getDogId() {
-        return dogId;
-    }
-
-    public void setDogId(Integer dogId) {
-        this.dogId = dogId;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -111,5 +104,19 @@ public class ClientDog {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "ClientDog{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", chatId=" + chatId +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", yearOfBirth=" + yearOfBirth +
+                ", status='" + status + '\'' +
+                ", dog=" + dog +
+                '}';
     }
 }
