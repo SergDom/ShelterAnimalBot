@@ -20,7 +20,7 @@ public class Probation {
     private Animal animal;
 
     @ManyToOne
-    private Adopter adopter;
+    private Client client;
 
     @OneToMany
     private List<Report> reports;
@@ -68,12 +68,12 @@ public class Probation {
         this.animal = animal;
     }
 
-    public Adopter getAdopter() {
-        return adopter;
+    public Client getAdopter() {
+        return client;
     }
 
-    public void setAdopter(Adopter adopter) {
-        this.adopter = adopter;
+    public void setAdopter(Client client) {
+        this.client = client;
     }
 
     public List<Report> getReports() {
@@ -91,12 +91,12 @@ public class Probation {
         Probation probation = (Probation) o;
         return Successful == probation.Successful && needToSentVolunteersComment == probation.needToSentVolunteersComment
                 && Objects.equals(finish, probation.finish) && Objects.equals(volunteersComment, probation.volunteersComment)
-                && Objects.equals(animal, probation.animal) && Objects.equals(adopter, probation.adopter)
+                && Objects.equals(animal, probation.animal) && Objects.equals(client, probation.client)
                 && Objects.equals(reports, probation.reports);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(finish, Successful, volunteersComment, needToSentVolunteersComment, animal, adopter, reports);
+        return Objects.hash(finish, Successful, volunteersComment, needToSentVolunteersComment, animal, client, reports);
     }
 }
