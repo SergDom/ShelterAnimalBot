@@ -50,7 +50,7 @@ public class ClientDogService {
         return repository.findAll();
     }
 
-    public Collection<ClientDog> getByChatId(Long chatId) {
+    public ClientDog getByChatId(Long chatId) {
         logger.info("Was invoked method to get a Client with dog by chatId={}", chatId);
         return repository.findByChatId(chatId);
     }

@@ -8,5 +8,7 @@ import java.util.Set;
 
 @Repository
 public interface ClientDogRepository extends JpaRepository <ClientDog, Long> {
-    Set<ClientDog> findByChatId(Long chatId);
+
+    ClientDog findByChatId(Long chatId);
+
 }
