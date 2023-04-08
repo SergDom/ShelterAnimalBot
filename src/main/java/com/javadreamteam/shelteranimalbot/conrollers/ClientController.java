@@ -1,6 +1,7 @@
 package com.javadreamteam.shelteranimalbot.conrollers;
 import com.javadreamteam.shelteranimalbot.model.Client;
-import com.javadreamteam.shelteranimalbot.service.ClientService;
+import com.javadreamteam.shelteranimalbot.model.ClientDog;
+import com.javadreamteam.shelteranimalbot.service.ClientDogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,11 +14,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("clients")
 public class ClientController {
-    public ClientController(ClientService clientService) {
-        this.clientService = clientService;
+    public ClientController(ClientDogService clientDogService) {
+        this.clientDogService = clientDogService;
     }
 
-    private final ClientService clientService;
+    private final ClientDogService clientDogService;
 
     @Operation(
             summary = "Создание владельца животного",
@@ -43,8 +44,8 @@ public class ClientController {
             }
     )
     @PostMapping
-    public ResponseEntity<Client> createCustomer(@RequestBody Client client) {
-        return ResponseEntity.ok(clientService.create(client));
+    public ResponseEntity<ClientDog> createCustomer(@RequestBody ClientDog clientDog) {
+        return ResponseEntity.ok(clientDogService.create(clientDog));
     }
 
     @Operation(
@@ -72,9 +73,9 @@ public class ClientController {
             }
     )
     @PutMapping
-    public ResponseEntity<Client> updateClient(@RequestBody Client client) {
+    public ResponseEntity<ClientDog> updateClient(@RequestBody ClientDog clientDog) {
 
-        Client updatedClient = clientService.update(client);
+        ClientDog updatedClient = clientDogService.update(clientDog);
         if (updatedClient == null) {
             return ResponseEntity.notFound().build();
         }
@@ -91,11 +92,11 @@ public class ClientController {
             }
     )
     @DeleteMapping("{ClientId}")
-    public ResponseEntity<Client> deleteClient(
+    public ResponseEntity<ClientDog> deleteClient(
             @Parameter(description = "id удаляемого владельца животного")
             @PathVariable long clientId) {
 
-        clientService.removeById(clientId);
+        clientDogService.removeById(clientId);
         return ResponseEntity.ok().build();
     }
 
@@ -119,22 +120,22 @@ public class ClientController {
             }
     )
     @GetMapping("{ClientId}")
-    public ResponseEntity<Client> findClient(
+    public ResponseEntity<ClientDog> findClient(
             @Parameter(description = "Идентификатор владельца животного", example = "1")
             @PathVariable Long ClientId) {
 
-        Client client = clientService.getById(ClientId);
-        if (client == null) {
+        ClientDog clientDog = clientDogService.getById(ClientId);
+        if (clientDog == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(client);
+        return ResponseEntity.ok(clientDog);
     }
     @GetMapping("/find-all-records")
     public ResponseEntity getClientsList() {
-        return ResponseEntity.ok(clientService.getAll());
+        return ResponseEntity.ok(clientDogService.getAll());
     }
     @GetMapping("/find--client-by-chatId")
     public ResponseEntity getClientByName(@RequestParam Long chatId) {
-        return ResponseEntity.ok(clientService.getByChatId(chatId));
+        return ResponseEntity.ok(clientDogService.getByChatId(chatId));
     }
 }
