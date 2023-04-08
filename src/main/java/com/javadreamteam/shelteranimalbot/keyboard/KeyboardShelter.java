@@ -20,6 +20,38 @@ import java.nio.file.Paths;
 public class KeyboardShelter {
     private static final Logger logger = LoggerFactory.getLogger(ShelterAnimalBotUpdatesListener.class);
 
+    // константы для кнопок
+    public static final String ABOUT_BOT = "Информация о боте";
+    public static final String ABOUT_SHELTER = "Информация о приюте";
+    public static final String HOW_ADOPT = "Как взять питомца";
+    public static final String SEND_REPORT = "Прислать отчет о питомце";
+
+
+    public static final String REQUEST_VOLUNTEER = "Позвать волонтера";
+    public static final String MAIN_MENU = "Вернуться в меню";
+    public static final String CONTACTS = "Контакты";
+    public static final String SEND_CONTACTS = "Оставить контакты";
+
+
+    public static final String RULES_SHELTER = "Правила поведения";
+
+    public static final String ADVISE = "Советы и рекомендации";
+    public static final String DOCUMENT_LIST = "Документы";
+    public static final String REFUSE_REASONS = "Причины отказа";
+
+    public static final String TRANSPORTATION = "Транспортировка";
+    public static final String CYNOLOGIST_INFO = "Кинологи";
+    public static final String CYNOLOGIST_LIST_INFO = "Кинологи список";
+
+    public static final String PUPPY_INFO = "Щенок";
+    public static final String ADULT_INFO = "Взрослый";
+    public static final String DISABLED_INFO = "С ограничениями";
+
+
+
+
+
+
     private final TelegramBot telegramBot;
 
 
@@ -36,11 +68,11 @@ public class KeyboardShelter {
         logger.info("Method sendMessage has been run: {}, {}", chatId, "Вызвано основное меню");
 
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(
-                new KeyboardButton("Информация о боте"),
-                new KeyboardButton("Информация о приюте"));
-        replyKeyboardMarkup.addRow(new KeyboardButton("Как взять питомца"),
-                new KeyboardButton("Прислать отчет о питомце"));
-        replyKeyboardMarkup.addRow(new KeyboardButton("Позвать волонтера"));
+                new KeyboardButton(ABOUT_BOT),
+                new KeyboardButton(ABOUT_SHELTER));
+        replyKeyboardMarkup.addRow(new KeyboardButton(HOW_ADOPT),
+                new KeyboardButton(SEND_REPORT));
+        replyKeyboardMarkup.addRow(new KeyboardButton(REQUEST_VOLUNTEER));
 
         returnResponseReplyKeyboardMarkup(replyKeyboardMarkup, chatId, "Основное меню");
     }
@@ -53,13 +85,13 @@ public class KeyboardShelter {
     public void menuInfoShelter(long chatId) {
         logger.info("Method MenuInfoShelter has been run: {}, {}", chatId, "Вызвано Информация о приюте");
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(
-                new KeyboardButton("Контакты"),
-                new KeyboardButton("Правила поведения"));
+                new KeyboardButton(CONTACTS),
+                new KeyboardButton(RULES_SHELTER));
         replyKeyboardMarkup.addRow(
-                new KeyboardButton("Оставить контакты").requestContact(true),
-                new KeyboardButton("Позвать волонтера"));
-        replyKeyboardMarkup.addRow(new KeyboardButton("Вернуться в меню"));
-        returnResponseReplyKeyboardMarkup(replyKeyboardMarkup, chatId, "Информация о приюте");
+                new KeyboardButton(SEND_CONTACTS).requestContact(true),
+                new KeyboardButton(REQUEST_VOLUNTEER));
+        replyKeyboardMarkup.addRow(new KeyboardButton(MAIN_MENU));
+        returnResponseReplyKeyboardMarkup(replyKeyboardMarkup, chatId, ABOUT_SHELTER);
     }
 
     /**
@@ -69,15 +101,15 @@ public class KeyboardShelter {
     public void menuTakeAnimal(long chatId) {
         logger.info("Method menuTakeAnimal has been run: {}, {}", chatId, "вызвали Как взять питомца из приюта");
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(
-                new KeyboardButton("Советы и рекомендации"));
+                new KeyboardButton(ADVISE));
         replyKeyboardMarkup.addRow(
-                new KeyboardButton("Документы"),
-                new KeyboardButton("Причины отказа"));
+                new KeyboardButton(DOCUMENT_LIST),
+                new KeyboardButton(REFUSE_REASONS));
         replyKeyboardMarkup.addRow(
-                new KeyboardButton("Оставить контакты").requestContact(true),
-                new KeyboardButton("Позвать волонтера"));
-        replyKeyboardMarkup.addRow(new KeyboardButton("Вернуться в меню"));
-        returnResponseReplyKeyboardMarkup(replyKeyboardMarkup, chatId, "Как взять питомца");
+                new KeyboardButton(SEND_CONTACTS).requestContact(true),
+                new KeyboardButton(REQUEST_VOLUNTEER));
+        replyKeyboardMarkup.addRow(new KeyboardButton(MAIN_MENU));
+        returnResponseReplyKeyboardMarkup(replyKeyboardMarkup, chatId, HOW_ADOPT );
     }
 
     /**
@@ -87,19 +119,19 @@ public class KeyboardShelter {
     public void menuAdviseAnimal(long chatId) {
         logger.info("Method menuAdviseAnimal has been run: {}, {}", chatId, "вызвали Советы и рекомендации");
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(
-                new KeyboardButton("Транспортировка"),
-                new KeyboardButton("Кинологи"),
-                new KeyboardButton("Кинологи дома"));
+                new KeyboardButton(TRANSPORTATION),
+                new KeyboardButton(CYNOLOGIST_INFO),
+                new KeyboardButton(CYNOLOGIST_LIST_INFO));
         replyKeyboardMarkup.addRow(
-                new KeyboardButton("Щенок"),
-                new KeyboardButton("Взрослый"),
-                new KeyboardButton("С ограничениями"));
+                new KeyboardButton(PUPPY_INFO),
+                new KeyboardButton(ADULT_INFO),
+                new KeyboardButton(DISABLED_INFO));
         replyKeyboardMarkup.addRow(
-                new KeyboardButton("Оставить контакты").requestContact(true),
-                new KeyboardButton("Позвать волонтера"));
+                new KeyboardButton(SEND_CONTACTS).requestContact(true),
+                new KeyboardButton(REQUEST_VOLUNTEER));
 
-        replyKeyboardMarkup.addRow(new KeyboardButton("Вернуться в меню"));
-        returnResponseReplyKeyboardMarkup(replyKeyboardMarkup, chatId, "Советы и рекомендации");
+        replyKeyboardMarkup.addRow(new KeyboardButton(MAIN_MENU));
+        returnResponseReplyKeyboardMarkup(replyKeyboardMarkup, chatId, ADVISE);
     }
 
     /**

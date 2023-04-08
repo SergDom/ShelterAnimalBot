@@ -1,8 +1,8 @@
 package com.javadreamteam.shelteranimalbot.listener;
 
 import static com.javadreamteam.shelteranimalbot.keyboard.KeyboardConstant.*;
+import static com.javadreamteam.shelteranimalbot.keyboard.KeyboardShelter.*;
 
-import com.javadreamteam.shelteranimalbot.keyboard.KeyboardConstant;
 import com.javadreamteam.shelteranimalbot.keyboard.KeyboardShelter;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
@@ -54,11 +54,11 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                         keyboardShelter.sendMenu(chatId);
                         break;
 // Главное меню
-                    case "Информация о боте":
+                    case ABOUT_BOT:
                         sendMessage(chatId, INFO_ABOUT_BOT);
                         break;
 
-                    case "Информация о приюте":
+                    case ABOUT_SHELTER:
                         keyboardShelter.menuInfoShelter(chatId);
                         try {
                             keyboardShelter.sendPhoto(chatId, "/static/SHELTER_LOGO.png", SHELTER_ABOUT);
@@ -67,11 +67,11 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                         }
                         break;
 // Меню о приюте
-                    case "Контакты":
+                    case CONTACTS:
                         sendMessage(chatId, SHELTER_CONTACTS);
                         break;
 
-                    case "Правила поведения":
+                    case RULES_SHELTER:
                         try {
                             keyboardShelter.sendPhoto(chatId, "/static/SHELTER_RULES.png", SHELTER_RULES);
                         } catch (URISyntaxException | IOException e) {
@@ -79,45 +79,45 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                         }
                         break;
 // Меню как взять питомца
-                    case "Как взять питомца":
+                    case HOW_ADOPT:
                         keyboardShelter.menuTakeAnimal(chatId);
                         break;
 
-                    case "Советы и рекомендации":
+                    case ADVISE:
                         sendMessage(chatId, nameUser + WELCOME);
                         keyboardShelter.menuAdviseAnimal(chatId);
                         break;
 
-                    case "Документы":
+                    case DOCUMENT_LIST:
                         sendMessage(chatId, DOCUMENTS);
                         break;
-                    case "Причины отказа":
+                    case REFUSE_REASONS:
                         sendMessage(chatId, REFUSE);
                         break;
-                    case "Транспортировка":
+                    case TRANSPORTATION:
                         sendMessage(chatId, TRANSPORT);
                         break;
-                    case "Кинологи":
+                    case CYNOLOGIST_INFO:
                         sendMessage(chatId, CYNOLOGIST);
                         break;
-                    case "Кинологи дома":
+                    case CYNOLOGIST_LIST_INFO:
                         sendMessage(chatId, CYNOLOGIST_HOME);
                         break;
-                    case "Щенок":
+                    case PUPPY_INFO:
                         sendMessage(chatId, PUPPY);
                         break;
-                    case "Взрослый":
+                    case ADULT_INFO:
                         sendMessage(chatId, ADULT);
                         break;
-                    case "С ограничениями":
+                    case DISABLED_INFO:
                         sendMessage(chatId, DISABLE_PET);
                         break;
 // Общие кнопки
-                    case "Позвать волонтера":
+                    case REQUEST_VOLUNTEER:
                         sendMessage(chatId, CALL_VOLUNTEERS);
                         break;
 
-                    case "Вернуться в меню":
+                    case MAIN_MENU:
                         keyboardShelter.sendMenu(chatId);
                         break;
 
