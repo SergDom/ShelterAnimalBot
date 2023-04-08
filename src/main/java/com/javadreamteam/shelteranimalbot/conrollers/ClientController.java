@@ -1,4 +1,5 @@
 package com.javadreamteam.shelteranimalbot.conrollers;
+
 import com.javadreamteam.shelteranimalbot.model.Client;
 import com.javadreamteam.shelteranimalbot.model.ClientDog;
 import com.javadreamteam.shelteranimalbot.service.ClientDogService;
@@ -101,7 +102,6 @@ public class ClientController {
     }
 
 
-
     @Operation(
             summary = "Поиск владельца животного по id.",
             responses = {
@@ -130,10 +130,12 @@ public class ClientController {
         }
         return ResponseEntity.ok(clientDog);
     }
+
     @GetMapping("/find-all-records")
     public ResponseEntity getClientsList() {
         return ResponseEntity.ok(clientDogService.getAll());
     }
+
     @GetMapping("/find--client-by-chatId")
     public ResponseEntity getClientByName(@RequestParam Long chatId) {
         return ResponseEntity.ok(clientDogService.getByChatId(chatId));

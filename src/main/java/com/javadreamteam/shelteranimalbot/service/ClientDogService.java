@@ -1,7 +1,6 @@
 package com.javadreamteam.shelteranimalbot.service;
 
 import com.javadreamteam.shelteranimalbot.exceptions.ClientException;
-import com.javadreamteam.shelteranimalbot.model.Client;
 import com.javadreamteam.shelteranimalbot.model.ClientDog;
 import com.javadreamteam.shelteranimalbot.repository.ClientDogRepository;
 import org.slf4j.Logger;
@@ -20,7 +19,6 @@ public class ClientDogService {
     public ClientDogService(ClientDogRepository repository) {
         this.repository = repository;
     }
-
 
 
     public ClientDog create(ClientDog clientDog) {
