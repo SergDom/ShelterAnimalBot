@@ -1,6 +1,6 @@
 package com.javadreamteam.shelteranimalbot.conrollers;
 
-import com.javadreamteam.shelteranimalbot.model.Client;
+
 import com.javadreamteam.shelteranimalbot.model.ClientDog;
 import com.javadreamteam.shelteranimalbot.service.ClientDogService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("clients")
-public class ClientController {
-    public ClientController(ClientDogService clientDogService) {
+public class ClientDogController {
+    public ClientDogController(ClientDogService clientDogService) {
         this.clientDogService = clientDogService;
     }
 
@@ -29,7 +29,7 @@ public class ClientController {
                             "Все поля кроме id обязательны.",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = Client.class)
+                            schema = @Schema(implementation = ClientDog.class)
                     )
             ),
             responses = {
@@ -38,7 +38,7 @@ public class ClientController {
                             description = "Данные созданного владельца животного",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = Client.class)
+                                    schema = @Schema(implementation = ClientDog.class)
                             )
 
                     )
@@ -55,7 +55,7 @@ public class ClientController {
                     description = "Данные о владельце животного с изменениями. Все поля обязательны.",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = Client.class)
+                            schema = @Schema(implementation = ClientDog.class)
                     )
             ),
             responses = {
@@ -64,7 +64,7 @@ public class ClientController {
                             description = "Измененные данные о владельце животного",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = Client.class)
+                                    schema = @Schema(implementation = ClientDog.class)
                             )
                     ),
                     @ApiResponse(
@@ -110,7 +110,7 @@ public class ClientController {
                             description = "Информация о найденном владельце животного",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = Client.class)
+                                    schema = @Schema(implementation = ClientDog.class)
                             )
                     ),
                     @ApiResponse(
