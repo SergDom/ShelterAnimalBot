@@ -2,14 +2,19 @@ package com.javadreamteam.shelteranimalbot.keyboard;
 
 import com.javadreamteam.shelteranimalbot.listener.ShelterAnimalBotUpdatesListener;
 import com.pengrad.telegrambot.TelegramBot;
+import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.*;
+import com.pengrad.telegrambot.request.SendDocument;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SendPhoto;
 import com.pengrad.telegrambot.response.SendResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -48,10 +53,6 @@ public class KeyboardShelter {
     public static final String DISABLED_INFO = "С ограничениями";
 
 
-
-
-
-
     private final TelegramBot telegramBot;
 
 
@@ -62,6 +63,7 @@ public class KeyboardShelter {
 
     /**
      * Основное Меню
+     *
      * @param chatId
      */
     public void sendMenu(long chatId) {
@@ -80,6 +82,7 @@ public class KeyboardShelter {
 
     /**
      * Меню о приюте
+     *
      * @param chatId
      */
     public void menuInfoShelter(long chatId) {
@@ -96,6 +99,7 @@ public class KeyboardShelter {
 
     /**
      * Меню как взять питомца
+     *
      * @param chatId
      */
     public void menuTakeAnimal(long chatId) {
@@ -109,11 +113,12 @@ public class KeyboardShelter {
                 new KeyboardButton(SEND_CONTACTS).requestContact(true),
                 new KeyboardButton(REQUEST_VOLUNTEER));
         replyKeyboardMarkup.addRow(new KeyboardButton(MAIN_MENU));
-        returnResponseReplyKeyboardMarkup(replyKeyboardMarkup, chatId, HOW_ADOPT );
+        returnResponseReplyKeyboardMarkup(replyKeyboardMarkup, chatId, HOW_ADOPT);
     }
 
     /**
      * Меню с рекомендациями
+     *
      * @param chatId
      */
     public void menuAdviseAnimal(long chatId) {
@@ -136,6 +141,7 @@ public class KeyboardShelter {
 
     /**
      * Метод обработки фото и отправки в чат
+     *
      * @param chatId
      * @param name
      * @param text
@@ -149,8 +155,18 @@ public class KeyboardShelter {
         telegramBot.execute(sendPhoto);
     }
 
+    public void sendDocument(Update update, String name, String text) throws IOException, URISyntaxException {
+//        byte[] document = Files.readAllBytes(Paths.get(ShelterAnimalBotUpdatesListener.class.getResource(name).getPath()));
+        String path = "/static/";
+        File doc = new File(path + name);
+        SendDocument sendDocument = new SendDocument(update.message().chat().id(), doc);
+        sendDocument.caption(text);
+        telegramBot.execute(sendDocument);
+    }
+
     /**
      * Метод возврата в верхнее меню
+     *
      * @param replyKeyboardMarkup
      * @param chatId
      * @param text

@@ -98,8 +98,13 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                         sendMessage(chatId, TRANSPORT);
                         break;
                     case CYNOLOGIST_INFO:
-                        sendMessage(chatId, CYNOLOGIST);
+                        try {
+                            keyboardShelter.sendDocument(update, "CYNOLOGIST_INFO.pdf", CYNOLOGIST);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         break;
+
                     case CYNOLOGIST_LIST_INFO:
                         sendMessage(chatId, CYNOLOGIST_HOME);
                         break;
