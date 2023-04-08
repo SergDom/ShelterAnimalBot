@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class Adopter {
+public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,7 +13,7 @@ public class Adopter {
 
     private Long chatId;
     private String userName;
-    private String name;
+//    private String name;
     private String address;
     private int age;
     private String phoneNumber;
@@ -26,7 +26,16 @@ public class Adopter {
 
     private Long currentReportId;
 
-    public Adopter() {
+    public Client() {
+    }
+
+    public Client(Long id, Long chatId, String userName, String address, int age, String phoneNumber) {
+        this.id = id;
+        this.chatId = chatId;
+        this.userName = userName;
+        this.address = address;
+        this.age = age;
+        this.phoneNumber = phoneNumber;
     }
 
     public Long getId() {
@@ -54,11 +63,11 @@ public class Adopter {
     }
 
     public String getName() {
-        return name;
+        return userName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.userName = name;
     }
 
     public String getAddress() {
@@ -113,12 +122,12 @@ public class Adopter {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Adopter adopter = (Adopter) o;
-        return age == adopter.age && Objects.equals(id, adopter.id) && Objects.equals(chatId, adopter.chatId) && Objects.equals(userName, adopter.userName) && Objects.equals(name, adopter.name) && Objects.equals(address, adopter.address) && Objects.equals(phoneNumber, adopter.phoneNumber) && Objects.equals(animals, adopter.animals) && Objects.equals(probations, adopter.probations) && Objects.equals(currentReportId, adopter.currentReportId);
+        Client client = (Client) o;
+        return age == client.age && Objects.equals(id, client.id) && Objects.equals(chatId, client.chatId) && Objects.equals(userName, client.userName) && Objects.equals(address, client.address) && Objects.equals(phoneNumber, client.phoneNumber) && Objects.equals(animals, client.animals) && Objects.equals(probations, client.probations) && Objects.equals(currentReportId, client.currentReportId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, chatId, userName, name, address, age, phoneNumber, animals, probations, currentReportId);
+        return Objects.hash(id, chatId, userName, address, age, phoneNumber, animals, probations, currentReportId);
     }
 }
