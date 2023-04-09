@@ -1,4 +1,4 @@
-package com.javadreamteam.shelteranimalbot.conrollers;
+package com.javadreamteam.shelteranimalbot.controllers;
 
 
 import com.javadreamteam.shelteranimalbot.model.ClientDog;
