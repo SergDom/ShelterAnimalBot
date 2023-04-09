@@ -11,8 +11,6 @@ public class Report {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Probation probation;
 
     private LocalDate date;
     private String entry;

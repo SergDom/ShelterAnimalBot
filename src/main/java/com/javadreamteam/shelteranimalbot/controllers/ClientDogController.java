@@ -2,6 +2,7 @@ package com.javadreamteam.shelteranimalbot.controllers;
 
 
 import com.javadreamteam.shelteranimalbot.model.ClientDog;
+import com.javadreamteam.shelteranimalbot.model.Dog;
 import com.javadreamteam.shelteranimalbot.service.ClientDogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -92,7 +93,7 @@ public class ClientDogController {
                     )
             }
     )
-    @DeleteMapping("{ClientId}")
+    @DeleteMapping("{clientId}")
     public ResponseEntity<ClientDog> deleteClient(
             @Parameter(description = "id удаляемого владельца животного")
             @PathVariable long clientId) {
@@ -119,25 +120,60 @@ public class ClientDogController {
                     )
             }
     )
-    @GetMapping("{ClientId}")
+    @GetMapping("{clientId}")
     public ResponseEntity<ClientDog> findClient(
             @Parameter(description = "Идентификатор владельца животного", example = "1")
-            @PathVariable Long ClientId) {
+            @PathVariable Long clientId) {
 
-        ClientDog clientDog = clientDogService.getById(ClientId);
+        ClientDog clientDog = clientDogService.getById(clientId);
         if (clientDog == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(clientDog);
     }
+    @Operation(
+            summary = "Получение всех клиентов из БД.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Все найденные клиенты",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ClientDog.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "клиенты не найдены"
+                    )
+            }
+    )
 
     @GetMapping("/find-all-records")
     public ResponseEntity getClientsList() {
         return ResponseEntity.ok(clientDogService.getAll());
     }
 
-    @GetMapping("/find--client-by-chatId")
-    public ResponseEntity getClientByName(@RequestParam Long chatId) {
+    @Operation(
+            summary = "Получение всех клиентов из БД по id",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Найден клиент по id",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ClientDog.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "клиент не найден"
+                    )
+            }
+    )
+
+    @GetMapping("/find-client-by-chatId")
+    public ResponseEntity getClientById(@RequestParam Long chatId) {
         return ResponseEntity.ok(clientDogService.getByChatId(chatId));
     }
 }

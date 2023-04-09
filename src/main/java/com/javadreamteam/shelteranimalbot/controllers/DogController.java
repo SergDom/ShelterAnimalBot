@@ -130,7 +130,7 @@ public class DogController {
     }
 
     @Operation(
-            summary = "Получение всех союак из БД.",
+            summary = "Получение всех собак из БД.",
             responses = {
                     @ApiResponse(
                             responseCode = "200",

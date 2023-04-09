@@ -155,9 +155,8 @@ public class KeyboardShelter {
         telegramBot.execute(sendPhoto);
     }
 
-    public void sendDocument(Update update, String name, String text) throws IOException, URISyntaxException {
-//        byte[] document = Files.readAllBytes(Paths.get(ShelterAnimalBotUpdatesListener.class.getResource(name).getPath()));
-        String path = "/static/";
+    public void sendDocument(Update update, String name, String text) throws IOException{
+        String path = "src/main/resources/static/";
         File doc = new File(path + name);
         SendDocument sendDocument = new SendDocument(update.message().chat().id(), doc);
         sendDocument.caption(text);
