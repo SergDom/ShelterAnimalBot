@@ -13,4 +13,15 @@ public class ReportPhoto extends Photo {
     @ManyToOne
     @JoinColumn(name = "report_id")
     private Report report;
+
+    public ReportPhoto() {
+    }
+
+    public Report getReport() {
+        return report;
+    }
+
+    public void setReport(Report report) {
+        this.report = report;
+    }
 }

@@ -73,6 +73,14 @@ public class Dog {
         this.info = info;
     }
 
+    public Collection<DogPhoto> getDogPhoto() {
+        return dogPhoto;
+    }
+
+    public void setDogPhoto(Collection<DogPhoto> dogPhoto) {
+        this.dogPhoto = dogPhoto;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

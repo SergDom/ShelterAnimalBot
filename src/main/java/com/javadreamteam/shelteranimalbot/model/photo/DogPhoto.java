@@ -14,4 +14,15 @@ public class DogPhoto extends Photo {
     @ManyToOne
     @JoinColumn(name = "dog_id")
     private Dog dog;
+
+    public DogPhoto() {
+    }
+
+    public Dog getDog() {
+        return dog;
+    }
+
+    public void setDog(Dog dog) {
+        this.dog = dog;
+    }
 }

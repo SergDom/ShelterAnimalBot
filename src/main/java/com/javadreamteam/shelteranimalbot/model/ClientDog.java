@@ -99,6 +99,22 @@ public class ClientDog {
         this.status = status;
     }
 
+    public Dog getDog() {
+        return dog;
+    }
+
+    public void setDog(Dog dog) {
+        this.dog = dog;
+    }
+
+    public Collection<Report> getReport() {
+        return report;
+    }
+
+    public void setReport(Collection<Report> report) {
+        this.report = report;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
