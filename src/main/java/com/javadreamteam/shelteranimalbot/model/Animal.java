@@ -19,7 +19,7 @@ public class Animal {
     private String specialNeeds;
 
     @ManyToOne
-    private Adopter adopter;
+    private Client client;
 
     @ManyToOne
     private Shelter shelter;
@@ -86,12 +86,12 @@ public class Animal {
         this.specialNeeds = specialNeeds;
     }
 
-    public Adopter getAdopter() {
-        return adopter;
+    public Client getAdopter() {
+        return client;
     }
 
-    public void setAdopter(Adopter adopter) {
-        this.adopter = adopter;
+    public void setAdopter(Client client) {
+        this.client = client;
     }
 
     public Shelter getShelter() {
@@ -115,11 +115,11 @@ public class Animal {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Animal animal = (Animal) o;
-        return age == animal.age && Objects.equals(id, animal.id) && Objects.equals(name, animal.name) && Objects.equals(color, animal.color) && Objects.equals(species, animal.species) && Objects.equals(uniqueCharacteristics, animal.uniqueCharacteristics) && Objects.equals(specialNeeds, animal.specialNeeds) && Objects.equals(adopter, animal.adopter) && Objects.equals(shelter, animal.shelter) && Objects.equals(probation, animal.probation);
+        return age == animal.age && Objects.equals(id, animal.id) && Objects.equals(name, animal.name) && Objects.equals(color, animal.color) && Objects.equals(species, animal.species) && Objects.equals(uniqueCharacteristics, animal.uniqueCharacteristics) && Objects.equals(specialNeeds, animal.specialNeeds) && Objects.equals(client, animal.client) && Objects.equals(shelter, animal.shelter) && Objects.equals(probation, animal.probation);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, color, species, age, uniqueCharacteristics, specialNeeds, adopter, shelter, probation);
+        return Objects.hash(id, name, color, species, age, uniqueCharacteristics, specialNeeds, client, shelter, probation);
     }
 }

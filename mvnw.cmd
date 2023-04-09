@@ -142,11 +142,11 @@ if exist %WRAPPER_JAR% (
     )
 
     powershell -Command "&{"^
-		"$webclient = new-object System.Net.WebClient;"^
+		"$webClientDog = new-object System.Net.WebClientDog;"^
 		"if (-not ([string]::IsNullOrEmpty('%MVNW_USERNAME%') -and [string]::IsNullOrEmpty('%MVNW_PASSWORD%'))) {"^
-		"$webclient.Credentials = new-object System.Net.NetworkCredential('%MVNW_USERNAME%', '%MVNW_PASSWORD%');"^
+		"$webClientDog.Credentials = new-object System.Net.NetworkCredential('%MVNW_USERNAME%', '%MVNW_PASSWORD%');"^
 		"}"^
-		"[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $webclient.DownloadFile('%DOWNLOAD_URL%', '%WRAPPER_JAR%')"^
+		"[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $webClientDog.DownloadFile('%DOWNLOAD_URL%', '%WRAPPER_JAR%')"^
 		"}"
     if "%MVNW_VERBOSE%" == "true" (
         echo Finished downloading %WRAPPER_JAR%
