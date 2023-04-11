@@ -46,7 +46,7 @@ public class ReportController {
                     )
             }
     )
-    @GetMapping("{reportId}")
+    @GetMapping("{report-find-Id}")
     public ResponseEntity<Report> findReport(
             @Parameter(description = "Идентификатор отчета", example = "1")
             @PathVariable long reportId) {

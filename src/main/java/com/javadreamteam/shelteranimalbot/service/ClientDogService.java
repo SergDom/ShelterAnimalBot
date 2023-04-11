@@ -20,12 +20,23 @@ public class ClientDogService {
         this.repository = repository;
     }
 
+    /**
+     *Создание нового клиента
+     *
+     * @param clientDog
+     * @return
+     */
 
     public ClientDog create(ClientDog clientDog) {
         logger.info("Was invoked method to create a personDog");
         return repository.save(clientDog);
     }
 
+    /**
+     * получение клиента по его id
+     * @param id идентификатор клиента
+     * @return
+     */
     public ClientDog getById(Long id) {
         logger.info("Was invoked method to get a Client by id={}", id);
         return repository.findById(id).orElseThrow(ClientException::new);
