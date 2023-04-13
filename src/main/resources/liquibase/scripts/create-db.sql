@@ -10,7 +10,8 @@ CREATE TABLE client_dog
     email         TEXT           NOT NULL,
     year_of_birth INTEGER        NOT NULL,
     dog_id        INTEGER UNIQUE NOT NULL,
-    status        VARCHAR        NOT NULL
+    status        VARCHAR        NOT NULL,
+    volunteer_id    INT
 );
 
 -- changeset andrew:2
@@ -24,3 +25,12 @@ CREATE TABLE dog
     FOREIGN KEY (id) REFERENCES client_dog (dog_id)
 );
 
+-- changeset sergeyd:1
+CREATE TABLE volunteer
+(
+    id            INTEGER PRIMARY KEY,
+    name          TEXT           NOT NULL,
+    chat_id       BIGINT                 ,
+    username      VARCHAR        NOT NULL,
+    phone         TEXT
+);

@@ -1,18 +1,22 @@
 package com.javadreamteam.shelteranimalbot.keyboard;
 
 import com.javadreamteam.shelteranimalbot.listener.ShelterAnimalBotUpdatesListener;
+import com.javadreamteam.shelteranimalbot.repository.VolunteerRepository;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.*;
+import com.pengrad.telegrambot.request.ForwardMessage;
 import com.pengrad.telegrambot.request.SendDocument;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SendPhoto;
 import com.pengrad.telegrambot.response.SendResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
+import java.awt.print.Pageable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -52,13 +56,17 @@ public class KeyboardShelter {
     public static final String ADULT_INFO = "Взрослый";
     public static final String DISABLED_INFO = "С ограничениями";
 
+    private static final long telegramChatVolunteer = 424941618L;
 
     private final TelegramBot telegramBot;
+    private final VolunteerRepository volunteerRepository;
 
 
-    public KeyboardShelter(TelegramBot telegramBot) {
+    public KeyboardShelter(TelegramBot telegramBot,
+                           VolunteerRepository volunteerRepository) {
         this.telegramBot = telegramBot;
 
+        this.volunteerRepository = volunteerRepository;
     }
 
     /**
@@ -163,6 +171,12 @@ public class KeyboardShelter {
         telegramBot.execute(sendDocument);
     }
 
+
+    public void sendForwardMessage(Long chatId, Integer messageId) {
+        ForwardMessage forwardMessage = new ForwardMessage(telegramChatVolunteer, chatId, messageId);
+        volunteerRepository.getRandomVolunteer();
+        telegramBot.execute(forwardMessage);
+    }
     /**
      * Метод возврата в верхнее меню
      *

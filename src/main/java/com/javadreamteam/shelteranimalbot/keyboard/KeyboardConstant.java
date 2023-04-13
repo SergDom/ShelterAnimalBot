@@ -34,4 +34,9 @@ public class KeyboardConstant {
 
     public static final String HOW_TAKE_A_PET = "Как взять питомца: ...";
 
+
+
+    public final static String CONTACT_TELEGRAM_USERNAME_TEXT = "Пожалуйста свяжитесь с пользователем %s. Ему нужна помощь.";
+    public final static String CONTACT_TELEGRAM_ID_TEXT = "Пожалуйста свяжитесь с пользователем id %s. Ему нужна помощь.";
+    public final static String NO_VOLUNTEERS_TEXT = "На данный момент нет свободных волонтеров.";
 }

@@ -33,6 +33,7 @@ public class ClientDog {
     @OneToOne
     @JoinColumn(name = "dog_id")
     private Dog dog;
+    private int volunteerId;
 
     public ClientDog() {
     }
