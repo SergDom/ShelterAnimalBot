@@ -18,13 +18,13 @@ public class Dog {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "breed", nullable = false)
+    @Column(name = "breed")
     private String breed;
 
     @Column(name = "age")
     private Integer age;
 
-    @Column(name = "info", nullable = false)
+    @Column(name = "info")
     private String info;
 
     @OneToMany(mappedBy = "dog")

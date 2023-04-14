@@ -16,7 +16,6 @@ public class Report {
      * Идентификатор записи, primary key
      */
     private Long id;
-
     /**
      * Дата отправки отчета
      */
@@ -29,13 +28,11 @@ public class Report {
      * Текст отчета
      */
     private String textReport;
-
     /**
      * Фото петомца
      */
     @OneToMany(mappedBy = "report")
     private Collection<ReportPhoto> reportPhoto;
-
     /**
      * id питомца
      */
@@ -46,6 +43,51 @@ public class Report {
     public Report() {
     }
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
+    public LocalDateTime getDateReport() {
+        return dateReport;
+    }
+
+    public void setDateReport(LocalDateTime dateReport) {
+        this.dateReport = dateReport;
+    }
+
+    public Long getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(Long chatId) {
+        this.chatId = chatId;
+    }
+
+    public String getTextReport() {
+        return textReport;
+    }
+
+    public void setTextReport(String textReport) {
+        this.textReport = textReport;
+    }
+
+    public Collection<ReportPhoto> getReportPhoto() {
+        return reportPhoto;
+    }
+
+    public void setReportPhoto(Collection<ReportPhoto> reportPhoto) {
+        this.reportPhoto = reportPhoto;
+    }
+
+    public Dog getDog() {
+        return dog;
+    }
+
+    public void setDog(Dog dog) {
+        this.dog = dog;
+    }
 }
