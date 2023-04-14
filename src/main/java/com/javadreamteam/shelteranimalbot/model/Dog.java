@@ -30,6 +30,9 @@ public class Dog {
     @OneToMany(mappedBy = "dog")
     private Collection<DogPhoto> dogPhoto;
 
+    @OneToMany(mappedBy = "dog")
+    private Collection<Report> report;
+
     public Dog() {
     }
 
@@ -79,6 +82,14 @@ public class Dog {
 
     public void setDogPhoto(Collection<DogPhoto> dogPhoto) {
         this.dogPhoto = dogPhoto;
+    }
+
+    public Collection<Report> getReport() {
+        return report;
+    }
+
+    public void setReport(Collection<Report> report) {
+        this.report = report;
     }
 
     @Override
