@@ -20,7 +20,6 @@ public class ReportService {
     private final ReportRepository reportRepository;
     private final Logger logger = LoggerFactory.getLogger(ReportService.class);
 
-
     public ReportService(ReportRepository reportRepository) {
         this.reportRepository = reportRepository;
     }
