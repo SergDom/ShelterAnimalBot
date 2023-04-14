@@ -34,10 +34,6 @@ public class ClientDog {
     @OneToOne
     @JoinColumn(name = "dog_id")
     private Dog dog;
-
-    @OneToMany(mappedBy = "clientDog")
-    private Collection<Report> report;
-
     public ClientDog() {
     }
 
@@ -103,14 +99,6 @@ public class ClientDog {
 
     public void setDog(Dog dog) {
         this.dog = dog;
-    }
-
-    public Collection<Report> getReport() {
-        return report;
-    }
-
-    public void setReport(Collection<Report> report) {
-        this.report = report;
     }
 
     @Override
