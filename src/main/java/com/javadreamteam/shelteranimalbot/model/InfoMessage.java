@@ -5,16 +5,16 @@ import javax.persistence.Id;
 import java.util.Objects;
 
 @Entity
-public class InfoMassage {
+public class InfoMessage {
 
     @Id
     private String tag;
     private String text;
 
-    public InfoMassage() {
+    public InfoMessage() {
     }
 
-    public InfoMassage(String tag, String text) {
+    public InfoMessage(String tag, String text) {
         this.tag = tag;
         this.text = text;
     }
@@ -39,7 +39,7 @@ public class InfoMassage {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        InfoMassage that = (InfoMassage) o;
+        InfoMessage that = (InfoMessage) o;
         return Objects.equals(tag, that.tag) && Objects.equals(text, that.text);
     }
 
