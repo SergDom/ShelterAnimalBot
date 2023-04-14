@@ -15,16 +15,16 @@ public class Dog {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "breed")
+    @Column(name = "breed", nullable = false)
     private String breed;
 
     @Column(name = "age")
     private Integer age;
 
-    @Column(name = "info")
+    @Column(name = "info", nullable = false)
     private String info;
 
     @OneToMany(mappedBy = "dog")

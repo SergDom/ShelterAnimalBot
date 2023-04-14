@@ -15,13 +15,13 @@ public class ClientDog {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "chat_id")
+    @Column(name = "chat_id", nullable = false)
     private Integer chatId;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
     @Column(name = "email")
@@ -30,7 +30,7 @@ public class ClientDog {
     @Column(name = "year_of_birth")
     private Integer yearOfBirth;
 
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     private Status status;
 
     @OneToOne
