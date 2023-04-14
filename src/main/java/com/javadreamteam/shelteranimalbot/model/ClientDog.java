@@ -1,7 +1,5 @@
 package com.javadreamteam.shelteranimalbot.model;
 
-import com.javadreamteam.shelteranimalbot.model.photo.DogPhoto;
-
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
