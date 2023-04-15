@@ -18,6 +18,7 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -66,7 +67,7 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                     case ABOUT_SHELTER:
                         keyboardShelter.menuInfoShelter(chatId);
                         try {
-                            keyboardShelter.sendPhoto(chatId, "/static/SHELTER_LOGO.png", SHELTER_ABOUT);
+                            keyboardShelter.sendPhoto(chatId, "/static/shelter/SHELTER_LOGO.png", SHELTER_ABOUT);
                         } catch (URISyntaxException | IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -78,7 +79,7 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
 
                     case RULES_SHELTER:
                         try {
-                            keyboardShelter.sendPhoto(chatId, "/static/SHELTER_RULES.png", SHELTER_RULES);
+                            keyboardShelter.sendPhoto(chatId, "/static/shelter/SHELTER_RULES.png", SHELTER_RULES);
                         } catch (URISyntaxException | IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -100,21 +101,36 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                         sendMessage(chatId, REFUSE);
                         break;
                     case TRANSPORTATION:
-                        sendMessage(chatId, TRANSPORT);
+                        try {
+                            keyboardShelter.sendDocument(update, "/advice/" +"TRANSPORTATION_INFO.pdf", TRANSPORT);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         break;
+
                     case CYNOLOGIST_INFO:
                         try {
-                            keyboardShelter.sendDocument(update, "CYNOLOGIST_INFO.pdf", CYNOLOGIST);
+                            keyboardShelter.sendDocument(update, "/advice/" +"CYNOLOGIST_INFO.pdf", CYNOLOGIST);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
                         break;
 
                     case CYNOLOGIST_LIST_INFO:
-                        sendMessage(chatId, CYNOLOGIST_HOME);
+                        try {
+                            keyboardShelter.sendDocument(update, "/advice/" +"CYNOLOGIST_LIST_INFO.pdf", CYNOLOGIST_LIST);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         break;
+
                     case PUPPY_INFO:
-                        sendMessage(chatId, PUPPY);
+                        try {
+                            keyboardShelter.sendDocument(update, "/advice/" +"PUPPY_INFO.pdf", PUPPY);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+
                         break;
                     case ADULT_INFO:
                         sendMessage(chatId, ADULT);
@@ -173,17 +189,16 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
         long chatId = 0; // volunteer's chat_id
         userId += update.message().from().id();
         logger.info("UserId = {}", userId);
-        Volunteer volunteer = volunteerService.getRandomVolunteer();
+        List <Volunteer> volunteer = volunteerService.getRandomVolunteer();
+        chatId = Long.parseLong(userId);
         if (volunteer == null) {
             // Guest chat_id. Send message to the guest.
-            chatId = Long.parseLong(userId);
             SendMessage message = new SendMessage(chatId, NO_VOLUNTEERS_TEXT);
             telegramBot.execute(message);
         } else {
             // Volunteer chat_id. Send message to volunteer.
-            chatId = volunteer.getChatId();
             if (update.message().from().username() != null) {
-                userId = update.message().from().username();
+                userId = "@" + update.message().from().username();
                 SendMessage message = new SendMessage(chatId, String.format(CONTACT_TELEGRAM_USERNAME_TEXT, userId));
                 telegramBot.execute(message);
             } else {

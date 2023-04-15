@@ -18,15 +18,15 @@ public class KeyboardConstant {
 
     public static final String SHELTER_CONTACTS = "Адрес приюта: ...";
 
-    public static final String SHELTER_RULES  = "Правила поведения в приюте: ...";
+    public static final String SHELTER_RULES  = "Правила поведения в приюте, для удобства, изображены на картинке";
 
 
     public static final String DOCUMENTS  = "Список необходимых документов: ...";
     public static final String REFUSE  = "Причины отказа: ...";
-    public static final String TRANSPORT  = "Правила перевозки: ...";
-    public static final String CYNOLOGIST  = "Кинологи: ...";
-    public static final String CYNOLOGIST_HOME  = "Кинологи дома: ...";
-    public static final String PUPPY  = "Правила ухода за щенком: ...";
+    public static final String TRANSPORT  = "Правила перевозки в приложенной памятке";
+    public static final String CYNOLOGIST  = "Ознакомьтесь пожалуйста с рекомендациями кинологов в приложенном файле";
+    public static final String CYNOLOGIST_LIST = "Здесь мы собрали рекомендации как выбрать кинолога для вашего питомца";
+    public static final String PUPPY  = "Ознакомьтесь пожалуйста с правилами ухода за щенком";
     public static final String ADULT  = "Правила ухода за взрослым питомцем: ...";
     public static final String DISABLE_PET  = "Правила ухода за питомцем c ограничениями: ...";
 

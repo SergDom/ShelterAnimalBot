@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class VolunteerService {
     private final VolunteerRepository volunteerRepository;
@@ -72,9 +74,8 @@ public class VolunteerService {
      * @throws VolunteerException, если волонтер не найден в БД
      * @return найден волонтер
      */
-    public Volunteer getRandomVolunteer() {
+    public List<Volunteer> getRandomVolunteer() {
         return volunteerRepository
-                .getRandomVolunteer()
-                .orElseThrow(VolunteerException::new);
+                .getRandomVolunteer();
     }
 }
