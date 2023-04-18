@@ -5,7 +5,7 @@ import static com.javadreamteam.shelteranimalbot.keyboard.KeyboardShelter.*;
 
 import com.javadreamteam.shelteranimalbot.keyboard.KeyboardShelter;
 import com.javadreamteam.shelteranimalbot.model.Volunteer;
-import com.javadreamteam.shelteranimalbot.service.VolunteerService;
+import com.javadreamteam.shelteranimalbot.repository.VolunteerRepository;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
@@ -18,7 +18,8 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
+import java.util.Random;
 
 
 @Service
@@ -29,13 +30,12 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
 
     private final KeyboardShelter keyboardShelter;
 
-    private final VolunteerService volunteerService;
 
 
-    public ShelterAnimalBotUpdatesListener(TelegramBot telegramBot, KeyboardShelter keyboardShelter, VolunteerService volunteerService) {
+    public ShelterAnimalBotUpdatesListener(TelegramBot telegramBot, KeyboardShelter keyboardShelter, VolunteerRepository volunteerRepository) {
         this.telegramBot = telegramBot;
         this.keyboardShelter = keyboardShelter;
-        this.volunteerService = volunteerService;
+
     }
 
     @PostConstruct
@@ -95,11 +95,21 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                         break;
 
                     case DOCUMENT_LIST:
-                        sendMessage(chatId, DOCUMENTS);
+                        try {
+                            keyboardShelter.sendDocument(update, "/advice/" +"DOCUMENTS_INFO.pdf", DOCUMENTS);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         break;
+
                     case REFUSE_REASONS:
-                        sendMessage(chatId, REFUSE);
+                        try {
+                            keyboardShelter.sendDocument(update, "/advice/" +"REFUSE_REASONS.pdf", REFUSE);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         break;
+
                     case TRANSPORTATION:
                         try {
                             keyboardShelter.sendDocument(update, "/advice/" +"TRANSPORTATION_INFO.pdf", TRANSPORT);
@@ -130,18 +140,28 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
+                        break;
 
-                        break;
                     case ADULT_INFO:
-                        sendMessage(chatId, ADULT);
+                        try {
+                            keyboardShelter.sendDocument(update, "/advice/" +"ADULT_INFO.pdf", ADULT);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         break;
+
                     case DISABLED_INFO:
-                        sendMessage(chatId, DISABLE_PET);
+
+                        try {
+                            keyboardShelter.sendDocument(update, "/advice/" +"DISABLED_DOG.pdf", DISABLE_PET);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         break;
 // Общие кнопки
                     case REQUEST_VOLUNTEER:
                         sendMessage(chatId, CALL_VOLUNTEERS);
-                        callVolunteer(update);
+                        keyboardShelter.callVolunteer(update);
                         break;
 
                     case MAIN_MENU:
@@ -176,35 +196,4 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
         telegramBot.execute(message);
     }
 
-    /**
-     * Генерирует и отправляет сообщение волонтеру из БД
-     * Если {@code @username} посетитель вызывает его по имени {@code @username}.
-     * Иначе указан {@code chat_id}.
-     * Если БД волонтера пуста отправляется сообщение {@code NO_VOLUNTEERS_TEXT}.
-     *
-     * @param update
-     */
-    private void callVolunteer(Update update) {
-        String userId = ""; // guest's chat_id or username
-        long chatId = 0; // volunteer's chat_id
-        userId += update.message().from().id();
-        logger.info("UserId = {}", userId);
-        List <Volunteer> volunteer = volunteerService.getRandomVolunteer();
-        chatId = Long.parseLong(userId);
-        if (volunteer == null) {
-            // Guest chat_id. Send message to the guest.
-            SendMessage message = new SendMessage(chatId, NO_VOLUNTEERS_TEXT);
-            telegramBot.execute(message);
-        } else {
-            // Volunteer chat_id. Send message to volunteer.
-            if (update.message().from().username() != null) {
-                userId = "@" + update.message().from().username();
-                SendMessage message = new SendMessage(chatId, String.format(CONTACT_TELEGRAM_USERNAME_TEXT, userId));
-                telegramBot.execute(message);
-            } else {
-                SendMessage message = new SendMessage(chatId, String.format(CONTACT_TELEGRAM_ID_TEXT, userId));
-                telegramBot.execute(message);
-            }
-        }
-    }
 }

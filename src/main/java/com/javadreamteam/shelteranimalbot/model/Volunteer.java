@@ -25,12 +25,24 @@ public class Volunteer {
     @Column(name = "phone", nullable = false)
     private String phone;
 
-    @Column(name = "chat_id", nullable = false)
+    @Column(name = "chat_id")
     private Long chatId;
+
+    @Column(name = "user_id")
+    private Long userId;
 
     @OneToMany (mappedBy = "volunteerId")
     private Collection<ClientDog> clientDogs;
+
     public Volunteer() {
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Long getId() {
@@ -85,8 +97,9 @@ public class Volunteer {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, username, phone, chatId);
+        return Objects.hash(id, name, username, phone, chatId, userId);
     }
+
 
     @Override
     public String toString() {
@@ -96,6 +109,7 @@ public class Volunteer {
                 ", username='" + username + '\'' +
                 ", phone='" + phone + '\'' +
                 ", chatId=" + chatId +
+                ", userId=" + userId +
                 '}';
     }
 }

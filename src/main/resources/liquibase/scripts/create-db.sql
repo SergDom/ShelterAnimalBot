@@ -28,8 +28,9 @@ CREATE TABLE dog
 -- changeset sergeyd:1
 CREATE TABLE volunteer
 (
-    id            INTEGER PRIMARY KEY,
+    id            SERIAL PRIMARY KEY,
     name          TEXT           NOT NULL,
+    user_id       BIGINT                 ,
     chat_id       BIGINT                 ,
     username      VARCHAR        NOT NULL,
     phone         TEXT
