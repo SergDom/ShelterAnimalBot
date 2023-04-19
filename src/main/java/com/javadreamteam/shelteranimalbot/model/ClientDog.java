@@ -1,7 +1,6 @@
 package com.javadreamteam.shelteranimalbot.model;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.Objects;
 
 @Entity
@@ -34,6 +33,7 @@ public class ClientDog {
     @OneToOne
     @JoinColumn(name = "dog_id")
     private Dog dog;
+  
     public ClientDog() {
     }
 

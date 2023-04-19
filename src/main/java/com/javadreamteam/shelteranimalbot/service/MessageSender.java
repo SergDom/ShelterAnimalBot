@@ -9,11 +9,20 @@ import org.springframework.stereotype.Service;
 public class MessageSender {
 
 
+
     private final InfoMessageRepository infoMassageRepository;
     private static TelegramBot telegramBot;
 
     public MessageSender(InfoMessageRepository infoMessageRepository) {
         this.infoMassageRepository = infoMessageRepository;
+
+    
+    private final InfoMessageRepository infoMessageRepository;
+    private static TelegramBot telegramBot;
+
+    public MessageSender(InfoMessageRepository infoMessageRepository) {
+        this.infoMessageRepository = infoMessageRepository;
+
     }
 
     public static void setTelegramBot(TelegramBot telegramBot) {
