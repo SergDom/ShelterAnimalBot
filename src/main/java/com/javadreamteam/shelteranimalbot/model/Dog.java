@@ -1,6 +1,9 @@
 package com.javadreamteam.shelteranimalbot.model;
 
+import com.javadreamteam.shelteranimalbot.model.photo.DogPhoto;
+
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
@@ -12,7 +15,7 @@ public class Dog {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "breed")
@@ -23,6 +26,12 @@ public class Dog {
 
     @Column(name = "info")
     private String info;
+
+    @OneToMany(mappedBy = "dog")
+    private Collection<DogPhoto> dogPhoto;
+
+    @OneToMany(mappedBy = "dog")
+    private Collection<Report> report;
 
     public Dog() {
     }
@@ -65,6 +74,22 @@ public class Dog {
 
     public void setInfo(String info) {
         this.info = info;
+    }
+
+    public Collection<DogPhoto> getDogPhoto() {
+        return dogPhoto;
+    }
+
+    public void setDogPhoto(Collection<DogPhoto> dogPhoto) {
+        this.dogPhoto = dogPhoto;
+    }
+
+    public Collection<Report> getReport() {
+        return report;
+    }
+
+    public void setReport(Collection<Report> report) {
+        this.report = report;
     }
 
     @Override
