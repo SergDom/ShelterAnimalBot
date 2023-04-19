@@ -4,6 +4,8 @@ import static com.javadreamteam.shelteranimalbot.keyboard.KeyboardConstant.*;
 import static com.javadreamteam.shelteranimalbot.keyboard.KeyboardShelter.*;
 
 import com.javadreamteam.shelteranimalbot.keyboard.KeyboardShelter;
+import com.javadreamteam.shelteranimalbot.model.Volunteer;
+import com.javadreamteam.shelteranimalbot.repository.VolunteerRepository;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
@@ -16,6 +18,8 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 
 
 @Service
@@ -27,9 +31,11 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
     private final KeyboardShelter keyboardShelter;
 
 
-    public ShelterAnimalBotUpdatesListener(TelegramBot telegramBot, KeyboardShelter keyboardShelter) {
+
+    public ShelterAnimalBotUpdatesListener(TelegramBot telegramBot, KeyboardShelter keyboardShelter, VolunteerRepository volunteerRepository) {
         this.telegramBot = telegramBot;
         this.keyboardShelter = keyboardShelter;
+
     }
 
     @PostConstruct
@@ -61,7 +67,7 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                     case ABOUT_SHELTER:
                         keyboardShelter.menuInfoShelter(chatId);
                         try {
-                            keyboardShelter.sendPhoto(chatId, "/static/SHELTER_LOGO.png", SHELTER_ABOUT);
+                            keyboardShelter.sendPhoto(chatId, "/static/shelter/SHELTER_LOGO.png", SHELTER_ABOUT);
                         } catch (URISyntaxException | IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -73,7 +79,7 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
 
                     case RULES_SHELTER:
                         try {
-                            keyboardShelter.sendPhoto(chatId, "/static/SHELTER_RULES.png", SHELTER_RULES);
+                            keyboardShelter.sendPhoto(chatId, "/static/shelter/SHELTER_RULES.png", SHELTER_RULES);
                         } catch (URISyntaxException | IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -89,37 +95,73 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                         break;
 
                     case DOCUMENT_LIST:
-                        sendMessage(chatId, DOCUMENTS);
+                        try {
+                            keyboardShelter.sendDocument(update, "/advice/" +"DOCUMENTS_INFO.pdf", DOCUMENTS);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         break;
+
                     case REFUSE_REASONS:
-                        sendMessage(chatId, REFUSE);
+                        try {
+                            keyboardShelter.sendDocument(update, "/advice/" +"REFUSE_REASONS.pdf", REFUSE);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         break;
+
                     case TRANSPORTATION:
-                        sendMessage(chatId, TRANSPORT);
+                        try {
+                            keyboardShelter.sendDocument(update, "/advice/" +"TRANSPORTATION_INFO.pdf", TRANSPORT);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         break;
+
                     case CYNOLOGIST_INFO:
                         try {
-                            keyboardShelter.sendDocument(update, "CYNOLOGIST_INFO.pdf", CYNOLOGIST);
+                            keyboardShelter.sendDocument(update, "/advice/" +"CYNOLOGIST_INFO.pdf", CYNOLOGIST);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
                         break;
 
                     case CYNOLOGIST_LIST_INFO:
-                        sendMessage(chatId, CYNOLOGIST_HOME);
+                        try {
+                            keyboardShelter.sendDocument(update, "/advice/" +"CYNOLOGIST_LIST_INFO.pdf", CYNOLOGIST_LIST);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         break;
+
                     case PUPPY_INFO:
-                        sendMessage(chatId, PUPPY);
+                        try {
+                            keyboardShelter.sendDocument(update, "/advice/" +"PUPPY_INFO.pdf", PUPPY);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         break;
+
                     case ADULT_INFO:
-                        sendMessage(chatId, ADULT);
+                        try {
+                            keyboardShelter.sendDocument(update, "/advice/" +"ADULT_INFO.pdf", ADULT);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         break;
+
                     case DISABLED_INFO:
-                        sendMessage(chatId, DISABLE_PET);
+
+                        try {
+                            keyboardShelter.sendDocument(update, "/advice/" +"DISABLED_DOG.pdf", DISABLE_PET);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         break;
 // Общие кнопки
                     case REQUEST_VOLUNTEER:
                         sendMessage(chatId, CALL_VOLUNTEERS);
+                        keyboardShelter.callVolunteer(update);
                         break;
 
                     case MAIN_MENU:
@@ -135,23 +177,23 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                         sendReplyMessage(chatId, "Я не знаю такой команды", messageId);
                         break;
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 logger.error((e.getMessage()), e);
             }
-            });
-            return UpdatesListener.CONFIRMED_UPDATES_ALL;
-        }
-
-
-        public void sendReplyMessage (Long chatId, String messageText, Integer messageId){
-            SendMessage sendMessage = new SendMessage(chatId, messageText);
-            sendMessage.replyToMessageId(messageId);
-            telegramBot.execute(sendMessage);
-        }
-
-        public void sendMessage ( long chatId, String text){
-            SendMessage message = new SendMessage(chatId, text);
-            telegramBot.execute(message);
-        }
+        });
+        return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
+
+
+    public void sendReplyMessage(Long chatId, String messageText, Integer messageId) {
+        SendMessage sendMessage = new SendMessage(chatId, messageText);
+        sendMessage.replyToMessageId(messageId);
+        telegramBot.execute(sendMessage);
+    }
+
+    public void sendMessage(long chatId, String text) {
+        SendMessage message = new SendMessage(chatId, text);
+        telegramBot.execute(message);
+    }
+
+}

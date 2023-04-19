@@ -1,24 +1,34 @@
 package com.javadreamteam.shelteranimalbot.keyboard;
 
 import com.javadreamteam.shelteranimalbot.listener.ShelterAnimalBotUpdatesListener;
+import com.javadreamteam.shelteranimalbot.model.Volunteer;
+import com.javadreamteam.shelteranimalbot.repository.VolunteerRepository;
+import com.javadreamteam.shelteranimalbot.service.VolunteerService;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.*;
+import com.pengrad.telegrambot.request.ForwardMessage;
 import com.pengrad.telegrambot.request.SendDocument;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SendPhoto;
 import com.pengrad.telegrambot.response.SendResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 
+import java.awt.print.Pageable;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+import java.util.stream.Collectors;
+
+import static com.javadreamteam.shelteranimalbot.keyboard.KeyboardConstant.*;
 
 
 @Service
@@ -52,12 +62,21 @@ public class KeyboardShelter {
     public static final String ADULT_INFO = "Взрослый";
     public static final String DISABLED_INFO = "С ограничениями";
 
+    private static final long telegramChatVolunteer = 426343815L; //SergeyD
 
     private final TelegramBot telegramBot;
+    private final VolunteerRepository volunteerRepository;
+    private final VolunteerService volunteerService;
 
 
-    public KeyboardShelter(TelegramBot telegramBot) {
+
+
+    public KeyboardShelter(TelegramBot telegramBot,
+                           VolunteerRepository volunteerRepository, VolunteerService volunteerService) {
         this.telegramBot = telegramBot;
+
+        this.volunteerRepository = volunteerRepository;
+        this.volunteerService = volunteerService;
 
     }
 
@@ -162,6 +181,52 @@ public class KeyboardShelter {
         sendDocument.caption(text);
         telegramBot.execute(sendDocument);
     }
+
+
+//    public void sendForwardMessage(Long chatId, Integer messageId) {
+//        ForwardMessage forwardMessage = new ForwardMessage(telegramChatVolunteer,chatId, messageId);
+//        volunteerRepository.getRandomVolunteer();
+//        telegramBot.execute(forwardMessage);
+//    }
+
+
+    /**
+     * Генерирует и отправляет сообщение волонтеру из БД
+     * Если {@code @username} посетитель вызывает его по имени {@code @username}.
+     * Иначе указан {@code chat_id}.
+     * Если БД волонтера пуста отправляется сообщение {@code NO_VOLUNTEERS_TEXT}.
+     *
+     * @param update
+     */
+
+
+    public void callVolunteer(Update update) {
+        String userId = ""; // guest's chat_id or username
+        long chatId = 0; // volunteer's chat_id
+        userId += update.message().from().id();
+        logger.info("UserId = {}", userId);
+//        Random random = new Random();
+//        Pageable pageable = PageRequest.of(random.nextLong(( volunteerRepository.count()), 1);
+//        Volunteer randomVolunteer = volunteerRepository.findAll(pageable).getContent().get(0);
+        List <Volunteer> volunteer = volunteerService.getRandomVolunteer();
+        chatId = Long.parseLong(userId);
+        if (volunteer == null) {
+            // Guest chat_id. Send message to the guest.
+            SendMessage message = new SendMessage(chatId, NO_VOLUNTEERS_TEXT);
+            telegramBot.execute(message);
+        } else {
+            // Volunteer chat_id. Send message to volunteer
+//            chatId = volunteer.stream().map(Volunteer::getChatId).mapToLong();
+//            if (update.message().from().username() != null) {
+                userId = "@" + update.message().from().username();
+                SendMessage message = new SendMessage(chatId, String.format(CONTACT_TELEGRAM_USERNAME_TEXT, userId));
+                telegramBot.execute(message);
+
+
+        }
+    }
+
+
 
     /**
      * Метод возврата в верхнее меню
