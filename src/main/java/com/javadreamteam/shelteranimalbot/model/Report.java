@@ -1,13 +1,12 @@
 package com.javadreamteam.shelteranimalbot.model;
 
 
-import com.javadreamteam.shelteranimalbot.model.photo.ReportPhoto;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.Collection;
+import java.util.Date;
 
 @Entity
+@Table (name = "report")
 public class Report {
 
     @Id
@@ -16,31 +15,59 @@ public class Report {
      * Идентификатор записи, primary key
      */
     private Long id;
-    /**
-     * Дата отправки отчета
-     */
-    private LocalDateTime dateReport;
+
     /**
      * Идентификатор чата хозяина животного, отправившего отчет
      */
     private Long chatId;
     /**
-     * Текст отчета
+     * Рацион животного
      */
-    private String textReport;
+    private String ration;
+    /**
+     * Здоровье животного
+     */
+    private String health;
+    /**
+     * Привычки животного
+     */
+    private String habits;
+    /**
+     * Количество дней для отчета
+     */
+    private long days;
+    /**
+     * Путь до файла
+     */
+    private String filePath;
+    /**
+     * Размер файла
+     */
+    private long fileSize;
+
+    private Date lastMessage;
+
     /**
      * Фото петомца
      */
-    @OneToMany(mappedBy = "report")
-    private Collection<ReportPhoto> reportPhoto;
+//    @OneToMany(mappedBy = "report")
+//    private Collection<ReportPhoto> reportPhoto;
     /**
      * id питомца
      */
     @ManyToOne
-    @JoinColumn(name = "dog_id")
-    private Dog dog;
+    @JoinColumn(name = "client_dog_id")
+    private ClientDog clientDog;
 
     public Report() {
+    }
+
+    public Date getLastMessage() {
+        return lastMessage;
+    }
+
+    public void setLastMessage(Date lastMessage) {
+        this.lastMessage = lastMessage;
     }
 
     public Long getId() {
@@ -51,14 +78,6 @@ public class Report {
         this.id = id;
     }
 
-    public LocalDateTime getDateReport() {
-        return dateReport;
-    }
-
-    public void setDateReport(LocalDateTime dateReport) {
-        this.dateReport = dateReport;
-    }
-
     public Long getChatId() {
         return chatId;
     }
@@ -67,27 +86,52 @@ public class Report {
         this.chatId = chatId;
     }
 
-    public String getTextReport() {
-        return textReport;
+    public String getRation() {
+        return ration;
     }
 
-    public void setTextReport(String textReport) {
-        this.textReport = textReport;
+    public void setRation(String ration) {
+        this.ration = ration;
     }
 
-    public Collection<ReportPhoto> getReportPhoto() {
-        return reportPhoto;
+    public String getHealth() {
+        return health;
     }
 
-    public void setReportPhoto(Collection<ReportPhoto> reportPhoto) {
-        this.reportPhoto = reportPhoto;
+    public void setHealth(String health) {
+        this.health = health;
     }
 
-    public Dog getDog() {
-        return dog;
+    public String getHabits() {
+        return habits;
     }
 
-    public void setDog(Dog dog) {
-        this.dog = dog;
+    public void setHabits(String habits) {
+        this.habits = habits;
+    }
+
+    public long getDays() {
+        return days;
+    }
+
+    public void setDays(long days) {
+        this.days = days;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public long getFileSize() {
+        return fileSize;
+    }
+
+    public void setFileSize(long fileSize) {
+        this.fileSize = fileSize;
     }
 }
+

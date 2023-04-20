@@ -184,7 +184,8 @@ public class KeyboardShelter {
 
 
 //    public void sendForwardMessage(Long chatId, Integer messageId) {
-//        ForwardMessage forwardMessage = new ForwardMessage(telegramChatVolunteer,chatId, messageId);
+//        ForwardMessage forwardMessage = new ForwardMessage(chatId ,chatId, messageId);
+//        volunteerService.getById();
 //        volunteerRepository.getRandomVolunteer();
 //        telegramBot.execute(forwardMessage);
 //    }

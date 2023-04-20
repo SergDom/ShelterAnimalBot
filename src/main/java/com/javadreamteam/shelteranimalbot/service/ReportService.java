@@ -31,18 +31,18 @@ public class ReportService {
      * @param textReport текст отчета, не может быть {@code null}
      * @param dateReport дата и время отправки отчета, не может быть {@code null}
      */
-    @Transactional
-    public Report createReport(Long chatId, String textReport, LocalDateTime dateReport
-                               //параметры фото - путь к файлу, размер файла, тип данных, массив байт
-    ) {
-        logger.info("Method createReport has been run");
+//    @Transactional
+//    public Report createReport(Long chatId, String textReport, LocalDateTime dateReport
+//                               //параметры фото - путь к файлу, размер файла, тип данных, массив байт
+//    ) {
+//        logger.info("Method createReport has been run");
 
-        Report report = new Report();
-        report.setChatId(chatId);
-        report.setTextReport(textReport);
-        report.setDateReport(dateReport.truncatedTo(ChronoUnit.MINUTES));
-        return reportRepository.save(report);
-    }
+//        Report report = new Report();
+//        report.setChatId(chatId);
+//        report.setTextReport(textReport);
+//        report.setDateReport(dateReport.truncatedTo(ChronoUnit.MINUTES));
+//        return reportRepository.save(report);
+//    }
 
     /**
      * Метод ищет данные об отчете по его id.

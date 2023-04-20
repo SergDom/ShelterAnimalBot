@@ -30,10 +30,18 @@ public class Dog {
     @OneToMany(mappedBy = "dog")
     private Collection<DogPhoto> dogPhoto;
 
-    @OneToMany(mappedBy = "dog")
-    private Collection<Report> report;
+//    @OneToMany(mappedBy = "report")
+//    private Collection<Report> report;
 
     public Dog() {
+    }
+
+    public Dog(Long id, String name, String breed, Integer age, String info) {
+        this.id = id;
+        this.name = name;
+        this.breed = breed;
+        this.age = age;
+        this.info = info;
     }
 
     public Long getId() {
@@ -84,13 +92,6 @@ public class Dog {
         this.dogPhoto = dogPhoto;
     }
 
-    public Collection<Report> getReport() {
-        return report;
-    }
-
-    public void setReport(Collection<Report> report) {
-        this.report = report;
-    }
 
     @Override
     public boolean equals(Object o) {

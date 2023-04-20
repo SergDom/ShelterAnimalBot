@@ -35,3 +35,19 @@ CREATE TABLE volunteer
     username      VARCHAR        NOT NULL,
     phone         TEXT
 );
+
+-- changeset sergeyd:2
+
+CREATE TABLE report
+(
+    id          integer PRIMARY KEY NOT NULL,
+    chat_id     integer             NOT NULL,
+    ration      varchar             NOT NULL,
+    health      varchar             NOT NULL,
+    habits      varchar             NOT NULL,
+    filePath    varchar             NOT NULL,
+    days        integer             NOT NULL,
+    client_dog_id   BIGINT REFERENCES client_dog(id),
+    lastMessage date                NOT NULL,
+    photo        bytea               NOT NULL
+)

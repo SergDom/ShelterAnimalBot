@@ -16,7 +16,7 @@ public class ClientDog {
     private String name;
 
     @Column(name = "chat_id", nullable = false)
-    private Integer chatId;
+    private Long chatId;
 
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
@@ -40,6 +40,12 @@ public class ClientDog {
     public ClientDog() {
     }
 
+    public ClientDog(String name, Long chatId, String phoneNumber) {
+        this.name = name;
+        this.chatId = chatId;
+        this.phoneNumber = phoneNumber;
+    }
+
     public Long getId() {
         return id;
     }
@@ -56,11 +62,11 @@ public class ClientDog {
         this.name = name;
     }
 
-    public Integer getChatId() {
+    public Long getChatId() {
         return chatId;
     }
 
-    public void setChatId(Integer chatId) {
+    public void setChatId(Long chatId) {
         this.chatId = chatId;
     }
 
