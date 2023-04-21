@@ -1,5 +1,6 @@
 package com.javadreamteam.shelteranimalbot.controllers;
 
+import com.javadreamteam.shelteranimalbot.model.ClientDog;
 import com.javadreamteam.shelteranimalbot.model.Report;
 import com.javadreamteam.shelteranimalbot.service.ReportService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,11 +11,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -26,9 +25,31 @@ import java.util.List;
 public class ReportController {
     private  final ReportService reportService;
 
+
     public ReportController(ReportService reportService) {
         this.reportService = reportService;
     }
+
+    @Operation(
+            summary = "Добавление отчета в БД",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Добавленный отчет",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = Report.class)
+                            )
+                    )
+            }
+    )
+
+    @PostMapping
+    public Report createReport(@RequestBody Report report){
+        return reportService.createReport(report);
+    }
+
+
     @Operation(
             summary = "Поиск отчета по id.",
             responses = {
@@ -46,33 +67,45 @@ public class ReportController {
                     )
             }
     )
-    @GetMapping("{report-find-Id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Report> findReport(
             @Parameter(description = "Идентификатор отчета", example = "1")
-            @PathVariable long reportId) {
+            @PathVariable Long id) {
 
-        Report report = reportService.findReportById(reportId);
+        Report report = reportService.findReportById(id);
         if (report == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(report);
     }
+
+
     @Operation(
-            summary = "Получить список всех отчетов",
+            summary = "Редактирование отчета в БД",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Список всех отчетов",
+                            description = "Измененный отчет",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    array = @ArraySchema(schema = @Schema(implementation = Report.class))
+                                    schema = @Schema(implementation = Report.class)
                             )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Отчет не найден"
                     )
             }
     )
-    @GetMapping("/all")
-    public ResponseEntity<List<Report>> findAllReports() {
-        return ResponseEntity.ok(reportService.findAllReports());
+
+    @PutMapping
+    public ResponseEntity<Report> updateReport(@RequestBody Report report) {
+
+        Report updatedReport = reportService.updateReport(report);
+        if (updatedReport == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedReport);
     }
 
     @Operation(
@@ -89,13 +122,32 @@ public class ReportController {
                     )
             }
     )
-    @GetMapping("{reportId}")
+    @GetMapping("{/id}")
     public ResponseEntity<Report> deleteReport(
             @Parameter(description = "Идентификатор отчета")
-            @PathVariable long reportId) {
-        reportService.deleteReport(reportId);
+            @PathVariable long id) {
+        reportService.deleteReport(id);
 
         return ResponseEntity.ok().build();
     }
+
+    @Operation(
+            summary = "Получить список всех отчетов",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Список всех отчетов",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    array = @ArraySchema(schema = @Schema(implementation = Report.class))
+                            )
+                    )
+            }
+    )
+    @GetMapping("/all")
+    public ResponseEntity<Collection<Report>> getAllReports() {
+        return ResponseEntity.ok(reportService.getAllReports());
+    }
+
 
 }

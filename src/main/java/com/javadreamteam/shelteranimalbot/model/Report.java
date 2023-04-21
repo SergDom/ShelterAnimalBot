@@ -3,7 +3,11 @@ package com.javadreamteam.shelteranimalbot.model;
 
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table (name = "report")
@@ -36,16 +40,14 @@ public class Report {
      * Количество дней для отчета
      */
     private long days;
-    /**
-     * Путь до файла
-     */
-    private String filePath;
-    /**
-     * Размер файла
-     */
-    private long fileSize;
 
-    private Date lastMessage;
+    /**
+     * Фото
+     */
+
+    private byte[] photo;
+
+    private LocalDate lastMessage;
 
     /**
      * Фото петомца
@@ -62,11 +64,11 @@ public class Report {
     public Report() {
     }
 
-    public Date getLastMessage() {
+    public LocalDate getLastMessage() {
         return lastMessage;
     }
 
-    public void setLastMessage(Date lastMessage) {
+    public void setLastMessage(LocalDate lastMessage) {
         this.lastMessage = lastMessage;
     }
 
@@ -118,20 +120,42 @@ public class Report {
         this.days = days;
     }
 
-    public String getFilePath() {
-        return filePath;
+    public byte[] getPhoto() {
+        return photo;
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
     }
 
-    public long getFileSize() {
-        return fileSize;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Report report = (Report) o;
+        return days == report.days && Objects.equals(id, report.id) && Objects.equals(chatId, report.chatId) && Objects.equals(ration, report.ration) && Objects.equals(health, report.health) && Objects.equals(habits, report.habits) && Arrays.equals(photo, report.photo) && Objects.equals(lastMessage, report.lastMessage);
     }
 
-    public void setFileSize(long fileSize) {
-        this.fileSize = fileSize;
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(id, chatId, ration, health, habits, days, lastMessage);
+        result = 31 * result + Arrays.hashCode(photo);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Report{" +
+                "id=" + id +
+                ", chatId=" + chatId +
+                ", ration='" + ration + '\'' +
+                ", health='" + health + '\'' +
+                ", habits='" + habits + '\'' +
+                ", days=" + days +
+                ", photo=" + Arrays.toString(photo) +
+                ", lastMessage=" + lastMessage +
+                ", clientDog=" + clientDog +
+                '}';
     }
 }
 

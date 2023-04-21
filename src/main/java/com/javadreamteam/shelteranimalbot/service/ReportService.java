@@ -1,5 +1,6 @@
 package com.javadreamteam.shelteranimalbot.service;
 
+import com.javadreamteam.shelteranimalbot.exceptions.ReportException;
 import com.javadreamteam.shelteranimalbot.model.Report;
 import com.javadreamteam.shelteranimalbot.repository.ReportRepository;
 
@@ -8,8 +9,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -24,46 +27,79 @@ public class ReportService {
         this.reportRepository = reportRepository;
     }
     /**
-     * Метод создает экземпляр класса {@link Report} и сохраняет сущность в БД
+     * Создание отчета и сохранение его в БД
+     * Используется метод репозитория {@link ReportRepository#save(Object)}
+     * @param report создается объект отчет
+     * @return созданный отчет
+     */
+
+  public Report createReport (Report report){
+      logger.info("Method createReport has been run", report);
+      return reportRepository.save(report);
+  }
+
+    /**
+     * Метод скачивает отчет из БД {@link Report}
      * с помощью метода {@link ReportRepository#save(Object)}.
      *
-     * @param chatId     идентификатор чата, не может быть {@code null}
-     * @param textReport текст отчета, не может быть {@code null}
-     * @param dateReport дата и время отправки отчета, не может быть {@code null}
      */
-//    @Transactional
-//    public Report createReport(Long chatId, String textReport, LocalDateTime dateReport
-//                               //параметры фото - путь к файлу, размер файла, тип данных, массив байт
-//    ) {
-//        logger.info("Method createReport has been run");
 
-//        Report report = new Report();
-//        report.setChatId(chatId);
-//        report.setTextReport(textReport);
-//        report.setDateReport(dateReport.truncatedTo(ChronoUnit.MINUTES));
-//        return reportRepository.save(report);
-//    }
+    public Report downloadReport(Long chatId, String ration, String health, String habits, LocalDate lastMessage,
+    byte [] photo) {
+        logger.info("Method downloadReport has been run");
+
+        Report report = new Report();
+        report.setChatId(chatId);
+        report.setRation(ration);
+        report.setHealth(health);
+        report.setHabits(habits);
+        report.setLastMessage(lastMessage);
+        report.setPhoto(photo);
+
+        return reportRepository.save(report);
+    }
 
     /**
      * Метод ищет данные об отчете по его id.
-     * Используется метод {@link ReportRepository#findById(long)}
+     * Используется метод {@link ReportRepository#findById(Object)}
      *
      * @param id идентификатор отчета
+     * @throws  ReportException, если отчет не найден с указанным id в БД
      * @return данные об отчете
      */
     public Report findReportById(long id) {
         logger.info("Was invoked method - findReportById");
 
-        return reportRepository.findById(id);
+        return reportRepository.findById(id).orElseThrow(ReportException::new);
     }
+    /**
+     * Изменение данных отчета в БД
+     * Используется метод репозитория {@link ReportRepository#save(Object)}
+     * @param report отчет
+     * @throws ReportException, если отчет не найден в БД
+     * @return измененный отчет
+     */
+    public Report updateReport (Report report){
+        logger.info("Was invoked method - updateReport");
+        if(report.getId() != null) {
+            if(findReportById(report.getId()) !=null){
+                reportRepository.save(report);
+            }
+        }
+        else {
+            logger.error("Request report is not found");
+            throw new ReportException();}
+        return report;
+        }
+
     /**
      * Метод удаляет сущность {@link Report} по-указанному id.
      * Используется метод {@link ReportRepository#deleteById(Object)}
      *
      * @param id идентификатор удаляемого отчета
      */
-    public void deleteReport(long id) {
-        logger.info("Was invoked method - deleteReport");
+    public void deleteReport(Long id) {
+        logger.info("Was invoked method - deleteReport, by id {}", id);
 
         reportRepository.deleteById(id);
     }
@@ -72,7 +108,7 @@ public class ReportService {
      *
      * @return список всех отчетов
      */
-    public List<Report> findAllReports() {
+    public Collection <Report> getAllReports () {
         logger.info("Was invoked method - findAllReports");
 
         return reportRepository.findAll();
