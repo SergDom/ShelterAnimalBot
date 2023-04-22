@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "dog")
-public class Dog {
+@Table(name = "cat")
+public class Cat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,10 +25,10 @@ public class Dog {
     private String info;
 
 
-    public Dog() {
+    public Cat() {
     }
 
-    public Dog(Long id, String name, String breed, Integer age, String info) {
+    public Cat(Long id, String name, String breed, Integer age, String info) {
         this.id = id;
         this.name = name;
         this.breed = breed;
@@ -80,8 +80,8 @@ public class Dog {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Dog dog = (Dog) o;
-        return Objects.equals(id, dog.id);
+        Cat cat = (Cat) o;
+        return Objects.equals(id, cat.id);
     }
 
     @Override
@@ -91,7 +91,7 @@ public class Dog {
 
     @Override
     public String toString() {
-        return "Dog{" +
+        return "Cat{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", breed='" + breed + '\'' +

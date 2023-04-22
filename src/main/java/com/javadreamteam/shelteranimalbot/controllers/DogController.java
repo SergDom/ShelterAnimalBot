@@ -45,8 +45,8 @@ public class DogController {
             }
     )
     @PostMapping
-    public ResponseEntity<Dog> createCustomer(@RequestBody Dog Dog) {
-        return ResponseEntity.ok(dogService.create(Dog));
+    public ResponseEntity<Dog> createCustomer(@RequestBody Dog dog) {
+        return ResponseEntity.ok(dogService.create(dog));
     }
 
     @Operation(
@@ -74,8 +74,8 @@ public class DogController {
             }
     )
     @PutMapping
-    public ResponseEntity<Dog> updateDog(@RequestBody Dog Dog) {
-        Dog updatedDog = dogService.update(Dog);
+    public ResponseEntity<Dog> updateDog(@RequestBody Dog dog) {
+        Dog updatedDog = dogService.update(dog);
         if (updatedDog == null) {
             return ResponseEntity.notFound().build();
         }

@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "client_dog")
-public class ClientDog {
+@Table(name = "client_cat")
+public class ClientCat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,16 +31,16 @@ public class ClientDog {
     private Status status;
 
     @OneToOne
-    @JoinColumn(name = "dog_id")
-    private Dog dog;
+    @JoinColumn(name = "cat_id")
+    private Cat cat;
 
     private int volunteerId;
 
 
-    public ClientDog() {
+    public ClientCat() {
     }
 
-    public ClientDog(String name, Long chatId, String phoneNumber) {
+    public ClientCat(String name, Long chatId, String phoneNumber) {
         this.name = name;
         this.chatId = chatId;
         this.phoneNumber = phoneNumber;
@@ -102,12 +102,12 @@ public class ClientDog {
         this.status = status;
     }
 
-    public Dog getDog() {
-        return dog;
+    public Cat getCat() {
+        return cat;
     }
 
-    public void setDog(Dog dog) {
-        this.dog = dog;
+    public void setCat(Cat cat) {
+        this.cat = cat;
     }
 
     public int getVolunteerId() {
@@ -122,8 +122,8 @@ public class ClientDog {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ClientDog clientDog = (ClientDog) o;
-        return Objects.equals(id, clientDog.id);
+        ClientCat clientCat = (ClientCat) o;
+        return Objects.equals(id, clientCat.id);
     }
 
     @Override
@@ -133,7 +133,7 @@ public class ClientDog {
 
     @Override
     public String toString() {
-        return "ClientDog{" +
+        return "ClientCat{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", chatId=" + chatId +
@@ -141,7 +141,7 @@ public class ClientDog {
                 ", email='" + email + '\'' +
                 ", yearOfBirth=" + yearOfBirth +
                 ", status='" + status + '\'' +
-                ", dog=" + dog +
+                ", cat=" + cat +
                 '}';
     }
 }
