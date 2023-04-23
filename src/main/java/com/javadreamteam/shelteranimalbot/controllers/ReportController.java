@@ -122,7 +122,7 @@ public class ReportController {
                     )
             }
     )
-    @GetMapping("{/id}")
+    @DeleteMapping ("/{id}")
     public ResponseEntity<Report> deleteReport(
             @Parameter(description = "Идентификатор отчета")
             @PathVariable long id) {

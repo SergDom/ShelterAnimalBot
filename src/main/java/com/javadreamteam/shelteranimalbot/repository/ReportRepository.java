@@ -7,5 +7,4 @@ import java.util.Collection;
 
 public interface ReportRepository extends JpaRepository<Report, Long> {
 
-    Collection<Report> findReports();
 }

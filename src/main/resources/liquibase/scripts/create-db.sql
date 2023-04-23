@@ -45,9 +45,10 @@ CREATE TABLE report
     ration      varchar             NOT NULL,
     health      varchar             NOT NULL,
     habits      varchar             NOT NULL,
-    filePath    varchar             NOT NULL,
+    info        VARCHAR             NOT NULL,
     days        integer             NOT NULL,
     client_dog_id   BIGINT REFERENCES client_dog(id),
     lastMessage date                NOT NULL,
-    photo        bytea               NOT NULL
+    photo        bytea               NOT NULL,
+    status       TEXT DEFAULT 'POSTED'
 )

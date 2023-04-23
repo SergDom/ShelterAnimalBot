@@ -1,6 +1,7 @@
 package com.javadreamteam.shelteranimalbot.service;
 
 import com.javadreamteam.shelteranimalbot.exceptions.ReportException;
+import com.javadreamteam.shelteranimalbot.keyboard.ReportStatus;
 import com.javadreamteam.shelteranimalbot.model.Report;
 import com.javadreamteam.shelteranimalbot.repository.ReportRepository;
 
@@ -8,12 +9,10 @@ import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.transaction.Transactional;
+
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Collection;
-import java.util.List;
+
 
 /**
  * Класс сервиса для работы с {@link ReportRepository} и сущностью {@link Report}
@@ -34,7 +33,7 @@ public class ReportService {
      */
 
   public Report createReport (Report report){
-      logger.info("Method createReport has been run", report);
+      logger.info("Method createReport has been run {}", report);
       return reportRepository.save(report);
   }
 
@@ -55,6 +54,7 @@ public class ReportService {
         report.setHabits(habits);
         report.setLastMessage(lastMessage);
         report.setPhoto(photo);
+        report.setReportStatus(ReportStatus.POSTED);
 
         return reportRepository.save(report);
     }

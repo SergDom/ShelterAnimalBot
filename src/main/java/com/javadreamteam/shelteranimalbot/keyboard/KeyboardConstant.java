@@ -37,6 +37,17 @@ public class KeyboardConstant {
     public static final String HOW_TAKE_A_PET = "....";
 
 
+    public static final String REPORT_LIST = """
+            ЗАГРУЗИТЕ ОТЧЕТ В ФОРМАТЕ:\s
+            \s
+            Рацион: Данные о рационе\s
+            Информация: Общая информация\s
+            Привычки: Данные об изменении привычек\s
+            Не забудьте загрузить фото к отчету !""";
+
+
+
+
 
     public final static String CONTACT_TELEGRAM_USERNAME_TEXT = "Пожалуйста свяжитесь с пользователем %s. Ему нужна помощь.";
     public final static String NO_VOLUNTEERS_TEXT = "На данный момент нет свободных волонтеров.";
