@@ -1,6 +1,5 @@
 package com.javadreamteam.shelteranimalbot.controllers;
 
-import com.javadreamteam.shelteranimalbot.model.ClientDog;
 import com.javadreamteam.shelteranimalbot.model.Report;
 import com.javadreamteam.shelteranimalbot.service.ReportService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,17 +13,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Класс для обработки запросов от клиента и возвращения результатов,
  * работает с сущностью {@link ReportService}.
  */
 @RestController
-@RequestMapping("/report")
+@RequestMapping("report")
 public class ReportController {
     private  final ReportService reportService;
-
 
     public ReportController(ReportService reportService) {
         this.reportService = reportService;
@@ -67,7 +64,7 @@ public class ReportController {
                     )
             }
     )
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<Report> findReport(
             @Parameter(description = "Идентификатор отчета", example = "1")
             @PathVariable Long id) {
@@ -122,7 +119,7 @@ public class ReportController {
                     )
             }
     )
-    @GetMapping("{/id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<Report> deleteReport(
             @Parameter(description = "Идентификатор отчета")
             @PathVariable long id) {

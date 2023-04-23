@@ -1,7 +1,7 @@
 package com.javadreamteam.shelteranimalbot.controllers;
 
-import com.javadreamteam.shelteranimalbot.model.Dog;
-import com.javadreamteam.shelteranimalbot.service.DogService;
+import com.javadreamteam.shelteranimalbot.model.Cat;
+import com.javadreamteam.shelteranimalbot.service.CatService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,90 +12,87 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-
 @RestController
-@RequestMapping("dogs")
-public class DogController {
-    private final DogService dogService;
-
-    public DogController(DogService dogService) {
-        this.dogService = dogService;
+@RequestMapping("cats")
+public class CatController {
+    private final CatService catService;
+    public CatController(CatService catService) {
+        this.catService = catService;
     }
-
     @Operation(
-            summary = "Создание собаки",
+            summary = "Создание кошки",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "Данные создаваемой собаки." +
+                    description = "Данные создаваемой кошки." +
                             "id переданный в теле будет игнорироваться, будет присвоен следующий id из БД. " +
                             "Все поля кроме id обязательны.",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = Dog.class)
+                            schema = @Schema(implementation = Cat.class)
                     )
             ),
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Данные созданной собаки",
+                            description = "Данные созданной кошки",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = Dog.class)
+                                    schema = @Schema(implementation = Cat.class)
                             )
                     )
             }
     )
     @PostMapping
-    public ResponseEntity<Dog> createCustomer(@RequestBody Dog dog) {
-        return ResponseEntity.ok(dogService.create(dog));
+    public ResponseEntity<Cat> createCustomer(@RequestBody Cat cat) {
+        return ResponseEntity.ok(catService.create(cat));
     }
 
     @Operation(
-            summary = "Изменение данных собаки.",
+            summary = "Изменение данных кошки.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "Данные о собаке с изменениями. Все поля обязательны.",
+                    description = "Данные о кошке с изменениями. Все поля обязательны.",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = Dog.class)
+                            schema = @Schema(implementation = Cat.class)
                     )
             ),
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Измененные данные о собаке",
+                            description = "Измененные данные о кошке",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = Dog.class)
+                                    schema = @Schema(implementation = Cat.class)
                             )
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "Собака с данным id не найдена"
+                            description = "кошка с данным id не найдена"
                     )
             }
     )
     @PutMapping
-    public ResponseEntity<Dog> updateDog(@RequestBody Dog dog) {
-        Dog updatedDog = dogService.update(dog);
-        if (updatedDog == null) {
+    public ResponseEntity<Cat> updateCat(@RequestBody Cat cat) {
+        Cat updatedCat = catService.update(cat);
+        if (updatedCat == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(updatedDog);
+        return ResponseEntity.ok(updatedCat);
     }
 
     @Operation(
-            summary = "Удаление собаки по id.",
+            summary = "Удаление кошки по id.",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Собака успешно удалена"
+                            description = "кошка успешно удалена"
                     )
             }
     )
     @DeleteMapping("{id}")
-    public ResponseEntity<Dog> deleteDog(
+    public ResponseEntity<Cat> deleteCat(
             @Parameter(description = "id удаляемого владельца животного")
             @PathVariable long id) {
-        dogService.removeById(id);
+        catService.removeById(id);
         return ResponseEntity.ok().build();
     }
 
@@ -105,28 +102,28 @@ public class DogController {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Информация о найденой собаке",
+                            description = "Информация о найденой кошке",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = Dog.class)
+                                    schema = @Schema(implementation = Cat.class)
                             )
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "собака с данным id не найден"
+                            description = "кошка с данным id не найден"
                     )
             }
     )
     @GetMapping("{id}")
-    public ResponseEntity<Dog> findDog(
-            @Parameter(description = "Идентификатор собаки", example = "1")
+    public ResponseEntity<Cat> findCat(
+            @Parameter(description = "Идентификатор кошки", example = "1")
             @PathVariable Long id) {
 
-        Dog Dog = dogService.getById(id);
-        if (Dog == null) {
+        Cat Cat = catService.getById(id);
+        if (Cat == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(Dog);
+        return ResponseEntity.ok(Cat);
     }
 
     @Operation(
@@ -134,20 +131,20 @@ public class DogController {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Все найденные собаки",
+                            description = "Все найденные кошки",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = Dog.class)
+                                    schema = @Schema(implementation = Cat.class)
                             )
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "собаки не найдены"
+                            description = "кошки не найдены"
                     )
             }
     )
-    @GetMapping("/find-all-dogs")
-    public ResponseEntity<Collection<Dog>> getDogsList() {
-        return ResponseEntity.ok(dogService.getAll());
+    @GetMapping("/find-all-cats")
+    public ResponseEntity<Collection<Cat>> getCatsList() {
+        return ResponseEntity.ok(catService.getAll());
     }
 }
