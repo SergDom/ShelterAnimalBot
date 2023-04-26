@@ -2,17 +2,18 @@ package com.javadreamteam.shelteranimalbot.model;
 
 
 
+
+
 import com.javadreamteam.shelteranimalbot.keyboard.ReportStatus;
+
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Objects;
 
 @Entity
-@Table (name = "report")
+@Table(name = "report")
 public class Report {
 
     @Id
@@ -70,6 +71,10 @@ public class Report {
     @ManyToOne
     @JoinColumn(name = "client_dog_id")
     private ClientDog clientDog;
+
+    @ManyToOne
+    @JoinColumn(name = "client_cat_id")
+    private ClientCat clientCat;
 
     public Report() {
     }
@@ -154,12 +159,21 @@ public class Report {
         this.clientDog = clientDog;
     }
 
+
+    public ClientCat getClientCat() {
+        return clientCat;
+    }
+
+    public void setClientCat(ClientCat clientCat) {
+        this.clientCat = clientCat;
+
     public ReportStatus getReportStatus() {
         return reportStatus;
     }
 
     public void setReportStatus(ReportStatus reportStatus) {
         this.reportStatus = reportStatus;
+
     }
 
     @Override

@@ -4,10 +4,10 @@ import com.javadreamteam.shelteranimalbot.exceptions.ReportException;
 import com.javadreamteam.shelteranimalbot.keyboard.ReportStatus;
 import com.javadreamteam.shelteranimalbot.model.Report;
 import com.javadreamteam.shelteranimalbot.repository.ReportRepository;
-
-import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
 
 
 import java.time.LocalDate;

@@ -1,6 +1,7 @@
 package com.javadreamteam.shelteranimalbot.controller;
 
 import com.javadreamteam.shelteranimalbot.controllers.*;
+import com.javadreamteam.shelteranimalbot.model.Cat;
 import com.javadreamteam.shelteranimalbot.model.Dog;
 import com.javadreamteam.shelteranimalbot.repository.*;
 import com.javadreamteam.shelteranimalbot.service.*;
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest
-public class DogControllerTest {
+public class CatControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -63,13 +64,13 @@ public class DogControllerTest {
 
 
     @Test
-    public void dogTest() throws Exception {
+    public void catTest() throws Exception {
 
-        Long id = 1L;
-        String name = "Лайка";
-        Integer age = 2;
-        String breed = "Дворняга";
-        String info = "С пятном на спине";
+        Long id = 3L;
+        String name = "Мурка";
+        Integer age = 5;
+        String breed = "Британская";
+        String info = "Гладкошерстая";
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("id", id);
@@ -78,13 +79,13 @@ public class DogControllerTest {
         jsonObject.put("breed", breed);
         jsonObject.put("info", info);
 
-        Dog dog = new Dog(id, name, breed, age, info);
+        Cat cat = new Cat(id, name, breed, age, info);
 
-        when(dogRepository.findById(any(Long.class))).thenReturn(Optional.of(dog));
-        when(dogRepository.save(dog)).thenReturn(dog);
+        when(catRepository.findById(any(Long.class))).thenReturn(Optional.of(cat));
+        when(catRepository.save(cat)).thenReturn(cat);
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/dogs")
+                        .post("/cats")
                         .content(jsonObject.toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -95,7 +96,7 @@ public class DogControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.info").value(info));
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/dogs/1")
+                        .get("/cats/3")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(name))
@@ -104,19 +105,19 @@ public class DogControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.info").value(info));
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .put("/dogs")
+                        .put("/cats")
                         .content(jsonObject.toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/dogs/1")
+                        .delete("/cats/3")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/dogs/find-all-dogs")
+                        .get("/cats/find-all-cats")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }

@@ -1,15 +1,9 @@
 package com.javadreamteam.shelteranimalbot.controller;
 
-import com.javadreamteam.shelteranimalbot.controllers.ClientDogController;
-import com.javadreamteam.shelteranimalbot.controllers.DogController;
-import com.javadreamteam.shelteranimalbot.controllers.ReportController;
+import com.javadreamteam.shelteranimalbot.controllers.*;
 import com.javadreamteam.shelteranimalbot.model.ClientDog;
-import com.javadreamteam.shelteranimalbot.repository.ClientDogRepository;
-import com.javadreamteam.shelteranimalbot.repository.DogRepository;
-import com.javadreamteam.shelteranimalbot.repository.ReportRepository;
-import com.javadreamteam.shelteranimalbot.service.ClientDogService;
-import com.javadreamteam.shelteranimalbot.service.DogService;
-import com.javadreamteam.shelteranimalbot.service.ReportService;
+import com.javadreamteam.shelteranimalbot.repository.*;
+import com.javadreamteam.shelteranimalbot.service.*;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -34,28 +28,40 @@ public class ClientDogControllerTest {
     private MockMvc mockMvc;
     @MockBean
     private DogRepository dogRepository;
-
+    @MockBean
+    private CatRepository catRepository;
     @MockBean
     private ClientDogRepository clientDogRepository;
+    @MockBean
+    private ClientCatRepository clientCatRepository;
     @MockBean
     private ReportRepository reportRepository;
 
     @SpyBean
     private DogService dogService;
     @SpyBean
+    private CatService catService;
+
+    @SpyBean
     private ClientDogService clientDogService;
+    @SpyBean
+    private ClientCatService clientCatService;
     @SpyBean
     private ReportService reportService;
 
     @InjectMocks
     private DogController dogController;
     @InjectMocks
+    private CatController catController;
+    @InjectMocks
     private ClientDogController clientDogController;
+    @InjectMocks
+    private ClientCatController clientCatController;
     @InjectMocks
     private ReportController reportController;
 
     @Test
-    public void clientDogTest () throws Exception {
+    public void clientDogTest() throws Exception {
         Long chatId = 12345L;
         String name = "Иван";
         String phoneNumber = "89991234567";
@@ -66,7 +72,7 @@ public class ClientDogControllerTest {
         jsonObject.put("name", name);
         jsonObject.put("phoneNumber", phoneNumber);
 
-        ClientDog clientDog = new ClientDog(name,chatId, phoneNumber);
+        ClientDog clientDog = new ClientDog(name, chatId, phoneNumber);
 
         when(clientDogRepository.save(any(ClientDog.class))).thenReturn(clientDog);
         when(clientDogRepository.findById(any(Long.class))).thenReturn(Optional.of(clientDog));

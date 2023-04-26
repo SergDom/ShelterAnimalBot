@@ -14,10 +14,9 @@ import java.util.Collection;
  * Сервис используется для создания, редактирования, удаления и получения собаки/списка собак из БД
  */
 @Service
-
 public class DogService {
-private final DogRepository repository;
-private static final Logger logger = LoggerFactory.getLogger(DogService.class);
+    private final DogRepository repository;
+    private static final Logger logger = LoggerFactory.getLogger(DogService.class);
 
     public DogService(DogRepository dogRepository) {
         this.repository = dogRepository;
@@ -27,6 +26,7 @@ private static final Logger logger = LoggerFactory.getLogger(DogService.class);
      * Создание собаки и сохранение ее в БД
      * <br>
      * Используется метод репозитория {@link DogRepository#save(Object)}
+     *
      * @param dog создается объект собака
      * @return созданная собака
      */
@@ -39,9 +39,10 @@ private static final Logger logger = LoggerFactory.getLogger(DogService.class);
      * Поиск собаки в БД по id
      * <br>
      * Используется метод репозитория {@link DogRepository#findById(Object)}
+     *
      * @param id идентификатор собаки
-     * @throws DogException, если собака с указанным id не найденна в БД
      * @return найденная собака
+     * @throws DogException, если собака с указанным id не найденна в БД
      */
     public Dog getById(Long id) {
         logger.info("Was invoked method to get a dog by id={}", id);
@@ -52,9 +53,10 @@ private static final Logger logger = LoggerFactory.getLogger(DogService.class);
      * Изменение данных собаки в БД
      * <br>
      * Используется метод репозитория {@link DogRepository#save(Object)}
+     *
      * @param dog изменяемая собака
-     * @throws DogException, если собака не найденна в БД
      * @return измененная собака
+     * @throws DogException, если собака не найденна в БД
      */
 
     public Dog update(Dog dog) {
@@ -66,10 +68,12 @@ private static final Logger logger = LoggerFactory.getLogger(DogService.class);
         }
         throw new DogException();
     }
+
     /**
      * Удаление собаки из БД по id
      * <br>
      * Используется метод репозитория {@link DogRepository#delete(Object)}
+     *
      * @param id идентификатор собаки
      */
 
@@ -77,10 +81,12 @@ private static final Logger logger = LoggerFactory.getLogger(DogService.class);
         logger.info("Was invoked method to remove a cat by id={}", id);
         repository.deleteById(id);
     }
+
     /**
      * Получение списка собак из БД
      * <br>
      * Используется метод репозитория {@link DogRepository#findAll()}
+     *
      * @return список собак
      */
 
