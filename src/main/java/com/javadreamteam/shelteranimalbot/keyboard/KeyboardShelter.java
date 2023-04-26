@@ -40,6 +40,9 @@ public class KeyboardShelter {
     public static final String ABOUT_SHELTER = "Информация о приюте";
     public static final String HOW_ADOPT = "Как взять питомца";
     public static final String SEND_REPORT = "Прислать отчет о питомце";
+    public static final String REPORT_FORM = "Форма отчета";
+    public static final String REPORT_STORE = "Отправить отчет";
+
 
 
     public static final String REQUEST_VOLUNTEER = "Позвать волонтера";
@@ -156,6 +159,17 @@ public class KeyboardShelter {
 
         replyKeyboardMarkup.addRow(new KeyboardButton(MAIN_MENU));
         returnResponseReplyKeyboardMarkup(replyKeyboardMarkup, chatId, ADVISE);
+    }
+
+    public void menuReport(long chatId) {
+        logger.info("Method menuReport has been run: {}, {}", chatId, "вызвали Меню отчета");
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(
+                new KeyboardButton(REPORT_FORM),
+                new KeyboardButton(REPORT_STORE));
+        replyKeyboardMarkup.addRow(
+                new KeyboardButton(REQUEST_VOLUNTEER));
+        replyKeyboardMarkup.addRow(new KeyboardButton(MAIN_MENU));
+        returnResponseReplyKeyboardMarkup(replyKeyboardMarkup, chatId, SEND_REPORT);
     }
 
     /**

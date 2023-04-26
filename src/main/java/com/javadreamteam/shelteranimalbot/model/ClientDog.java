@@ -1,5 +1,7 @@
 package com.javadreamteam.shelteranimalbot.model;
 
+import com.javadreamteam.shelteranimalbot.keyboard.ReportStatus;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -28,7 +30,7 @@ public class ClientDog {
     private Integer yearOfBirth;
 
     @Column(name = "status", nullable = false)
-    private Status status;
+    private ReportStatus status;
 
     @OneToOne
     @JoinColumn(name = "dog_id")
@@ -94,11 +96,11 @@ public class ClientDog {
         this.yearOfBirth = yearOfBirth;
     }
 
-    public Status getStatus() {
+    public ReportStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(ReportStatus status) {
         this.status = status;
     }
 

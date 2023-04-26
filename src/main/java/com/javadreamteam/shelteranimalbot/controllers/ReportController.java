@@ -119,6 +119,7 @@ public class ReportController {
                     )
             }
     )
+
     @DeleteMapping("{id}")
     public ResponseEntity<Report> deleteReport(
             @Parameter(description = "Идентификатор отчета")

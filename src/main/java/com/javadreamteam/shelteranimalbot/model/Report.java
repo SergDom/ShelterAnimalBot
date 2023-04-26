@@ -1,6 +1,12 @@
 package com.javadreamteam.shelteranimalbot.model;
 
 
+
+
+
+import com.javadreamteam.shelteranimalbot.keyboard.ReportStatus;
+
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -36,21 +42,29 @@ public class Report {
     /**
      * Количество дней для отчета
      */
+
     private long days;
 
     /**
-     * Фото
+     * Общая информация
+     */
+    private String info;
+
+    /**
+     * Фото в отчете
      */
 
     private byte[] photo;
 
+    /**
+     * Дата отправки отчета
+     */
     private LocalDate lastMessage;
 
-    /**
-     * Фото петомца
-     */
-//    @OneToMany(mappedBy = "report")
-//    private Collection<ReportPhoto> reportPhoto;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private ReportStatus reportStatus;
+
     /**
      * id питомца
      */
@@ -63,6 +77,14 @@ public class Report {
     private ClientCat clientCat;
 
     public Report() {
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
     }
 
     public LocalDate getLastMessage() {
@@ -137,12 +159,21 @@ public class Report {
         this.clientDog = clientDog;
     }
 
+
     public ClientCat getClientCat() {
         return clientCat;
     }
 
     public void setClientCat(ClientCat clientCat) {
         this.clientCat = clientCat;
+
+    public ReportStatus getReportStatus() {
+        return reportStatus;
+    }
+
+    public void setReportStatus(ReportStatus reportStatus) {
+        this.reportStatus = reportStatus;
+
     }
 
     @Override
@@ -150,12 +181,12 @@ public class Report {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Report report = (Report) o;
-        return days == report.days && Objects.equals(id, report.id) && Objects.equals(chatId, report.chatId) && Objects.equals(ration, report.ration) && Objects.equals(health, report.health) && Objects.equals(habits, report.habits) && Arrays.equals(photo, report.photo) && Objects.equals(lastMessage, report.lastMessage);
+        return days == report.days && Objects.equals(id, report.id) && Objects.equals(chatId, report.chatId) && Objects.equals(ration, report.ration) && Objects.equals(health, report.health) && Objects.equals(habits, report.habits) && Objects.equals(info, report.info) && Arrays.equals(photo, report.photo) && Objects.equals(lastMessage, report.lastMessage);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, chatId, ration, health, habits, days, lastMessage);
+        int result = Objects.hash(id, chatId, ration, health, habits, days, info, lastMessage);
         result = 31 * result + Arrays.hashCode(photo);
         return result;
     }
@@ -169,10 +200,11 @@ public class Report {
                 ", health='" + health + '\'' +
                 ", habits='" + habits + '\'' +
                 ", days=" + days +
+                ", info='" + info + '\'' +
                 ", photo=" + Arrays.toString(photo) +
                 ", lastMessage=" + lastMessage +
-                ", clientDog=" + clientDog +
                 '}';
     }
 }
+
 
