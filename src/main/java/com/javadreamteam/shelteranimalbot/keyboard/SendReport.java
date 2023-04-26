@@ -3,7 +3,6 @@ package com.javadreamteam.shelteranimalbot.keyboard;
 import com.javadreamteam.shelteranimalbot.listener.ShelterAnimalBotUpdatesListener;
 import com.javadreamteam.shelteranimalbot.model.Report;
 import com.javadreamteam.shelteranimalbot.model.Volunteer;
-import com.javadreamteam.shelteranimalbot.repository.ClientDogRepository;
 import com.javadreamteam.shelteranimalbot.repository.ReportRepository;
 import com.javadreamteam.shelteranimalbot.service.ReportService;
 import com.pengrad.telegrambot.TelegramBot;
@@ -12,7 +11,6 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.GetFile;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.GetFileResponse;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -40,14 +38,14 @@ public class SendReport {
                     "([А-яA-z\\s\\d\\D]+):(\\s)([А-яA-z\\s\\d\\D]+)\n" +
                     "([А-яA-z\\s\\d\\D]+):(\\s)([А-яA-z\\s\\d\\D]+)");
 
-    private final ClientDogRepository clientDogRepository;
 
 
-    public SendReport(TelegramBot telegramBot, ReportService reportService, ReportRepository reportRepository, ClientDogRepository clientDogRepository) {
+
+    public SendReport(TelegramBot telegramBot, ReportService reportService, ReportRepository reportRepository) {
         this.telegramBot = telegramBot;
         this.reportService = reportService;
         this.reportRepository = reportRepository;
-        this.clientDogRepository = clientDogRepository;
+
     }
 
     /**
@@ -116,10 +114,10 @@ public class SendReport {
             }
         }
         for (Report report : reportService.getAllReports()) {
-            Long ownerDogId = report.getClientDog().getId();
+            Long clientDogId = report.getClientDog().getId();
             if (report.getLastMessage().equals(LocalDate.now().minusDays(30))) {
                 reportRepository.save(report);
-                SendMessage sendMessage = new SendMessage(ownerDogId, report.getClientDog().getName() + "! поздравляем," +
+                SendMessage sendMessage = new SendMessage(clientDogId, report.getClientDog().getName() + "! поздравляем," +
                         "испытательный срок в 30 дней для собаки " + report.getClientDog().getDog().getName() +
                         " (id: " + report.getClientDog().getDog().getId() + ") закончен");
                 telegramBot.execute(sendMessage);

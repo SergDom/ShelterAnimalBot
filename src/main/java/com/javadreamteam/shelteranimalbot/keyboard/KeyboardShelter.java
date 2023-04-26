@@ -14,19 +14,13 @@ import com.pengrad.telegrambot.request.SendPhoto;
 import com.pengrad.telegrambot.response.SendResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
-import java.util.stream.Collectors;
 
 import static com.javadreamteam.shelteranimalbot.keyboard.KeyboardConstant.*;
 
@@ -50,6 +44,8 @@ public class KeyboardShelter {
     public static final String CONTACTS = "Контакты";
     public static final String SEND_CONTACTS = "Оставить контакты";
 
+    public static final String TOP_MENU = "Вернуться в меню выбора приюта";
+
 
     public static final String RULES_SHELTER = "Правила поведения";
 
@@ -61,9 +57,14 @@ public class KeyboardShelter {
     public static final String CYNOLOGIST_INFO = "Кинологи";
     public static final String CYNOLOGIST_LIST_INFO = "Кинологи список";
 
-    public static final String PUPPY_INFO = "Щенок";
+    public static final String PUPPY_INFO = "Детёныш";
     public static final String ADULT_INFO = "Взрослый";
     public static final String DISABLED_INFO = "С ограничениями";
+
+
+    public static final String DOG = "Хочу взять собачку !";
+    public static final String CAT = "Хочу взять кошку !";
+
 
     private static final long telegramChatVolunteer = 426343815L; //SergeyD
 
@@ -73,14 +74,26 @@ public class KeyboardShelter {
 
 
 
-
     public KeyboardShelter(TelegramBot telegramBot,
                            VolunteerRepository volunteerRepository, VolunteerService volunteerService) {
         this.telegramBot = telegramBot;
-
         this.volunteerRepository = volunteerRepository;
         this.volunteerService = volunteerService;
 
+    }
+
+    /**
+     * Главное Меню
+     *
+     * @param chatId
+     */
+    public void mainMenu(long chatId){
+        logger.info("Method sendMessage has been run: {}, {}", chatId, "Вызвано главное меню");
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(
+                new KeyboardButton(CAT));
+        replyKeyboardMarkup.addRow(new KeyboardButton(DOG));
+
+        returnResponseReplyKeyboardMarkup(replyKeyboardMarkup, chatId, "Выберите, кого хотите приютить:");
     }
 
     /**
@@ -97,7 +110,7 @@ public class KeyboardShelter {
         replyKeyboardMarkup.addRow(new KeyboardButton(HOW_ADOPT),
                 new KeyboardButton(SEND_REPORT));
         replyKeyboardMarkup.addRow(new KeyboardButton(REQUEST_VOLUNTEER));
-
+        replyKeyboardMarkup.addRow(new KeyboardButton(TOP_MENU));
         returnResponseReplyKeyboardMarkup(replyKeyboardMarkup, chatId, "Основное меню");
     }
 
@@ -160,7 +173,21 @@ public class KeyboardShelter {
         replyKeyboardMarkup.addRow(new KeyboardButton(MAIN_MENU));
         returnResponseReplyKeyboardMarkup(replyKeyboardMarkup, chatId, ADVISE);
     }
+    public void menuAdviseAnimalCat(long chatId) {
+        logger.info("Method menuAdviseAnimalCat has been run: {}, {}", chatId, "вызвали Советы и рекомендации");
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(
+                new KeyboardButton(TRANSPORTATION));
+        replyKeyboardMarkup.addRow(
+                new KeyboardButton(PUPPY_INFO),
+                new KeyboardButton(ADULT_INFO),
+                new KeyboardButton(DISABLED_INFO));
+        replyKeyboardMarkup.addRow(
+                new KeyboardButton(SEND_CONTACTS).requestContact(true),
+                new KeyboardButton(REQUEST_VOLUNTEER));
 
+        replyKeyboardMarkup.addRow(new KeyboardButton(MAIN_MENU));
+        returnResponseReplyKeyboardMarkup(replyKeyboardMarkup, chatId, ADVISE);
+    }
     public void menuReport(long chatId) {
         logger.info("Method menuReport has been run: {}, {}", chatId, "вызвали Меню отчета");
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(
@@ -198,10 +225,17 @@ public class KeyboardShelter {
 
 
 //    public void sendForwardMessage(Long chatId, Integer messageId) {
+//        Long volunterId = volunteerRepository.findById(volunteer.getChatId()).map(Volunteer::getChatId).orElseThrow();
 //        ForwardMessage forwardMessage = new ForwardMessage(chatId ,chatId, messageId);
-//        volunteerService.getById();
-//        volunteerRepository.getRandomVolunteer();
 //        telegramBot.execute(forwardMessage);
+//    }
+
+//    public SendMessage volunteerMessage (Update update) {
+//        logger.info("Launched method: volunteer, for user with id: " +
+//                update.message().chat().id());
+//
+//        SendMessage volunteer = new SendMessage(volunteerService.getRandomVolunteer(), "Волонтер скоро с вами свяжется");
+//        return volunteer;
 //    }
 
 
@@ -223,21 +257,22 @@ public class KeyboardShelter {
 //        Random random = new Random();
 //        Pageable pageable = PageRequest.of(random.nextLong(( volunteerRepository.count()), 1);
 //        Volunteer randomVolunteer = volunteerRepository.findAll(pageable).getContent().get(0);
-        List <Volunteer> volunteer = volunteerService.getRandomVolunteer();
-        chatId = Long.parseLong(userId);
+        Volunteer volunteer = volunteerService.getById(chatId);
+
         if (volunteer == null) {
             // Guest chat_id. Send message to the guest.
+            chatId = Long.parseLong(userId);
             SendMessage message = new SendMessage(chatId, NO_VOLUNTEERS_TEXT);
             telegramBot.execute(message);
         } else {
             // Volunteer chat_id. Send message to volunteer
-//            chatId = volunteer.stream().map(Volunteer::getChatId).mapToLong();
-//            if (update.message().from().username() != null) {
+            chatId = volunteer.getChatId();
+            if (update.message().from().username() != null) {
                 userId = "@" + update.message().from().username();
                 SendMessage message = new SendMessage(chatId, String.format(CONTACT_TELEGRAM_USERNAME_TEXT, userId));
                 telegramBot.execute(message);
 
-
+            }
         }
     }
 

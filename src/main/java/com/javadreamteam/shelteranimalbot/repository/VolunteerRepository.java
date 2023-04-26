@@ -18,8 +18,8 @@ import java.util.Optional;
 public interface VolunteerRepository extends JpaRepository<Volunteer, Long> {
 
 
-@Query(value = "SELECT * FROM volunteer ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
-
-List <Volunteer> getRandomVolunteer ();
+//@Query(value = "SELECT * FROM volunteer ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
+//
+//Optional <Volunteer> getRandomVolunteer ();
 
 }

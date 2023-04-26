@@ -31,6 +31,8 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
     private final SendReport sendReport;
 
 
+    private boolean isCat = false;
+
     public ShelterAnimalBotUpdatesListener(TelegramBot telegramBot, KeyboardShelter keyboardShelter, VolunteerRepository volunteerRepository, SendReport sendReport) {
         this.telegramBot = telegramBot;
         this.keyboardShelter = keyboardShelter;
@@ -54,11 +56,22 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
 
                 switch (textUpdate) {
 
+// Главное меню (выбор приюта)
                     case START:
                         sendMessage(chatId, nameUser + WELCOME);
+                        keyboardShelter.mainMenu(chatId);
+                        break;
+
+                    case CAT:
+                        isCat = true;
                         keyboardShelter.sendMenu(chatId);
                         break;
-// Главное меню
+
+                    case DOG:
+                        isCat = false;
+                        keyboardShelter.sendMenu(chatId);
+                        break;
+// Основное меню
                     case ABOUT_BOT:
                         sendMessage(chatId, INFO_ABOUT_BOT);
                         break;
@@ -99,8 +112,13 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                         break;
 
                     case ADVISE:
-                        sendMessage(chatId, nameUser + WELCOME);
-                        keyboardShelter.menuAdviseAnimal(chatId);
+                        if (isCat) {
+                            sendMessage(chatId, nameUser + WELCOME);
+                            keyboardShelter.menuAdviseAnimalCat(chatId);
+                        } else {
+                            sendMessage(chatId, nameUser + WELCOME);
+                            keyboardShelter.menuAdviseAnimal(chatId);
+                        }
                         break;
 
                     case DOCUMENT_LIST:
@@ -144,27 +162,50 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                         break;
 
                     case PUPPY_INFO:
-                        try {
-                            keyboardShelter.sendDocument(update, "/advice/" + "PUPPY_INFO.pdf", PUPPY);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
+                        if (isCat) {
+                            try {
+                                keyboardShelter.sendDocument(update, "/advice/" + "PUPPY_INFO.pdf", PUPPY);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else {
+                            try {
+                                keyboardShelter.sendDocument(update, "/advice/" + "PUPPY_INFO.pdf", PUPPY);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                         }
                         break;
 
                     case ADULT_INFO:
-                        try {
-                            keyboardShelter.sendDocument(update, "/advice/" + "ADULT_INFO.pdf", ADULT);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
+                        if (isCat) {
+                            try {
+                                keyboardShelter.sendDocument(update, "/advice/" + "ADULT_INFO.pdf", ADULT);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else {
+                            try {
+                                keyboardShelter.sendDocument(update, "/advice/" + "ADULT_INFO.pdf", ADULT);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                         }
                         break;
 
                     case DISABLED_INFO:
-
-                        try {
-                            keyboardShelter.sendDocument(update, "/advice/" + "DISABLED_DOG.pdf", DISABLE_PET);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
+                        if (isCat) {
+                            try {
+                                keyboardShelter.sendDocument(update, "/advice/" + "DISABLED_DOG.pdf", DISABLE_PET);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else {
+                            try {
+                                keyboardShelter.sendDocument(update, "/advice/" + "DISABLED_DOG.pdf", DISABLE_PET);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                         }
                         break;
 // Общие кнопки
@@ -175,6 +216,10 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
 
                     case MAIN_MENU:
                         keyboardShelter.sendMenu(chatId);
+                        break;
+
+                    case TOP_MENU:
+                        keyboardShelter.mainMenu(chatId);
                         break;
 
                     case "":

@@ -46,9 +46,33 @@ CREATE TABLE report
     health      varchar             NOT NULL,
     habits      varchar             NOT NULL,
     info        VARCHAR             NOT NULL,
-    days        integer             NOT NULL,
     client_dog_id   BIGINT REFERENCES client_dog(id),
     lastMessage date                NOT NULL,
     photo        bytea               NOT NULL,
     status       TEXT DEFAULT 'POSTED'
-)
+);
+
+-- changeset andrew:3
+CREATE TABLE client_cat
+(
+    id            INTEGER PRIMARY KEY,
+    name          TEXT           NOT NULL,
+    chat_id       INTEGER        NOT NULL,
+    phone_number  TEXT           NOT NULL,
+    email         TEXT           NOT NULL,
+    year_of_birth INTEGER        NOT NULL,
+    cat_id        INTEGER UNIQUE NOT NULL,
+    status        VARCHAR        NOT NULL,
+    volunteer_id    INT
+);
+
+-- changeset andrew:4
+CREATE TABLE cat
+(
+    id    INTEGER PRIMARY KEY,
+    name  TEXT    NOT NULL,
+    age   INTEGER NOT NULL,
+    breed TEXT    NOT NULL,
+    info  TEXT    NOT NULL,
+    FOREIGN KEY (id) REFERENCES client_cat (cat_id)
+);

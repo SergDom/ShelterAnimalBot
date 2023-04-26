@@ -22,7 +22,7 @@ public class Volunteer {
     @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "phone", nullable = false)
+    @Column(name = "phone")
     private String phone;
 
     @Column(name = "chat_id")

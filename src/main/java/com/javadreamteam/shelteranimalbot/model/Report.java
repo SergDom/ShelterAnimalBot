@@ -39,11 +39,6 @@ public class Report {
      * Привычки животного
      */
     private String habits;
-    /**
-     * Количество дней для отчета
-     */
-
-    private long days;
 
     /**
      * Общая информация
@@ -135,14 +130,6 @@ public class Report {
         this.habits = habits;
     }
 
-    public long getDays() {
-        return days;
-    }
-
-    public void setDays(long days) {
-        this.days = days;
-    }
-
     public byte[] getPhoto() {
         return photo;
     }
@@ -165,7 +152,7 @@ public class Report {
     }
 
     public void setClientCat(ClientCat clientCat) {
-        this.clientCat = clientCat;
+        this.clientCat = clientCat;}
 
     public ReportStatus getReportStatus() {
         return reportStatus;
@@ -181,12 +168,12 @@ public class Report {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Report report = (Report) o;
-        return days == report.days && Objects.equals(id, report.id) && Objects.equals(chatId, report.chatId) && Objects.equals(ration, report.ration) && Objects.equals(health, report.health) && Objects.equals(habits, report.habits) && Objects.equals(info, report.info) && Arrays.equals(photo, report.photo) && Objects.equals(lastMessage, report.lastMessage);
+        return Objects.equals(id, report.id) && Objects.equals(chatId, report.chatId) && Objects.equals(ration, report.ration) && Objects.equals(health, report.health) && Objects.equals(habits, report.habits) && Objects.equals(info, report.info) && Arrays.equals(photo, report.photo) && Objects.equals(lastMessage, report.lastMessage) && reportStatus == report.reportStatus && Objects.equals(clientDog, report.clientDog);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, chatId, ration, health, habits, days, info, lastMessage);
+        int result = Objects.hash(id, chatId, ration, health, habits, info, lastMessage, reportStatus, clientDog);
         result = 31 * result + Arrays.hashCode(photo);
         return result;
     }
@@ -199,7 +186,6 @@ public class Report {
                 ", ration='" + ration + '\'' +
                 ", health='" + health + '\'' +
                 ", habits='" + habits + '\'' +
-                ", days=" + days +
                 ", info='" + info + '\'' +
                 ", photo=" + Arrays.toString(photo) +
                 ", lastMessage=" + lastMessage +
