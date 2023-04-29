@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.OptionalLong;
 
 import static com.javadreamteam.shelteranimalbot.keyboard.KeyboardConstant.*;
 
@@ -224,11 +225,10 @@ public class KeyboardShelter {
     }
 
 
-//    public void sendForwardMessage(Long chatId, Integer messageId) {
-//        Long volunterId = volunteerRepository.findById(volunteer.getChatId()).map(Volunteer::getChatId).orElseThrow();
-//        ForwardMessage forwardMessage = new ForwardMessage(chatId ,chatId, messageId);
-//        telegramBot.execute(forwardMessage);
-//    }
+    public void sendForwardMessage(Long chatId, Integer messageId) {
+        ForwardMessage forwardMessage = new ForwardMessage(telegramChatVolunteer ,chatId, messageId);
+        telegramBot.execute(forwardMessage);
+    }
 
 //    public SendMessage volunteerMessage (Update update) {
 //        logger.info("Launched method: volunteer, for user with id: " +

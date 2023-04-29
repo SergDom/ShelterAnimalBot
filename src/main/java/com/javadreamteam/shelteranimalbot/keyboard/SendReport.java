@@ -1,13 +1,18 @@
 package com.javadreamteam.shelteranimalbot.keyboard;
 
 import com.javadreamteam.shelteranimalbot.listener.ShelterAnimalBotUpdatesListener;
+import com.javadreamteam.shelteranimalbot.model.ClientCat;
+import com.javadreamteam.shelteranimalbot.model.ClientDog;
 import com.javadreamteam.shelteranimalbot.model.Report;
 import com.javadreamteam.shelteranimalbot.model.Volunteer;
+import com.javadreamteam.shelteranimalbot.repository.ClientCatRepository;
+import com.javadreamteam.shelteranimalbot.repository.ClientDogRepository;
 import com.javadreamteam.shelteranimalbot.repository.ReportRepository;
 import com.javadreamteam.shelteranimalbot.service.ReportService;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.File;
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.request.ForwardMessage;
 import com.pengrad.telegrambot.request.GetFile;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.GetFileResponse;
@@ -21,7 +26,6 @@ import java.time.LocalDate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.javadreamteam.shelteranimalbot.keyboard.KeyboardShelter.REPORT_STORE;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 @Service
@@ -33,19 +37,24 @@ public class SendReport {
     private Volunteer volunteer;
     private final ReportRepository reportRepository;
 
+    private static final long telegramChatVolunteer = 426343815L; //SergeyD
+
     private static final Pattern REPORT_PATTERN = Pattern.compile(
             "([А-яA-z\\s\\d\\D]+):(\\s)([А-яA-z\\s\\d\\D]+)\n" +
                     "([А-яA-z\\s\\d\\D]+):(\\s)([А-яA-z\\s\\d\\D]+)\n" +
                     "([А-яA-z\\s\\d\\D]+):(\\s)([А-яA-z\\s\\d\\D]+)");
+    private final ClientDogRepository clientDogRepository;
+    private final ClientCatRepository clientCatRepository;
 
 
-
-
-    public SendReport(TelegramBot telegramBot, ReportService reportService, ReportRepository reportRepository) {
+    public SendReport(TelegramBot telegramBot, ReportService reportService, ReportRepository reportRepository,
+                      ClientDogRepository clientDogRepository, ClientCatRepository clientCatRepository) {
         this.telegramBot = telegramBot;
         this.reportService = reportService;
         this.reportRepository = reportRepository;
 
+        this.clientDogRepository = clientDogRepository;
+        this.clientCatRepository = clientCatRepository;
     }
 
     /**
@@ -57,15 +66,15 @@ public class SendReport {
         logger.info("Launched method: report_form, for user with id: " +
                 update.message().chat().id());
 
-        String message = update.message().text();
-
-        if (update.message().text().equals(REPORT_STORE)) {
+        String message = update.message().caption();
+        Matcher matcher = REPORT_PATTERN.matcher(message);
+//         update.message().text().equals(REPORT_STORE);
             SendMessage text = new SendMessage(update.message().chat().id(), "Введите данные по отчету");
             telegramBot.execute(text);
             logger.info("Received data " + text);
-        } else {
-            Matcher matcher = REPORT_PATTERN.matcher(message);
-            if (matcher.matches()) {
+
+          if (
+             matcher.matches()) {
                 String ration = matcher.group(3);
                 String info = matcher.group(6);
                 String habits = matcher.group(9);
@@ -92,7 +101,12 @@ public class SendReport {
                         "Введены не все данные, проверьте все поля в отчете!"));
             }
         }
+
+    public void sendForwardMessage(Long chatId, Integer messageId) {
+        ForwardMessage forwardMessage = new ForwardMessage(telegramChatVolunteer, chatId, messageId);
+        telegramBot.execute(forwardMessage);
     }
+
 
     @Scheduled(cron = "0 0/3 * * * *")
     public void sendNotificationDog() {

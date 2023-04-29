@@ -23,8 +23,7 @@ public class ClientDogService {
     /**
      *Создание нового клиента
      *
-     * @param clientDog
-     * @return
+     * @return созданный клиент
      */
 
     public ClientDog create(ClientDog clientDog) {
@@ -35,7 +34,7 @@ public class ClientDogService {
     /**
      * получение клиента по его id
      * @param id идентификатор клиента
-     * @return
+     * @return найденный клиент
      */
     public ClientDog getById(Long id) {
         logger.info("Was invoked method to get a Client by id={}", id);

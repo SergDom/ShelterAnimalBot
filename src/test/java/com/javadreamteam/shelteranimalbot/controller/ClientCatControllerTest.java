@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -21,34 +22,37 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest (ClientDogController.class)
-public class ClientDogControllerTest {
+@WebMvcTest (ClientCatController.class)
+public class ClientCatControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+
     @MockBean
-    private ClientDogRepository clientDogRepository;
+    private ClientCatRepository clientCatRepository;
 
 
     @MockBean
-    private ClientDogService clientDogService;
+    private ClientCatService clientCatService;
 
 
     @InjectMocks
-    private ClientDogController clientDogController;
+    private ClientCatController clientCatController;
 
-    private final ClientDog client = new ClientDog();
+
+    private final ClientCat client = new ClientCat();
     private final JSONObject jsonClient = new JSONObject();
 
     @BeforeEach
     public void setup() throws Exception {
 
-        client.setId(1L);
-        client.setName("Иван");
+        client.setId(2L);
+        client.setName("Федор");
         client.setPhoneNumber("89991234567");
 
 
@@ -57,16 +61,16 @@ public class ClientDogControllerTest {
         jsonClient.put("phoneNumber", client.getPhoneNumber());
 
 
-        when(clientDogService.create(client)).thenReturn(client);
-        when(clientDogService.update(client)).thenReturn(client);
-        when(clientDogService.getById(any())).thenReturn(client);
-        when(clientDogService.getAll()).thenReturn(List.of(client));
+        when(clientCatService.create(client)).thenReturn(client);
+        when(clientCatService.update(client)).thenReturn(client);
+        when(clientCatService.getById(any())).thenReturn(client);
+        when(clientCatService.getAll()).thenReturn(List.of(client));
     }
 
     @Test
-    public void createClient () throws Exception {
+    public void createClient() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/clients")
+                        .post("/clients/cat")
                         .content(jsonClient.toString())
                         .contentType(MediaType.APPLICATION_JSON))
 
@@ -78,10 +82,10 @@ public class ClientDogControllerTest {
     }
 
     @Test
-    public void updateClient () throws Exception {
+    public void updateClient() throws Exception {
         client.setName("New name");
         mockMvc.perform(MockMvcRequestBuilders
-                        .put("/clients")
+                        .put("/clients/cat")
                         .content(jsonClient.toString())
                         .contentType(MediaType.APPLICATION_JSON))
 
@@ -93,26 +97,28 @@ public class ClientDogControllerTest {
     }
 
     @Test
-    public void removeClient () throws Exception {
+    public void removeClient() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/clients/1")
+                        .delete("/clients/cat/1")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void getClient () throws Exception {
+    public void getClient() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/clients/1")
+                        .get("/clients/cat/1")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
+
     @Test
-    public void getClientAll () throws Exception {
+    public void getClientAll() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/clients/find-all-records")
+                        .get("/clients/cat/find-all-records")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
 }
+

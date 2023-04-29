@@ -66,16 +66,17 @@ public class VolunteerService {
         }
         throw new VolunteerException();
     }
-//
-//    /**
-//     * Получение произвольного волонтера из БД
-//     * <br>
-//     * Используется метод репозитория {@link VolunteerRepository#getRandomVolunteer()}
-//     * @throws VolunteerException, если волонтер не найден в БД
-//     * @return найден волонтер
-//     */
-//    public Volunteer getRandomVolunteer() {
-//        return volunteerRepository
-//                .getRandomVolunteer().orElseThrow(VolunteerException::new);
-//    }
+
+    /**
+     * Получение произвольного волонтера из БД
+     * <br>
+     * Используется метод репозитория {@link VolunteerRepository#getRandomVolunteer()}
+     * @throws VolunteerException, если волонтер не найден в БД
+     * @return найден волонтер
+     */
+    public Volunteer getRandomVolunteer() {
+        return volunteerRepository
+                .getRandomVolunteer().orElseThrow(VolunteerException::new);
+    }
+
 }

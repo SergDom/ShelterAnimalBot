@@ -42,10 +42,14 @@ public class ClientCat {
     public ClientCat() {
     }
 
-    public ClientCat(String name, Long chatId, String phoneNumber) {
+    public ClientCat (String name, Long chatId, String phoneNumber) {
         this.name = name;
         this.chatId = chatId;
         this.phoneNumber = phoneNumber;
+    }
+
+    public ClientCat (String name, String phone, long finalChatId) {
+
     }
 
     public Long getId() {

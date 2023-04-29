@@ -42,10 +42,14 @@ public class ClientDog {
     public ClientDog() {
     }
 
-    public ClientDog(String name, Long chatId, String phoneNumber) {
-        this.name = name;
+    public ClientDog(Long chatId, String name, String phoneNumber) {
         this.chatId = chatId;
+        this.name = name;
         this.phoneNumber = phoneNumber;
+    }
+
+    public ClientDog(String name, String phone, long finalChatId) {
+
     }
 
     public Long getId() {
