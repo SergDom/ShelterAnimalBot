@@ -3,7 +3,8 @@ package com.javadreamteam.shelteranimalbot.keyboard;
 public enum ReportStatus {
     POSTED ("Отправлен"),
     APPROVED ("Одобрен"),
-    REFUSED ("Отклонен");
+    REFUSED ("Отклонен"),
+    PENDING("На рассмотрении");
 
     /**
      * Поле "Описание"
