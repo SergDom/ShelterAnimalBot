@@ -30,7 +30,7 @@ class ClientDogServiceTest {
     @Test
     void testCreate() {
         ClientDog clientDog = new ClientDog("John", 123456789L, "123-456-7890");
-        assertNull(clientDog.getId());
+         assertNull(clientDog.getId());
 
         clientDogService.create(clientDog);
 

@@ -52,6 +52,9 @@ public class ClientDog {
 
     }
 
+    public ClientDog(String john, long l, String s) {
+    }
+
     public Long getId() {
         return id;
     }
