@@ -1,14 +1,15 @@
 package com.javadreamteam.shelteranimalbot.keyboard;
 
 import com.javadreamteam.shelteranimalbot.listener.ShelterAnimalBotUpdatesListener;
-import com.javadreamteam.shelteranimalbot.model.ClientCat;
-import com.javadreamteam.shelteranimalbot.model.ClientDog;
-import com.javadreamteam.shelteranimalbot.model.Report;
+import com.javadreamteam.shelteranimalbot.model.ReportCat;
+import com.javadreamteam.shelteranimalbot.model.ReportDog;
 import com.javadreamteam.shelteranimalbot.model.Volunteer;
 import com.javadreamteam.shelteranimalbot.repository.ClientCatRepository;
 import com.javadreamteam.shelteranimalbot.repository.ClientDogRepository;
-import com.javadreamteam.shelteranimalbot.repository.ReportRepository;
-import com.javadreamteam.shelteranimalbot.service.ReportService;
+import com.javadreamteam.shelteranimalbot.repository.ReportCatRepository;
+import com.javadreamteam.shelteranimalbot.repository.ReportDogRepository;
+import com.javadreamteam.shelteranimalbot.service.ReportCatService;
+import com.javadreamteam.shelteranimalbot.service.ReportDogService;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.File;
 import com.pengrad.telegrambot.model.Update;
@@ -33,9 +34,12 @@ public class SendReport {
     private final Logger logger = LoggerFactory.getLogger(ShelterAnimalBotUpdatesListener.class);
 
     private final TelegramBot telegramBot;
-    private final ReportService reportService;
+    private final ReportDogService reportDogService;
+    private final ReportCatService reportCatService;
     private Volunteer volunteer;
-    private final ReportRepository reportRepository;
+    private final ReportDogRepository reportDogRepository;
+
+    private final ReportCatRepository reportCatRepository;
 
     private static final long telegramChatVolunteer = 426343815L; //SergeyD
 
@@ -47,11 +51,14 @@ public class SendReport {
     private final ClientCatRepository clientCatRepository;
 
 
-    public SendReport(TelegramBot telegramBot, ReportService reportService, ReportRepository reportRepository,
-                      ClientDogRepository clientDogRepository, ClientCatRepository clientCatRepository) {
+
+    public SendReport(TelegramBot telegramBot, ReportDogService reportDogService, ReportCatService reportCatService, ReportDogRepository reportDogRepository,
+                      ReportCatRepository reportCatRepository, ClientDogRepository clientDogRepository, ClientCatRepository clientCatRepository) {
         this.telegramBot = telegramBot;
-        this.reportService = reportService;
-        this.reportRepository = reportRepository;
+        this.reportDogService = reportDogService;
+        this.reportCatService = reportCatService;
+        this.reportDogRepository = reportDogRepository;
+        this.reportCatRepository = reportCatRepository;
 
         this.clientDogRepository = clientDogRepository;
         this.clientCatRepository = clientCatRepository;
@@ -62,16 +69,15 @@ public class SendReport {
      *
      * @param update доступное обновление
      */
-    public void storeReport(Update update) {
-        logger.info("Launched method: report_form, for user with id: " +
+    public void downloadReport(Update update) {
+        logger.info("Launched for user with id: " +
                 update.message().chat().id());
 
         String message = update.message().caption();
         Matcher matcher = REPORT_PATTERN.matcher(message);
-//         update.message().text().equals(REPORT_STORE);
-            SendMessage text = new SendMessage(update.message().chat().id(), "Введите данные по отчету");
-            telegramBot.execute(text);
-            logger.info("Received data " + text);
+//            SendMessage text = new SendMessage(update.message().chat().id(), "Введите данные по отчету");
+//            telegramBot.execute(text);
+            logger.info("Received data " + message);
 
           if (
              matcher.matches()) {
@@ -87,9 +93,16 @@ public class SendReport {
 
                     byte[] photo = telegramBot.getFileContent(file);
                     LocalDate date = LocalDate.now();
-                    reportService.downloadReport(update.message().chat().id(), ration, info,
-                            habits, LocalDate.from(date.atStartOfDay()), photo);
+                    if (clientDogRepository.findByChatId(update.message().chat().id()) != null) {
+                        reportDogService.downloadReport(update.message().chat().id(), ration, info,
+                                habits, LocalDate.from(date.atStartOfDay()), photo);
                     telegramBot.execute(new SendMessage(update.message().chat().id(), "Отчет успешно принят!"));
+                }else if (clientCatRepository.findByChatId(update.message().chat().id()) != null){
+                  reportCatService.downloadReport(update.message().chat().id(), ration, info,
+                          habits, LocalDate.from(date.atStartOfDay()), photo);
+                  telegramBot.execute(new SendMessage(update.message().chat().id(), "Отчет успешно принят!"));
+
+              }
                 } catch (IOException e) {
                     logger.error("Ошибка загрузки фото");
                     telegramBot.execute(new SendMessage(update.message().chat().id(),
@@ -106,36 +119,155 @@ public class SendReport {
         ForwardMessage forwardMessage = new ForwardMessage(telegramChatVolunteer, chatId, messageId);
         telegramBot.execute(forwardMessage);
     }
+//
+//    public void shareContact(Update update) {
+//        if (update.message().contact() != null) {
+//            String firstName = update.message().contact().firstName();
+//            String lastName = update.message().contact().lastName();
+//            String phone = update.message().contact().phoneNumber();
+//            String username = update.message().chat().username();
+//            long finalChatId = update.message().chat().id();
+//            var sortChatId = clientDogRepository.findAll().stream().filter(i -> i.getChatId() == finalChatId).toList();
+//            var sortChatIdCat = clientCatRepository.findAll().stream().filter(i -> i.getChatId() == finalChatId).toList();
+//
+//            if (!sortChatId.isEmpty() || !sortChatIdCat.isEmpty()) {
+//                SendMessage message = new SendMessage(finalChatId, "Вы уже в базе");
+//                telegramBot.execute(message);
+//            }
+//            boolean isCat = true;
+//            if (lastName != null) {
+//                String name = firstName + " " + lastName + " " + username;
+//                if (isCat) {
+//                    clientCatRepository.save(new ClientCat(name, phone, finalChatId));
+//                } else {
+//                    clientDogRepository.save(new ClientDog(name, phone, finalChatId));
+//                }
+//                SendMessage message = new SendMessage(finalChatId, "Вас успешно добавили в базу. Скоро вам перезвонят.");
+//                telegramBot.execute(message);
+//            }
+//            if (isCat) {
+//                clientCatRepository.save(new ClientCat(firstName, phone, finalChatId));
+//            } else {
+//                clientDogRepository.save(new ClientDog(firstName, phone, finalChatId));
+//            }
+//            SendMessage message = new SendMessage(finalChatId, "Вас успешно добавили в базу. Скоро вам перезвонят.");
+//            telegramBot.execute(message);
+//            // Сообщение в чат волонтерам
+//            SendMessage messageToVolunteer = new SendMessage(telegramChatVolunteer, phone + " " + firstName + " Добавил(а) свой номер в базу");
+//            sendForwardMessage(finalChatId, update.message().messageId());
+//        }
+//    }
+
+//    public void getReport(Update update) {
+//        Matcher matcher = REPORT_PATTERN.matcher(update.message().caption());
+//        if (matcher.matches()) {
+//            String ration = matcher.group(3);
+//            String info = matcher.group(6);
+//            String habits = matcher.group(9);
+//
+//            GetFile getFileRequest = new GetFile(update.message().photo()[1].fileId());
+//            GetFileResponse getFileResponse = telegramBot.execute(getFileRequest);
+//            try {
+//                File file = getFileResponse.file();
+//                file.fileSize();
+//                String fullPathPhoto = file.filePath();
+//                long daysOfReports = reportRepository.findAll().stream()
+//                        .filter(s -> s.getChatId() == update.message().chat().id())
+//                        .count() + 1;
+////                long timeDate = update.message().date();
+//                LocalDate date = LocalDate.now();
+////                Date dateSendMessage = new Date(timeDate * 1000);
+//                byte[] fileContent = telegramBot.getFileContent(file);
+//                reportService.downloadReport(update.message().chat().id(), fileContent, file, ration, info, habits,
+//                        fullPathPhoto, LocalDate.from(date.atStartOfDay()), daysOfReports);
+//
+//                telegramBot.execute(new SendMessage(update.message().chat().id(), "Отчет успешно принят"));
+//
+//                System.out.println("Отчет успешно принят от: " + update.message().chat().id());
+//            } catch (IOException e) {
+//                System.out.println("Ошибка загрузки фото");
+//            }
+//        } else {
+//            GetFile getFileRequest = new GetFile(update.message().photo()[1].fileId());
+//            GetFileResponse getFileResponse = telegramBot.execute(getFileRequest);
+//            try {
+//                File file = getFileResponse.file();
+//                file.fileSize();
+//                String fullPathPhoto = file.filePath();
+//
+//                long timeDate = update.message().date();
+//                Date dateSendMessage = new Date(timeDate * 1000);
+//                byte[] fileContent = telegramBot.getFileContent(file);
+//                reportService.downloadReport(update.message().chat().id(), fileContent, file, update.message().caption(),
+//                        fullPathPhoto, dateSendMessage, timeDate, daysOfReports);
+//
+//                telegramBot.execute(new SendMessage(update.message().chat().id(), "Отчет успешно принят"));
+//                System.out.println("Отчет успешно принят от: " + update.message().chat().id());
+//            } catch (IOException e) {
+//                System.out.println("Ошибка загрузки фото");
+//            }
+//
+//        }
+//
+//    }
 
 
-    @Scheduled(cron = "0 0/3 * * * *")
-    public void sendNotificationDog() {
+        @Scheduled(cron = "0 0 14 ? * *")
+    public void sendNotification() {
         logger.info("Requests report to OwnerDog");
-        for (Report report : reportService.getAllReports()) {
-            Long ownerDogId = report.getClientDog().getId();
-            long daysBetween = DAYS.between(LocalDate.now(), report.getLastMessage());
-            if (report.getLastMessage().isBefore(LocalDate.now().minusDays(1))) {
+        for (ReportDog reportDog : reportDogService.getAllReports()) {
+            Long ownerDogId = reportDog.getClientDog().getId();
+            long daysBetween = DAYS.between(LocalDate.now(), reportDog.getLastMessage());
+            if (reportDog.getLastMessage().isBefore(LocalDate.now().minusDays(1))) {
                 SendMessage sendMessage = new SendMessage(volunteer.getChatId(), "Отчет о собаке "
-                        + report.getClientDog().getDog().getName() + " (id: " + report.getClientDog().getDog().getId() + ") от владельца "
-                        + report.getClientDog().getName() + " (id: " + ownerDogId + ") не поступал уже " + daysBetween + " дней. "
-                        + "Дата последнего отчета: " + report.getLastMessage());
+                        + reportDog.getClientDog().getDog().getName() + " (id: " + reportDog.getClientDog().getDog().getId() + ") от владельца "
+                        + reportDog.getClientDog().getName() + " (id: " + ownerDogId + ") не поступал уже " + daysBetween + " дней. "
+                        + "Дата последнего отчета: " + reportDog.getLastMessage());
                 telegramBot.execute(sendMessage);
             }
-            if (report.getLastMessage().equals(LocalDate.now().minusDays(1))) {
-                SendMessage sendToOwner = new SendMessage(report.getClientDog().getChatId(), "Пожалуйста, " +
+            if (reportDog.getLastMessage().equals(LocalDate.now().minusDays(1))) {
+                SendMessage sendToOwner = new SendMessage(reportDog.getClientDog().getChatId(), "Пожалуйста, " +
                         "не забудьте отправить отчет сегодня");
                 telegramBot.execute(sendToOwner);
             }
         }
-        for (Report report : reportService.getAllReports()) {
-            Long clientDogId = report.getClientDog().getId();
-            if (report.getLastMessage().equals(LocalDate.now().minusDays(30))) {
-                reportRepository.save(report);
-                SendMessage sendMessage = new SendMessage(clientDogId, report.getClientDog().getName() + "! поздравляем," +
-                        "испытательный срок в 30 дней для собаки " + report.getClientDog().getDog().getName() +
-                        " (id: " + report.getClientDog().getDog().getId() + ") закончен");
+        for (ReportDog reportDog : reportDogService.getAllReports()) {
+            Long clientDogId = reportDog.getClientDog().getId();
+            if (reportDog.getLastMessage().equals(LocalDate.now().minusDays(30))) {
+                reportDogRepository.save(reportDog);
+                SendMessage sendMessage = new SendMessage(clientDogId, reportDog.getClientDog().getName() + "! поздравляем," +
+                        "испытательный срок в 30 дней для собаки " + reportDog.getClientDog().getDog().getName() +
+                        " (id: " + reportDog.getClientDog().getDog().getId() + ") закончен");
                 telegramBot.execute(sendMessage);
             }
         }
+            logger.info("Requests report to OwnerCat");
+            for (ReportCat reportCat : reportCatService.getAllReports()) {
+                Long ownerCatId = reportCat.getClientCat().getId();
+                long daysBetween = DAYS.between(LocalDate.now(), reportCat.getLastMessage());
+                if (reportCat.getLastMessage().isBefore(LocalDate.now().minusDays(1))) {
+                    SendMessage sendMessage = new SendMessage(volunteer.getChatId(), "Отчет о собаке "
+                            + reportCat.getClientCat().getCat().getName() + " (id: " + reportCat.getClientCat().getCat().getId() + ") от владельца "
+                            + reportCat.getClientCat().getName() + " (id: " + ownerCatId + ") не поступал уже " + daysBetween + " дней. "
+                            + "Дата последнего отчета: " + reportCat.getLastMessage());
+                    telegramBot.execute(sendMessage);
+                }
+                if (reportCat.getLastMessage().equals(LocalDate.now().minusDays(1))) {
+                    SendMessage sendToOwner = new SendMessage(reportCat.getClientCat().getChatId(), "Пожалуйста, " +
+                            "не забудьте отправить отчет сегодня");
+                    telegramBot.execute(sendToOwner);
+                }
+            }
+            for (ReportCat reportCat : reportCatService.getAllReports()) {
+                Long clientCatId = reportCat.getClientCat().getId();
+                if (reportCat.getLastMessage().equals(LocalDate.now().minusDays(30))) {
+                    reportCatRepository.save(reportCat);
+                    SendMessage sendMessage = new SendMessage(clientCatId, reportCat.getClientCat().getName() + "! поздравляем," +
+                            "испытательный срок в 30 дней для собаки " + reportCat.getClientCat().getCat().getName() +
+                            " (id: " + reportCat.getClientCat().getCat().getId() + ") закончен");
+                    telegramBot.execute(sendMessage);
+                }
+            }
+
     }
 }

@@ -16,16 +16,18 @@ public class KeyboardConstant {
             "- Может передать контактные данные волонтерам для связи \n" + "";
     public static final String SHELTER_ABOUT  = " Самое время найти лучшего друга!";
 
-    public static final String SHELTER_CONTACTS = "\" Наши контактные данные:\" +\n" +
-            "                \"\\n Адрес: г. Астана, просп. Абая, 40 \" +\n" +
-            "                \" \\n Часы работы приюта: ежедневно с 11:00 до 18:00 \\n Тел.: +7‒702‒123‒45‒78\" +\n" +
-            "                \" \\n Email: shelteranimalastana@gmail.com  \\n\"";
+    public static final String SHELTER_CONTACTS = " Наши контактные данные:\n"  +
+            "                \n Адрес: г. Астана, просп. Абая, 40 \n" +
+            "                \n Часы работы приюта: с 11:00 до 18:00 \n Тел.: +7‒702‒123‒45‒78"  +
+            "                \n  Email: shelteranimalastana@gmail.com  ";
+
+
 
     public static final String SHELTER_RULES  = "Правила поведения в приюте, для удобства, изображены на картинке";
 
     public static final String DOCUMENTS = "Из неообходимых документов Вам потребуется только ПАСПОРТ\n" +
             "                \n Но прежде чем вы решитесь на такой ответсвенный шаг\n" +
-            "                \"просим Вас ознакомиться с информацие в прикрепленном документе";
+            "                \n просим Вас ознакомиться с информацие в прикрепленном документе";
 
     public static final String REFUSE  = "12 причин отказа, будьте готовы !";
     public static final String TRANSPORT  = "Правила перевозки в приложенной памятке";

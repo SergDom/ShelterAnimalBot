@@ -5,10 +5,19 @@ import static com.javadreamteam.shelteranimalbot.keyboard.KeyboardShelter.*;
 
 import com.javadreamteam.shelteranimalbot.keyboard.KeyboardShelter;
 import com.javadreamteam.shelteranimalbot.keyboard.SendReport;
+import com.javadreamteam.shelteranimalbot.model.ClientCat;
+import com.javadreamteam.shelteranimalbot.model.ClientDog;
+import com.javadreamteam.shelteranimalbot.model.User;
+import com.javadreamteam.shelteranimalbot.repository.ClientCatRepository;
+import com.javadreamteam.shelteranimalbot.repository.ClientDogRepository;
+import com.javadreamteam.shelteranimalbot.repository.UserRepository;
 import com.javadreamteam.shelteranimalbot.repository.VolunteerRepository;
+import com.javadreamteam.shelteranimalbot.service.ClientCatService;
+import com.javadreamteam.shelteranimalbot.service.ClientDogService;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.request.ForwardMessage;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,13 +39,26 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
 
     private final SendReport sendReport;
 
+    private final ClientCatRepository clientCatRepository;
+    private final ClientDogRepository clientDogRepository;
 
-    private boolean isCat = false;
+    private final ClientDogService clientDogService;
+    private final ClientCatService clientCatService;
+    private final UserRepository userRepository;
 
-    public ShelterAnimalBotUpdatesListener(TelegramBot telegramBot, KeyboardShelter keyboardShelter, VolunteerRepository volunteerRepository, SendReport sendReport) {
+
+//    private boolean isCat = false;
+    private static final long telegramChatVolunteer = 426343815L; //SergeyD
+
+    public ShelterAnimalBotUpdatesListener(TelegramBot telegramBot, KeyboardShelter keyboardShelter, VolunteerRepository volunteerRepository, SendReport sendReport, ClientCatRepository clientCatRepository, ClientDogRepository clientDogRepository, ClientDogService clientDogService, ClientCatService clientCatService, UserRepository userRepository) {
         this.telegramBot = telegramBot;
         this.keyboardShelter = keyboardShelter;
         this.sendReport = sendReport;
+        this.clientCatRepository = clientCatRepository;
+        this.clientDogRepository = clientDogRepository;
+        this.clientDogService = clientDogService;
+        this.clientCatService = clientCatService;
+        this.userRepository = userRepository;
     }
 
     @PostConstruct
@@ -63,12 +85,28 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                         break;
 
                     case CAT:
-                        isCat = true;
+                        if (userRepository.findUserByChatId(update.message().chat().id()) == null) {
+                            userRepository.save(new User(update.message().chat().id(),
+                                    update.message().chat().firstName(),
+                                    false));
+                        } else {
+                            User user = userRepository.findUserByChatId(update.message().chat().id());
+                            user.setIsDog(false);
+                            userRepository.save(user);
+                        }
                         keyboardShelter.sendMenu(chatId);
                         break;
 
                     case DOG:
-                        isCat = false;
+                        if (userRepository.findUserByChatId(update.message().chat().id()) == null) {
+                            userRepository.save(new User(update.message().chat().id(),
+                                    update.message().chat().firstName(),
+                                    true));
+                        } else {
+                            User user = userRepository.findUserByChatId(update.message().chat().id());
+                            user.setIsDog(true);
+                            userRepository.save(user);
+                        }
                         keyboardShelter.sendMenu(chatId);
                         break;
 // Основное меню
@@ -92,11 +130,10 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                         sendMessage(chatId, REPORT_LIST);
                         break;
                     case REPORT_STORE:
-                        sendReport.storeReport(update);
+                        sendReport.downloadReport(update);
                         break;
 // Меню о приюте
                     case CONTACTS:
-                        sendMessage(chatId, SHELTER_CONTACTS);
                         try {
                             keyboardShelter.sendPhoto(chatId, "/static/shelter/MAP_SHELTER.png", SHELTER_CONTACTS);
                         } catch (URISyntaxException | IOException e) {
@@ -117,12 +154,12 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                         break;
 
                     case ADVISE:
-                        if (isCat) {
-                            sendMessage(chatId, nameUser + WELCOME);
-                            keyboardShelter.menuAdviseAnimalCat(chatId);
-                        } else {
+                        if (userRepository.findUserByChatId(update.message().chat().id()).isDog()) {
                             sendMessage(chatId, nameUser + WELCOME);
                             keyboardShelter.menuAdviseAnimal(chatId);
+                        } else {
+                            sendMessage(chatId, nameUser + WELCOME);
+                            keyboardShelter.menuAdviseAnimalCat(chatId);
                         }
                         break;
 
@@ -167,15 +204,15 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                         break;
 
                     case PUPPY_INFO:
-                        if (isCat) {
+                        if (userRepository.findUserByChatId(update.message().chat().id()).isDog()) {
                             try {
-                                keyboardShelter.sendDocument(update, "/advice/" + "PUPPY_CAT_INFO.pdf", PUPPY);
+                                keyboardShelter.sendDocument(update, "/advice/" + "PUPPY_INFO.pdf", PUPPY);
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
                         } else {
                             try {
-                                keyboardShelter.sendDocument(update, "/advice/" + "PUPPY_INFO.pdf", PUPPY);
+                                keyboardShelter.sendDocument(update, "/advice/" + "PUPPY_CAT_INFO.pdf", PUPPY);
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
@@ -183,15 +220,15 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                         break;
 
                     case ADULT_INFO:
-                        if (isCat) {
+                        if (userRepository.findUserByChatId(update.message().chat().id()).isDog()) {
                             try {
-                                keyboardShelter.sendDocument(update, "/advice/" + "ADULT_CAT.pdf", ADULT);
+                                keyboardShelter.sendDocument(update, "/advice/" + "ADULT_INFO.pdf", ADULT);
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
                         } else {
                             try {
-                                keyboardShelter.sendDocument(update, "/advice/" + "ADULT_INFO.pdf", ADULT);
+                                keyboardShelter.sendDocument(update, "/advice/" + "ADULT_CAT.pdf", ADULT);
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
@@ -199,15 +236,15 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                         break;
 
                     case DISABLED_INFO:
-                        if (isCat) {
+                        if (userRepository.findUserByChatId(update.message().chat().id()).isDog()) {
                             try {
-                                keyboardShelter.sendDocument(update, "/advice/" + "DISABLED_CAT.pdf", DISABLE_PET);
+                                keyboardShelter.sendDocument(update, "/advice/" + "DISABLED_DOG.pdf", DISABLE_PET);
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
                         } else {
                             try {
-                                keyboardShelter.sendDocument(update, "/advice/" + "DISABLED_DOG.pdf", DISABLE_PET);
+                                keyboardShelter.sendDocument(update, "/advice/" + "DISABLED_CAT.pdf", DISABLE_PET);
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
@@ -216,7 +253,12 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
 // Общие кнопки
                     case REQUEST_VOLUNTEER:
                         sendMessage(chatId, CALL_VOLUNTEERS);
-                        keyboardShelter.sendForwardMessage(chatId, messageId);
+                        keyboardShelter.callVolunteer(update);
+                        break;
+
+                    case SEND_CONTACTS:
+                        if (update.message() != null && update.message().contact() != null) {
+                        shareContactInDB(update);}
                         break;
 
                     case MAIN_MENU:
@@ -253,6 +295,63 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
     public void sendMessage(long chatId, String text) {
         SendMessage message = new SendMessage(chatId, text);
         telegramBot.execute(message);
+    }
+
+    public void sendForwardMessage(Long chatId, Integer messageId) {
+        ForwardMessage forwardMessage = new ForwardMessage(telegramChatVolunteer, chatId, messageId);
+        telegramBot.execute(forwardMessage);
+    }
+
+
+//    public void shareContact(Update update) {
+//        if (update.message().contact() != null) {
+//            String firstName = update.message().contact().firstName();
+//            String phone = update.message().contact().phoneNumber();
+////            String username = update.message().chat().username();
+//            long finalChatId = update.message().chat().id();
+//            List <ClientDog> sortChatId = clientDogRepository.findAll().stream().filter(i -> i.getChatId() == finalChatId).toList();
+//            List <ClientCat> sortChatIdCat = clientCatRepository.findAll().stream().filter(i -> i.getChatId() == finalChatId).toList();
+//
+//            if (!sortChatId.isEmpty() || !sortChatIdCat.isEmpty()) {
+//                SendMessage message = new SendMessage(finalChatId, "Вы уже в базе");
+//                telegramBot.execute(message);
+//
+//            }
+//            if (isCat) {
+//                clientCatRepository.save(new ClientCat(firstName, phone, finalChatId));
+//            } else {
+//                clientDogRepository.save(new ClientDog(firstName, phone, finalChatId));
+//            }
+//            SendMessage message = new SendMessage(finalChatId, "Вас успешно добавили в базу. Скоро вам перезвонят.");
+//            telegramBot.execute(message);
+//            // Сообщение в чат волонтерам
+//            SendMessage messageToVolunteer = new SendMessage(telegramChatVolunteer, phone + " " + firstName + " Добавил(а) свой номер в базу");
+//            telegramBot.execute(messageToVolunteer);
+//
+//        }
+//    }
+
+    private void shareContactInDB(Update update){
+        logger.info("Created owner in database: " +
+                update.message().chat().id());
+
+        Long chatId = update.message().chat().id();
+
+        if (userRepository.findUserByChatId(update.message().chat().id()).isDog() &&
+                clientDogRepository.findByChatId(chatId) == null){
+            clientDogService.create(new ClientDog(chatId,
+                            update.message().contact().firstName(),
+                            update.message().contact().phoneNumber()));}
+        else if(clientCatRepository.findByChatId(chatId) == null){
+            clientCatService.create(new ClientCat(chatId,
+                            update.message().contact().firstName(),
+                            update.message().contact().phoneNumber()));
+        }
+        telegramBot.execute(new SendMessage(update.message().chat().id(),
+                "Мы с вами перезовним!"));
+        // Сообщение в чат волонтерам
+        SendMessage messageToVolunteer = new SendMessage(telegramChatVolunteer, " Добавил(а) свой номер в базу");
+        telegramBot.execute(messageToVolunteer);
     }
 
 }

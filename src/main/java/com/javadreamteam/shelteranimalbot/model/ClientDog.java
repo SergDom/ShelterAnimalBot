@@ -36,8 +36,6 @@ public class ClientDog {
     @JoinColumn(name = "dog_id")
     private Dog dog;
 
-    private int volunteerId;
-
 
     public ClientDog() {
     }
@@ -114,14 +112,6 @@ public class ClientDog {
 
     public void setDog(Dog dog) {
         this.dog = dog;
-    }
-
-    public int getVolunteerId() {
-        return volunteerId;
-    }
-
-    public void setVolunteerId(int volunteerId) {
-        this.volunteerId = volunteerId;
     }
 
     @Override

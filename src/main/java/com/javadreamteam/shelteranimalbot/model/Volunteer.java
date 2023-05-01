@@ -31,8 +31,6 @@ public class Volunteer {
     @Column(name = "user_id")
     private Long userId;
 
-    @OneToMany (mappedBy = "volunteerId")
-    private Collection<ClientDog> clientDogs;
 
     public Volunteer() {
     }

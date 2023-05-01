@@ -36,7 +36,6 @@ public class ClientCat {
     @JoinColumn(name = "cat_id")
     private Cat cat;
 
-    private int volunteerId;
 
 
     public ClientCat() {
@@ -50,6 +49,12 @@ public class ClientCat {
 
     public ClientCat (String name, String phone, long finalChatId) {
 
+    }
+
+    public ClientCat(Long chatId, String firstName, String phoneNumber) {
+        this.chatId = chatId;
+        this.name = firstName;
+        this.phoneNumber = phoneNumber;
     }
 
     public Long getId() {
@@ -116,13 +121,6 @@ public class ClientCat {
         this.cat = cat;
     }
 
-    public int getVolunteerId() {
-        return volunteerId;
-    }
-
-    public void setVolunteerId(int volunteerId) {
-        this.volunteerId = volunteerId;
-    }
 
     @Override
     public boolean equals(Object o) {

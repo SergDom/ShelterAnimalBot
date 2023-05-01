@@ -1,11 +1,6 @@
 package com.javadreamteam.shelteranimalbot.model;
 
-
-
-
-
 import com.javadreamteam.shelteranimalbot.keyboard.ReportStatus;
-
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -13,8 +8,8 @@ import java.util.Arrays;
 import java.util.Objects;
 
 @Entity
-@Table(name = "report")
-public class Report {
+@Table(name = "report_dog")
+public class ReportDog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,11 +62,8 @@ public class Report {
     @JoinColumn(name = "client_dog_id")
     private ClientDog clientDog;
 
-    @ManyToOne
-    @JoinColumn(name = "client_cat_id")
-    private ClientCat clientCat;
 
-    public Report() {
+    public ReportDog() {
     }
 
     public String getInfo() {
@@ -147,13 +139,6 @@ public class Report {
     }
 
 
-    public ClientCat getClientCat() {
-        return clientCat;
-    }
-
-    public void setClientCat(ClientCat clientCat) {
-        this.clientCat = clientCat;}
-
     public ReportStatus getReportStatus() {
         return reportStatus;
     }
@@ -167,8 +152,8 @@ public class Report {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Report report = (Report) o;
-        return Objects.equals(id, report.id) && Objects.equals(chatId, report.chatId) && Objects.equals(ration, report.ration) && Objects.equals(health, report.health) && Objects.equals(habits, report.habits) && Objects.equals(info, report.info) && Arrays.equals(photo, report.photo) && Objects.equals(lastMessage, report.lastMessage) && reportStatus == report.reportStatus && Objects.equals(clientDog, report.clientDog);
+        ReportDog reportDog = (ReportDog) o;
+        return Objects.equals(id, reportDog.id) && Objects.equals(chatId, reportDog.chatId) && Objects.equals(ration, reportDog.ration) && Objects.equals(health, reportDog.health) && Objects.equals(habits, reportDog.habits) && Objects.equals(info, reportDog.info) && Arrays.equals(photo, reportDog.photo) && Objects.equals(lastMessage, reportDog.lastMessage) && reportStatus == reportDog.reportStatus && Objects.equals(clientDog, reportDog.clientDog);
     }
 
     @Override

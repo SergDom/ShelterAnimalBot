@@ -1,7 +1,7 @@
 package com.javadreamteam.shelteranimalbot.controllers;
 
-import com.javadreamteam.shelteranimalbot.model.Report;
-import com.javadreamteam.shelteranimalbot.service.ReportService;
+import com.javadreamteam.shelteranimalbot.model.ReportDog;
+import com.javadreamteam.shelteranimalbot.service.ReportDogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -16,15 +16,15 @@ import java.util.Collection;
 
 /**
  * Класс для обработки запросов от клиента и возвращения результатов,
- * работает с сущностью {@link ReportService}.
+ * работает с сущностью {@link ReportDogService}.
  */
 @RestController
 @RequestMapping("report")
 public class ReportController {
-    private  final ReportService reportService;
+    private  final ReportDogService reportDogService;
 
-    public ReportController(ReportService reportService) {
-        this.reportService = reportService;
+    public ReportController(ReportDogService reportDogService) {
+        this.reportDogService = reportDogService;
     }
 
     @Operation(
@@ -35,15 +35,15 @@ public class ReportController {
                             description = "Добавленный отчет",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = Report.class)
+                                    schema = @Schema(implementation = ReportDog.class)
                             )
                     )
             }
     )
 
     @PostMapping
-    public Report createReport(@RequestBody Report report){
-        return reportService.createReport(report);
+    public ReportDog createReport(@RequestBody ReportDog reportDog){
+        return reportDogService.createReport(reportDog);
     }
 
 
@@ -55,7 +55,7 @@ public class ReportController {
                             description = "Информация о найденном отчете",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = Report.class)
+                                    schema = @Schema(implementation = ReportDog.class)
                             )
                     ),
                     @ApiResponse(
@@ -65,15 +65,15 @@ public class ReportController {
             }
     )
     @GetMapping("{id}")
-    public ResponseEntity<Report> findReport(
+    public ResponseEntity<ReportDog> findReport(
             @Parameter(description = "Идентификатор отчета", example = "1")
             @PathVariable Long id) {
 
-        Report report = reportService.findReportById(id);
-        if (report == null) {
+        ReportDog reportDog = reportDogService.findReportById(id);
+        if (reportDog == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(report);
+        return ResponseEntity.ok(reportDog);
     }
 
 
@@ -85,7 +85,7 @@ public class ReportController {
                             description = "Измененный отчет",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = Report.class)
+                                    schema = @Schema(implementation = ReportDog.class)
                             )
                     ),
                     @ApiResponse(
@@ -96,13 +96,13 @@ public class ReportController {
     )
 
     @PutMapping
-    public ResponseEntity<Report> updateReport(@RequestBody Report report) {
+    public ResponseEntity<ReportDog> updateReport(@RequestBody ReportDog reportDog) {
 
-        Report updatedReport = reportService.updateReport(report);
-        if (updatedReport == null) {
+        ReportDog updatedReportDog = reportDogService.updateReport(reportDog);
+        if (updatedReportDog == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(updatedReport);
+        return ResponseEntity.ok(updatedReportDog);
     }
 
     @Operation(
@@ -121,10 +121,10 @@ public class ReportController {
     )
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Report> deleteReport(
+    public ResponseEntity<ReportDog> deleteReport(
             @Parameter(description = "Идентификатор отчета")
             @PathVariable long id) {
-        reportService.deleteReport(id);
+        reportDogService.deleteReport(id);
 
         return ResponseEntity.ok().build();
     }
@@ -137,14 +137,14 @@ public class ReportController {
                             description = "Список всех отчетов",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    array = @ArraySchema(schema = @Schema(implementation = Report.class))
+                                    array = @ArraySchema(schema = @Schema(implementation = ReportDog.class))
                             )
                     )
             }
     )
     @GetMapping("/all")
-    public ResponseEntity<Collection<Report>> getAllReports() {
-        return ResponseEntity.ok(reportService.getAllReports());
+    public ResponseEntity<Collection<ReportDog>> getAllReports() {
+        return ResponseEntity.ok(reportDogService.getAllReports());
     }
 
 
