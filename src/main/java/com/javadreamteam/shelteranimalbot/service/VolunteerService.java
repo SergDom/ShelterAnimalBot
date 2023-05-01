@@ -1,16 +1,11 @@
 package com.javadreamteam.shelteranimalbot.service;
 
-import com.javadreamteam.shelteranimalbot.exceptions.DogException;
 import com.javadreamteam.shelteranimalbot.exceptions.VolunteerException;
 import com.javadreamteam.shelteranimalbot.model.Volunteer;
-import com.javadreamteam.shelteranimalbot.repository.DogRepository;
 import com.javadreamteam.shelteranimalbot.repository.VolunteerRepository;
-import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class VolunteerService {

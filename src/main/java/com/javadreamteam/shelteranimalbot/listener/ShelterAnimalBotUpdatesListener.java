@@ -47,7 +47,7 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
     private final UserRepository userRepository;
 
 
-//    private boolean isCat = false;
+    //    private boolean isCat = false;
     private static final long telegramChatVolunteer = 426343815L; //SergeyD
 
     public ShelterAnimalBotUpdatesListener(TelegramBot telegramBot, KeyboardShelter keyboardShelter, VolunteerRepository volunteerRepository, SendReport sendReport, ClientCatRepository clientCatRepository, ClientDogRepository clientDogRepository, ClientDogService clientDogService, ClientCatService clientCatService, UserRepository userRepository) {
@@ -258,7 +258,8 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
 
                     case SEND_CONTACTS:
                         if (update.message() != null && update.message().contact() != null) {
-                        shareContactInDB(update);}
+                            shareContactInDB(update);
+                        }
                         break;
 
                     case MAIN_MENU:
@@ -331,21 +332,21 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
 //        }
 //    }
 
-    private void shareContactInDB(Update update){
+    private void shareContactInDB(Update update) {
         logger.info("Created owner in database: " +
                 update.message().chat().id());
 
         Long chatId = update.message().chat().id();
 
         if (userRepository.findUserByChatId(update.message().chat().id()).isDog() &&
-                clientDogRepository.findByChatId(chatId) == null){
+                clientDogRepository.findByChatId(chatId) == null) {
             clientDogService.create(new ClientDog(chatId,
-                            update.message().contact().firstName(),
-                            update.message().contact().phoneNumber()));}
-        else if(clientCatRepository.findByChatId(chatId) == null){
+                    update.message().contact().firstName(),
+                    update.message().contact().phoneNumber()));
+        } else if (clientCatRepository.findByChatId(chatId) == null) {
             clientCatService.create(new ClientCat(chatId,
-                            update.message().contact().firstName(),
-                            update.message().contact().phoneNumber()));
+                    update.message().contact().firstName(),
+                    update.message().contact().phoneNumber()));
         }
         telegramBot.execute(new SendMessage(update.message().chat().id(),
                 "Мы с вами перезовним!"));
