@@ -1,4 +1,4 @@
 package com.javadreamteam.shelteranimalbot.service;
 
-public class ClientException {
+public class ClientException extends Throwable {
 }

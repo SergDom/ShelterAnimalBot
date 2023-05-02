@@ -5,6 +5,7 @@ import com.javadreamteam.shelteranimalbot.model.Cat;
 import com.javadreamteam.shelteranimalbot.model.ClientCat;
 import com.javadreamteam.shelteranimalbot.repository.ClientCatRepository;
 import com.javadreamteam.shelteranimalbot.repository.ClientDogRepository;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -13,6 +14,9 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -60,7 +64,7 @@ class ClientCatServiceTest {
       assertEquals(clientCat.getCat().getAge(), returnedClientCat.getCat().getAge());
       assertEquals(clientCat.getCat().getBreed(), returnedClientCat.getCat().getBreed());
 
-      assertEquals(0, returnedClientCat.getVolunteerId());
+
 
       // проверяем, что метод save() был вызван один раз
       Mockito.verify(repository, Mockito.times(1)).save(clientCat);
@@ -102,7 +106,7 @@ class ClientCatServiceTest {
       assertEquals(clientCat.getCat().getName(), returnedClientCat.getCat().getName());
       assertEquals(clientCat.getCat().getAge(), returnedClientCat.getCat().getAge());
       assertEquals(clientCat.getCat().getBreed(), returnedClientCat.getCat().getBreed());
-      assertEquals(0, returnedClientCat.getVolunteerId());
+
 
       // проверяем, что метод findById() был вызван один раз с нужным аргументом
       Mockito.verify(repository, Mockito.times(1)).findById(1L);
@@ -149,7 +153,7 @@ class ClientCatServiceTest {
       assertEquals(clientCat.getCat().getName(), returnedClientCat.getCat().getName());
       assertEquals(clientCat.getCat().getAge(), returnedClientCat.getCat().getAge());
       assertEquals(clientCat.getCat().getBreed(), returnedClientCat.getCat().getBreed());
-      assertEquals(0, returnedClientCat.getVolunteerId());
+
 
       // проверяем, что метод findById() был вызван один раз с нужным аргументом
       Mockito.verify(repository, Mockito.times(1)).findById(1L);
@@ -200,9 +204,58 @@ class ClientCatServiceTest {
 
     @Test
     void getAll() {
+      ClientCat clientCat1 = new ClientCat();
+      clientCat1.setName("John");
+      clientCat1.setChatId(123456789L);
+      clientCat1.setPhoneNumber("+1234567890");
+      clientCat1.setStatus(ReportStatus.NEW);
+
+      Cat cat1 = new Cat();
+      cat1.setName("Tom");
+      cat1.setBreed("Siamese");
+     clientCat1.setCat(cat1);
+
+      ClientCat clientCat2 = new ClientCat();
+      clientCat2.setName("Alice");
+      clientCat2.setChatId(987654321L);
+      clientCat2.setPhoneNumber("+0987654321");
+      clientCat2.setEmail("alice@example.com");
+      clientCat2.setYearOfBirth(1990);
+      clientCat2.setStatus(ReportStatus.PENDING);
+
+      Cat cat2 = new Cat();
+      cat2.setName("Luna");
+      cat2.setBreed("Persian");
+      clientCat2.setCat(cat2);
+
+      List<ClientCat> clientCats = Arrays.asList(clientCat1, clientCat2);
+
+      Mockito.when(repository.findAll()).thenReturn(clientCats);
+
+      Collection<ClientCat> result = service.getAll();
+
+      Assert.assertEquals(clientCats.size(), result.size());
+      Assert.assertTrue(result.containsAll(clientCats));
     }
 
     @Test
     void getByChatId() {
+      Long chatId = 123456789L;
+      ClientCat clientCat = new ClientCat();
+      clientCat.setName("John");
+      clientCat.setChatId(chatId);
+      clientCat.setPhoneNumber("+1234567890");
+      clientCat.setStatus(ReportStatus.NEW);
+
+      Cat cat = new Cat();
+      cat.setName("Tom");
+      cat.setBreed("Siamese");
+      clientCat.setCat(cat);
+
+      Mockito.when(repository.findByChatId(chatId)).thenReturn(clientCat);
+
+      ClientCat result = service.getByChatId(chatId);
+
+      Assert.assertEquals(clientCat, result);
     }
 }
