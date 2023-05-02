@@ -130,7 +130,13 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                         sendMessage(chatId, REPORT_LIST);
                         break;
                     case REPORT_STORE:
-                        sendReport.downloadReport(update);
+                        if (update.message() != null) {
+                            if (update.message().photo() != null || update.message().caption() != null) {
+                                sendReport.downloadReport(update);
+                            } else {
+                                shareMessage(update);
+                            }
+                        }
                         break;
 // Меню о приюте
                     case CONTACTS:
@@ -331,6 +337,15 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
 //        }
 //    }
 
+    public void shareMessage(Update update) {
+        if (update.message().contact() != null) {
+            shareContactInDB(update);
+            return;
+        } else if (update.message().text() == null) {
+            return;
+        }
+    }
+
     private void shareContactInDB(Update update){
         logger.info("Created owner in database: " +
                 update.message().chat().id());
@@ -353,5 +368,4 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
         SendMessage messageToVolunteer = new SendMessage(telegramChatVolunteer, " Добавил(а) свой номер в базу");
         telegramBot.execute(messageToVolunteer);
     }
-
 }
