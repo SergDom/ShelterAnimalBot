@@ -4,7 +4,8 @@ public enum ReportStatus {
     POSTED ("Отправлен"),
     APPROVED ("Одобрен"),
     REFUSED ("Отклонен"),
-    PENDING("На рассмотрении");
+    PENDING("На рассмотрении"),
+    NEW("Новый");
 
     /**
      * Поле "Описание"
