@@ -69,7 +69,7 @@ public class DogControllerTest {
     @Test
     public void createDog () throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/cats")
+                        .post("/dogs")
                         .content(jsonAnimal.toString())
                         .contentType(MediaType.APPLICATION_JSON))
 
@@ -84,7 +84,7 @@ public class DogControllerTest {
     public void updateDog () throws Exception {
         animal.setName("New name");
         mockMvc.perform(MockMvcRequestBuilders
-                        .put("/cats")
+                        .put("/dogs")
                         .content(jsonAnimal.toString())
                         .contentType(MediaType.APPLICATION_JSON))
 
@@ -98,7 +98,7 @@ public class DogControllerTest {
     @Test
     public void removeDog () throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/cats/1")
+                        .delete("/dogs/1")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -106,14 +106,14 @@ public class DogControllerTest {
     @Test
     public void getDog () throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/cats/1")
+                        .get("/dogs/1")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
     @Test
     public void getDogAll () throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/cats/find-all-dogs")
+                        .get("/dogs/find-all-dogs")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
