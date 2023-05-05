@@ -1,6 +1,7 @@
 package com.javadreamteam.shelteranimalbot.service;
 
 import com.javadreamteam.shelteranimalbot.exceptions.ClientException;
+import com.javadreamteam.shelteranimalbot.keyboard.ClientStatus;
 import com.javadreamteam.shelteranimalbot.model.ClientCat;
 import com.javadreamteam.shelteranimalbot.repository.ClientCatRepository;
 import org.slf4j.Logger;
@@ -26,8 +27,9 @@ public class ClientCatService {
      * @return созданный клиент
      */
 
-    public ClientCat create(ClientCat clientCat) {
+    public ClientCat create(ClientCat clientCat, ClientStatus status) {
         logger.info("Was invoked method to create a personCat");
+        clientCat.setStatus(status);
         return repository.save(clientCat);
     }
 

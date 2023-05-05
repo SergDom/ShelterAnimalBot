@@ -1,5 +1,6 @@
 package com.javadreamteam.shelteranimalbot.controllers;
 
+import com.javadreamteam.shelteranimalbot.keyboard.ClientStatus;
 import com.javadreamteam.shelteranimalbot.model.ClientCat;
 import com.javadreamteam.shelteranimalbot.service.ClientCatService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,8 +45,8 @@ public class ClientCatController {
             }
     )
     @PostMapping
-    public ResponseEntity<ClientCat> createCustomer(@RequestBody ClientCat clientCat) {
-        return ResponseEntity.ok(clientCatService.create(clientCat));
+    public ResponseEntity<ClientCat> createCustomer(@RequestBody ClientCat clientCat, ClientStatus status) {
+        return ResponseEntity.ok(clientCatService.create(clientCat, status));
     }
 
     @Operation(

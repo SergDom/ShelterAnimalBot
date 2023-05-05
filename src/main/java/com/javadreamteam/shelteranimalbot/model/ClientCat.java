@@ -1,5 +1,6 @@
 package com.javadreamteam.shelteranimalbot.model;
 
+import com.javadreamteam.shelteranimalbot.keyboard.ClientStatus;
 import com.javadreamteam.shelteranimalbot.keyboard.ReportStatus;
 
 import javax.persistence.*;
@@ -23,14 +24,13 @@ public class ClientCat {
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
-    @Column(name = "email")
-    private String email;
 
-    @Column(name = "year_of_birth")
-    private Integer yearOfBirth;
+    @Column(name = "age")
+    private Integer age;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private ReportStatus status;
+    private ClientStatus status;
 
     @OneToOne
     @JoinColumn(name = "cat_id")
@@ -89,27 +89,20 @@ public class ClientCat {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getEmail() {
-        return email;
+
+    public Integer getAge() {
+        return age;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
-    public Integer getYearOfBirth() {
-        return yearOfBirth;
-    }
-
-    public void setYearOfBirth(Integer yearOfBirth) {
-        this.yearOfBirth = yearOfBirth;
-    }
-
-    public ReportStatus getStatus() {
+    public ClientStatus getStatus() {
         return status;
     }
 
-    public void setStatus(ReportStatus status) {
+    public void setStatus(ClientStatus status) {
         this.status = status;
     }
 
@@ -142,8 +135,7 @@ public class ClientCat {
                 ", name='" + name + '\'' +
                 ", chatId=" + chatId +
                 ", phoneNumber='" + phoneNumber + '\'' +
-                ", email='" + email + '\'' +
-                ", yearOfBirth=" + yearOfBirth +
+                ", age=" + age +
                 ", status='" + status + '\'' +
                 ", cat=" + cat +
                 '}';

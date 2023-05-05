@@ -65,13 +65,13 @@ public class VolunteerService {
     /**
      * Получение произвольного волонтера из БД
      * <br>
-     * Используется метод репозитория {@link VolunteerRepository#getRandomVolunteer()}
+     * Используется метод репозитория {@link VolunteerRepository#getVolunteerById()}
      * @throws VolunteerException, если волонтер не найден в БД
      * @return найден волонтер
      */
     public Volunteer getRandomVolunteer() {
         return volunteerRepository
-                .getRandomVolunteer().orElseThrow(VolunteerException::new);
+                .getVolunteerById().orElseThrow(VolunteerException::new);
     }
 
 }

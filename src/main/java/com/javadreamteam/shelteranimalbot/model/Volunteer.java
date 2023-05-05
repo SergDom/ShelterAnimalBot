@@ -28,20 +28,10 @@ public class Volunteer {
     @Column(name = "chat_id")
     private Long chatId;
 
-    @Column(name = "user_id")
-    private Long userId;
-
 
     public Volunteer() {
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
 
     public Long getId() {
         return id;
@@ -95,7 +85,7 @@ public class Volunteer {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, username, phone, chatId, userId);
+        return Objects.hash(id, name, username, phone, chatId);
     }
 
 
@@ -107,7 +97,6 @@ public class Volunteer {
                 ", username='" + username + '\'' +
                 ", phone='" + phone + '\'' +
                 ", chatId=" + chatId +
-                ", userId=" + userId +
                 '}';
     }
 }

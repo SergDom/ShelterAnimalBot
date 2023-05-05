@@ -1,6 +1,7 @@
 package com.javadreamteam.shelteranimalbot.controllers;
 
 
+import com.javadreamteam.shelteranimalbot.keyboard.ClientStatus;
 import com.javadreamteam.shelteranimalbot.model.ClientDog;
 import com.javadreamteam.shelteranimalbot.model.Dog;
 import com.javadreamteam.shelteranimalbot.service.ClientDogService;
@@ -46,8 +47,8 @@ public class ClientDogController {
             }
     )
     @PostMapping
-    public ResponseEntity<ClientDog> createCustomer(@RequestBody ClientDog clientDog) {
-        return ResponseEntity.ok(clientDogService.create(clientDog));
+    public ResponseEntity<ClientDog> createCustomer(@RequestBody ClientDog clientDog, ClientStatus status) {
+        return ResponseEntity.ok(clientDogService.create(clientDog, status));
     }
 
     @Operation(

@@ -226,17 +226,16 @@ public class KeyboardShelter {
 
 
     public void sendForwardMessage(Long chatId, Integer messageId) {
-        ForwardMessage forwardMessage = new ForwardMessage(telegramChatVolunteer ,chatId, messageId);
+        ForwardMessage forwardMessage = new ForwardMessage(volunteerService.getRandomVolunteer() ,chatId, messageId);
         telegramBot.execute(forwardMessage);
     }
 
-//    public SendMessage volunteerMessage (Update update) {
-//        logger.info("Launched method: volunteer, for user with id: " +
-//                update.message().chat().id());
-//
-//        SendMessage volunteer = new SendMessage(volunteerService.getRandomVolunteer(), "Волонтер скоро с вами свяжется");
-//        return volunteer;
-//    }
+    public SendMessage volunteerMessage (Update update) {
+        logger.info("Launched method: volunteer, for user with id: " +
+                update.message().chat().id());
+
+        return new SendMessage(volunteerService.getRandomVolunteer(), "Волонтер скоро с вами свяжется");
+    }
 
 
     /**
@@ -257,7 +256,7 @@ public class KeyboardShelter {
 //        Random random = new Random();
 //        Pageable pageable = PageRequest.of(random.nextLong(( volunteerRepository.count()), 1);
 //        Volunteer randomVolunteer = volunteerRepository.findAll(pageable).getContent().get(0);
-        Volunteer volunteer = volunteerService.getById(chatId);
+        Volunteer volunteer = volunteerService.getRandomVolunteer();
 
         if (volunteer == null) {
             // Guest chat_id. Send message to the guest.
