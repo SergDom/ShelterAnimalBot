@@ -26,10 +26,7 @@ public class ReportDog {
      * Рацион животного
      */
     private String ration;
-    /**
-     * Здоровье животного
-     */
-    private String health;
+
     /**
      * Привычки животного
      */
@@ -64,6 +61,17 @@ public class ReportDog {
 
 
     public ReportDog() {
+    }
+
+    public ReportDog(Long id, Long chatId, String ration, String habits, String info, byte[] photo, LocalDate lastMessage, ReportStatus reportStatus) {
+        this.id = id;
+        this.chatId = chatId;
+        this.ration = ration;
+        this.habits = habits;
+        this.info = info;
+        this.photo = photo;
+        this.lastMessage = lastMessage;
+        this.reportStatus = ReportStatus.POSTED;
     }
 
     public String getInfo() {
@@ -106,13 +114,6 @@ public class ReportDog {
         this.ration = ration;
     }
 
-    public String getHealth() {
-        return health;
-    }
-
-    public void setHealth(String health) {
-        this.health = health;
-    }
 
     public String getHabits() {
         return habits;
@@ -153,12 +154,12 @@ public class ReportDog {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ReportDog reportDog = (ReportDog) o;
-        return Objects.equals(id, reportDog.id) && Objects.equals(chatId, reportDog.chatId) && Objects.equals(ration, reportDog.ration) && Objects.equals(health, reportDog.health) && Objects.equals(habits, reportDog.habits) && Objects.equals(info, reportDog.info) && Arrays.equals(photo, reportDog.photo) && Objects.equals(lastMessage, reportDog.lastMessage) && reportStatus == reportDog.reportStatus && Objects.equals(clientDog, reportDog.clientDog);
+        return Objects.equals(id, reportDog.id) && Objects.equals(chatId, reportDog.chatId) && Objects.equals(ration, reportDog.ration)  && Objects.equals(habits, reportDog.habits) && Objects.equals(info, reportDog.info) && Arrays.equals(photo, reportDog.photo) && Objects.equals(lastMessage, reportDog.lastMessage) && reportStatus == reportDog.reportStatus && Objects.equals(clientDog, reportDog.clientDog);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, chatId, ration, health, habits, info, lastMessage, reportStatus, clientDog);
+        int result = Objects.hash(id, chatId, ration, habits, info, lastMessage, reportStatus, clientDog);
         result = 31 * result + Arrays.hashCode(photo);
         return result;
     }
@@ -169,7 +170,6 @@ public class ReportDog {
                 "id=" + id +
                 ", chatId=" + chatId +
                 ", ration='" + ration + '\'' +
-                ", health='" + health + '\'' +
                 ", habits='" + habits + '\'' +
                 ", info='" + info + '\'' +
                 ", photo=" + Arrays.toString(photo) +

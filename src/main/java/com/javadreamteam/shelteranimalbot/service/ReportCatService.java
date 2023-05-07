@@ -4,6 +4,7 @@ import com.javadreamteam.shelteranimalbot.exceptions.ReportException;
 import com.javadreamteam.shelteranimalbot.keyboard.ReportStatus;
 import com.javadreamteam.shelteranimalbot.model.ReportCat;
 import com.javadreamteam.shelteranimalbot.model.ReportDog;
+import com.javadreamteam.shelteranimalbot.repository.ClientCatRepository;
 import com.javadreamteam.shelteranimalbot.repository.ReportCatRepository;
 import com.javadreamteam.shelteranimalbot.repository.ReportDogRepository;
 import org.slf4j.Logger;
@@ -20,10 +21,12 @@ import java.util.Collection;
 @Service
 public class ReportCatService {
     private final ReportCatRepository reportCatRepository;
+    private final ClientCatRepository clientCatRepository;
     private final Logger logger = LoggerFactory.getLogger(ReportCatService.class);
 
-    public ReportCatService(ReportCatRepository reportCatRepository) {
+    public ReportCatService(ReportCatRepository reportCatRepository, ClientCatRepository clientCatRepository) {
         this.reportCatRepository = reportCatRepository;
+        this.clientCatRepository = clientCatRepository;
     }
 
 
@@ -45,18 +48,19 @@ public class ReportCatService {
      *
      */
 
-    public ReportCat downloadReport(Long chatId, String ration, String health, String habits, LocalDate lastMessage,
+    public ReportCat downloadReport(Long chatId, String ration, String info, String habits, LocalDate lastMessage,
                                     byte [] photo) {
         logger.info("Method downloadReport has been run");
 
         ReportCat reportCat = new ReportCat();
         reportCat.setChatId(chatId);
         reportCat.setRation(ration);
-        reportCat.setHealth(health);
+        reportCat.setInfo(info);
         reportCat.setHabits(habits);
         reportCat.setLastMessage(lastMessage);
         reportCat.setPhoto(photo);
         reportCat.setReportStatus(ReportStatus.POSTED);
+        reportCat.setClientCat(clientCatRepository.findByChatId(chatId));
 
         return reportCatRepository.save(reportCat);
     }
@@ -82,7 +86,7 @@ public class ReportCatService {
      * @return измененный отчет
      */
     public ReportCat updateReport (ReportCat reportCat){
-        logger.info("Was invoked method - updateReport");
+        logger.info("Was invoked method - updateReport {}", reportCat);
         if(reportCat.getId() != null) {
             if(findReportById(reportCat.getId()) !=null){
                 reportCatRepository.save(reportCat);

@@ -26,10 +26,7 @@ public class ReportCat {
      * Рацион животного
      */
     private String ration;
-    /**
-     * Здоровье животного
-     */
-    private String health;
+
     /**
      * Привычки животного
      */
@@ -64,6 +61,17 @@ public class ReportCat {
 
 
     public ReportCat() {
+    }
+
+    public ReportCat(Long id, Long chatId, String ration, String habits, String info, byte[] photo, LocalDate lastMessage, ReportStatus reportStatus) {
+        this.id = id;
+        this.chatId = chatId;
+        this.ration = ration;
+        this.habits = habits;
+        this.info = info;
+        this.photo = photo;
+        this.lastMessage = lastMessage;
+        this.reportStatus = ReportStatus.POSTED;
     }
 
     public String getInfo() {
@@ -106,14 +114,6 @@ public class ReportCat {
         this.ration = ration;
     }
 
-    public String getHealth() {
-        return health;
-    }
-
-    public void setHealth(String health) {
-        this.health = health;
-    }
-
     public String getHabits() {
         return habits;
     }
@@ -134,7 +134,7 @@ public class ReportCat {
         return clientCat;
     }
 
-    public void setClientDog(ClientCat clientCat) {
+    public void setClientCat(ClientCat clientCat) {
         this.clientCat = clientCat;
     }
 
@@ -153,12 +153,12 @@ public class ReportCat {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ReportCat reportCat = (ReportCat) o;
-        return Objects.equals(id, reportCat.id) && Objects.equals(chatId, reportCat.chatId) && Objects.equals(ration, reportCat.ration) && Objects.equals(health, reportCat.health) && Objects.equals(habits, reportCat.habits) && Objects.equals(info, reportCat.info) && Arrays.equals(photo, reportCat.photo) && Objects.equals(lastMessage, reportCat.lastMessage) && reportStatus == reportCat.reportStatus && Objects.equals(clientCat, reportCat.clientCat);
+        return Objects.equals(id, reportCat.id) && Objects.equals(chatId, reportCat.chatId) && Objects.equals(ration, reportCat.ration) && Objects.equals(habits, reportCat.habits) && Objects.equals(info, reportCat.info) && Arrays.equals(photo, reportCat.photo) && Objects.equals(lastMessage, reportCat.lastMessage) && reportStatus == reportCat.reportStatus && Objects.equals(clientCat, reportCat.clientCat);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, chatId, ration, health, habits, info, lastMessage, reportStatus, clientCat);
+        int result = Objects.hash(id, chatId, ration, habits, info, lastMessage, reportStatus, clientCat);
         result = 31 * result + Arrays.hashCode(photo);
         return result;
     }
@@ -169,7 +169,6 @@ public class ReportCat {
                 "id=" + id +
                 ", chatId=" + chatId +
                 ", ration='" + ration + '\'' +
-                ", health='" + health + '\'' +
                 ", habits='" + habits + '\'' +
                 ", info='" + info + '\'' +
                 ", photo=" + Arrays.toString(photo) +

@@ -97,3 +97,7 @@ CREATE TABLE users
     name    TEXT    NOT NULL,
     is_dog  BOOLEAN NOT NULL
 );
+
+-- changeset sergeyd:5
+ALTER TABLE report_cat DROP COLUMN health;
+ALTER TABLE report_dog DROP COLUMN health;

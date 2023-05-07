@@ -75,8 +75,7 @@ public class SendReport {
 
         String message = update.message().caption();
         Matcher matcher = REPORT_PATTERN.matcher(message);
-//            SendMessage text = new SendMessage(update.message().chat().id(), "Введите данные по отчету");
-//            telegramBot.execute(text);
+
             logger.info("Received data " + message);
 
           if (
@@ -93,16 +92,19 @@ public class SendReport {
 
                     byte[] photo = telegramBot.getFileContent(file);
                     LocalDate date = LocalDate.now();
-                    if (clientDogRepository.findByChatId(update.message().chat().id()) != null) {
+                    if (clientDogRepository.findByChatId(update.message().chat().id()) != null
+                    & clientDogRepository.findByChatId(update.message().chat().id()).getStatus() != ClientStatus.IN_SEARCH) {
                         reportDogService.downloadReport(update.message().chat().id(), ration, info,
                                 habits, LocalDate.from(date.atStartOfDay()), photo);
                     telegramBot.execute(new SendMessage(update.message().chat().id(), "Отчет успешно принят!"));
-                }else if (clientCatRepository.findByChatId(update.message().chat().id()) != null){
+                }else if (clientCatRepository.findByChatId(update.message().chat().id()) != null
+                    & clientCatRepository.findByChatId(update.message().chat().id()).getStatus() != ClientStatus.IN_SEARCH){
                   reportCatService.downloadReport(update.message().chat().id(), ration, info,
                           habits, LocalDate.from(date.atStartOfDay()), photo);
                   telegramBot.execute(new SendMessage(update.message().chat().id(), "Отчет успешно принят!"));
 
               }
+                    else {telegramBot.execute(new SendMessage(update.message().chat().id(),"У вас отсутвует питомец"));}
                 } catch (IOException e) {
                     logger.error("Ошибка загрузки фото");
                     telegramBot.execute(new SendMessage(update.message().chat().id(),

@@ -78,9 +78,11 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
 
                 if (update.message() != null && update.message().photo() != null && update.message().caption() != null) {
                     sendReport.downloadReport(update);
+                    return;
                 }
                 if (update.message().contact() != null) {
                     shareContactInDB(update);
+                    return;
                 }
                 switch (textUpdate) {
 
@@ -267,8 +269,8 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
 // Общие кнопки
                     case REQUEST_VOLUNTEER:
                         sendMessage(chatId, CALL_VOLUNTEERS);
-//                        keyboardShelter.callVolunteer(update);
-                        keyboardShelter.sendForwardMessage(chatId, messageId);
+                        keyboardShelter.callVolunteer(update);
+//                        keyboardShelter.sendForwardMessage(chatId, messageId);
                         break;
 
                     case SEND_CONTACTS:

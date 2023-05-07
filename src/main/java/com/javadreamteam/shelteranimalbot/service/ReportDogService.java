@@ -3,6 +3,7 @@ package com.javadreamteam.shelteranimalbot.service;
 import com.javadreamteam.shelteranimalbot.exceptions.ReportException;
 import com.javadreamteam.shelteranimalbot.keyboard.ReportStatus;
 import com.javadreamteam.shelteranimalbot.model.ReportDog;
+import com.javadreamteam.shelteranimalbot.repository.ClientDogRepository;
 import com.javadreamteam.shelteranimalbot.repository.ReportDogRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +21,12 @@ import java.util.Collection;
 @Service
 public class ReportDogService {
     private final ReportDogRepository reportDogRepository;
+    private final ClientDogRepository clientDogRepository;
     private final Logger logger = LoggerFactory.getLogger(ReportDogService.class);
 
-    public ReportDogService(ReportDogRepository reportDogRepository) {
+    public ReportDogService(ReportDogRepository reportDogRepository, ClientDogRepository clientDogRepository) {
         this.reportDogRepository = reportDogRepository;
+        this.clientDogRepository = clientDogRepository;
     }
     /**
      * Создание отчета и сохранение его в БД
@@ -43,18 +46,19 @@ public class ReportDogService {
      *
      */
 
-    public ReportDog downloadReport(Long chatId, String ration, String health, String habits, LocalDate lastMessage,
+    public ReportDog downloadReport(Long chatId, String ration, String info, String habits, LocalDate lastMessage,
                                     byte [] photo) {
         logger.info("Method downloadReport has been run");
 
         ReportDog reportDog = new ReportDog();
         reportDog.setChatId(chatId);
         reportDog.setRation(ration);
-        reportDog.setHealth(health);
+        reportDog.setInfo(info);
         reportDog.setHabits(habits);
         reportDog.setLastMessage(lastMessage);
         reportDog.setPhoto(photo);
         reportDog.setReportStatus(ReportStatus.POSTED);
+        reportDog.setClientDog(clientDogRepository.findByChatId(chatId));
 
         return reportDogRepository.save(reportDog);
     }
@@ -80,7 +84,7 @@ public class ReportDogService {
      * @return измененный отчет
      */
     public ReportDog updateReport (ReportDog reportDog){
-        logger.info("Was invoked method - updateReport");
+        logger.info("Was invoked method - updateReport {}", reportDog);
         if(reportDog.getId() != null) {
             if(findReportById(reportDog.getId()) !=null){
                 reportDogRepository.save(reportDog);
