@@ -67,4 +67,5 @@ public class ClientCatService {
         logger.info("Was invoked method to get a Client with cat by chatId={}", chatId);
         return repository.findByChatId(chatId);
     }
+
 }

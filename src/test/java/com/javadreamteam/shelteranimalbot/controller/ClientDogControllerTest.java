@@ -1,6 +1,7 @@
 package com.javadreamteam.shelteranimalbot.controller;
 
 import com.javadreamteam.shelteranimalbot.controllers.*;
+import com.javadreamteam.shelteranimalbot.keyboard.ClientStatus;
 import com.javadreamteam.shelteranimalbot.model.ClientCat;
 import com.javadreamteam.shelteranimalbot.model.ClientDog;
 import com.javadreamteam.shelteranimalbot.repository.*;
@@ -55,9 +56,10 @@ public class ClientDogControllerTest {
         jsonClient.put("id", client.getId());
         jsonClient.put("name", client.getName());
         jsonClient.put("phoneNumber", client.getPhoneNumber());
+        jsonClient.put("status", client.getStatus());
 
 
-        when(clientDogService.create(client)).thenReturn(client);
+        when(clientDogService.create(client, ClientStatus.IN_SEARCH)).thenReturn(client);
         when(clientDogService.update(client)).thenReturn(client);
         when(clientDogService.getById(any())).thenReturn(client);
         when(clientDogService.getAll()).thenReturn(List.of(client));
@@ -73,7 +75,8 @@ public class ClientDogControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(client.getId()))
                 .andExpect(jsonPath("$.name").value(client.getName()))
-                .andExpect(jsonPath("$.phoneNumber").value(client.getPhoneNumber()));
+                .andExpect(jsonPath("$.phoneNumber").value(client.getPhoneNumber()))
+                .andExpect(jsonPath("$.status").value(client.getStatus()));
 
     }
 

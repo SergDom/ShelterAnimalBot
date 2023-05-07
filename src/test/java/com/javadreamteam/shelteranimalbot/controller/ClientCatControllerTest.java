@@ -1,6 +1,7 @@
 package com.javadreamteam.shelteranimalbot.controller;
 
 import com.javadreamteam.shelteranimalbot.controllers.*;
+import com.javadreamteam.shelteranimalbot.keyboard.ClientStatus;
 import com.javadreamteam.shelteranimalbot.model.ClientCat;
 import com.javadreamteam.shelteranimalbot.model.ClientDog;
 import com.javadreamteam.shelteranimalbot.repository.*;
@@ -54,14 +55,16 @@ public class ClientCatControllerTest {
         client.setId(2L);
         client.setName("Федор");
         client.setPhoneNumber("89991234567");
+        client.setStatus(ClientStatus.IN_SEARCH);
 
 
         jsonClient.put("id", client.getId());
         jsonClient.put("name", client.getName());
         jsonClient.put("phoneNumber", client.getPhoneNumber());
+        jsonClient.put("status", client.getStatus());
 
 
-        when(clientCatService.create(client)).thenReturn(client);
+        when(clientCatService.create(client, ClientStatus.IN_SEARCH)).thenReturn(client);
         when(clientCatService.update(client)).thenReturn(client);
         when(clientCatService.getById(any())).thenReturn(client);
         when(clientCatService.getAll()).thenReturn(List.of(client));
@@ -77,7 +80,8 @@ public class ClientCatControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(client.getId()))
                 .andExpect(jsonPath("$.name").value(client.getName()))
-                .andExpect(jsonPath("$.phoneNumber").value(client.getPhoneNumber()));
+                .andExpect(jsonPath("$.phoneNumber").value(client.getPhoneNumber()))
+                .andExpect(jsonPath("$.status").value(client.getStatus()));
 
     }
 
@@ -92,7 +96,9 @@ public class ClientCatControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.chatId").value(client.getChatId()))
                 .andExpect(jsonPath("$.name").value(client.getName()))
-                .andExpect(jsonPath("$.phoneNumber").value(client.getPhoneNumber()));
+                .andExpect(jsonPath("$.phoneNumber").value(client.getPhoneNumber()))
+                .andExpect(jsonPath("$.status").value(client.getStatus())
+                );
 
     }
 

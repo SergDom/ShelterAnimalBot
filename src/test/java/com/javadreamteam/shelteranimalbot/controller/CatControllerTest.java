@@ -54,6 +54,7 @@ public class CatControllerTest {
 		animal.setBreed("Британская");
 		animal.setInfo("В крапинку");
 
+
 		jsonAnimal.put("id", animal.getId());
 		jsonAnimal.put("name", animal.getName());
 		jsonAnimal.put("age", animal.getAge());

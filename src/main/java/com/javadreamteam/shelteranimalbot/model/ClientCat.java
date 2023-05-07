@@ -47,8 +47,11 @@ public class ClientCat {
         this.phoneNumber = phoneNumber;
     }
 
-    public ClientCat (String name, String phone, long finalChatId) {
-
+    public ClientCat(Long id, String name, String phoneNumber, ClientStatus status) {
+        this.id = id;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.status = status;
     }
 
     public ClientCat(Long chatId, String firstName, String phoneNumber) {
