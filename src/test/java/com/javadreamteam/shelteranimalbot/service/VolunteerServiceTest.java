@@ -1,9 +1,13 @@
 package com.javadreamteam.shelteranimalbot.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import com.javadreamteam.shelteranimalbot.exceptions.VolunteerException;
 import com.javadreamteam.shelteranimalbot.model.Volunteer;
 import com.javadreamteam.shelteranimalbot.repository.VolunteerRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -14,8 +18,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-@SpringBootTest
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
+@SpringBootTest
 
 class VolunteerServiceTest {
 
@@ -24,115 +30,122 @@ class VolunteerServiceTest {
 
     @InjectMocks
     private VolunteerService volunteerService;
-
-
     @Test
-    void createVolunteer() {
+    public void testCreateVolunteer() {
+        // Создание объекта Volunteer
         Volunteer volunteer = new Volunteer();
-        volunteer.setName("John");
-        volunteer.setUsername("john123");
+        volunteer.setName("John Doe");
+        volunteer.setUsername("johndoe");
         volunteer.setPhone("1234567890");
-        volunteer.setChatId(12345L);
-        volunteer.setUserId(67890L);
+        volunteer.setChatId(123456789L);
 
-        Mockito.when(volunteerRepository.save(volunteer)).thenReturn(volunteer);
+        // Задание поведения зависимости volunteerRepository
+        when(volunteerRepository.save(any(Volunteer.class))).thenReturn(volunteer);
 
-        Volunteer savedVolunteer = volunteerService.createVolunteer(volunteer);
+        // Вызов метода createVolunteer
+        Volunteer result = volunteerService.createVolunteer(volunteer);
 
-        assertNotNull(savedVolunteer.getId());
-        assertEquals(volunteer.getName(), savedVolunteer.getName());
-        assertEquals(volunteer.getUsername(), savedVolunteer.getUsername());
-        assertEquals(volunteer.getPhone(), savedVolunteer.getPhone());
-        assertEquals(volunteer.getChatId(), savedVolunteer.getChatId());
-        assertEquals(volunteer.getUserId(), savedVolunteer.getUserId());
+        // Проверка, что метод save был вызван один раз с переданным объектом Volunteer
+        ArgumentCaptor<Volunteer> argumentCaptor = ArgumentCaptor.forClass(Volunteer.class);
+        verify(volunteerRepository, times(1)).save(argumentCaptor.capture());
+        Volunteer savedVolunteer = argumentCaptor.getValue();
+        assertEquals("John Doe", savedVolunteer.getName());
+        assertEquals("johndoe", savedVolunteer.getUsername());
+        assertEquals("1234567890", savedVolunteer.getPhone());
+        assertEquals(123456789L, savedVolunteer.getChatId());
 
-        Mockito.verify(volunteerRepository, Mockito.times(1)).save(volunteer);
+        // Проверка, что результат равен созданному объекту Volunteer
+        assertEquals(volunteer, result);
     }
 
 
+        @Test
+        public void testGetVolunteerById() {
+            // Создание объекта Volunteer
+            Volunteer volunteer = new Volunteer();
+            volunteer.setId(1L);
+            volunteer.setName("John Doe");
+            volunteer.setUsername("johndoe");
+            volunteer.setPhone("1234567890");
+            volunteer.setChatId(123456789L);
+
+            // Задание поведения зависимости volunteerRepository
+            when(volunteerRepository.findById(1L)).thenReturn(Optional.of(volunteer));
+
+            // Вызов метода getById
+            Volunteer result = volunteerService.getById(1L);
+
+            // Проверка, что метод findById был вызван один раз с переданным id
+            verify(volunteerRepository, times(1)).findById(1L);
+
+            // Проверка, что результат равен созданному объекту Volunteer
+            assertEquals(volunteer, result);
+
+            // Проверка, что метод findById был вызван с правильным аргументом
+            ArgumentCaptor<Long> argumentCaptor = ArgumentCaptor.forClass(Long.class);
+            verify(volunteerRepository).findById(argumentCaptor.capture());
+            assertEquals(1L, argumentCaptor.getValue().longValue());
+
+            // Проверка, что метод findById выбросил VolunteerException при отсутствии записи с таким id
+            when(volunteerRepository.findById(2L)).thenReturn(Optional.empty());
+            assertThrows(VolunteerException.class, () -> volunteerService.getById(2L));
+        }
+
+
+          @Test
+    public void testUpdateVolunteer() {
+              Volunteer volunteer = new Volunteer();
+              volunteer.setId(1L);
+              volunteer.setName("John");
+              volunteer.setUsername("john123");
+              volunteer.setPhone("1234567890");
+              volunteer.setChatId(12345L);
+
+
+              Volunteer updatedVolunteer = new Volunteer();
+              updatedVolunteer.setId(1L);
+              updatedVolunteer.setName("John Doe");
+              updatedVolunteer.setUsername("johndoe123");
+              updatedVolunteer.setPhone("0987654321");
+              updatedVolunteer.setChatId(54321L);
+
+
+              Mockito.when(volunteerRepository.findById(1L)).thenReturn(Optional.of(volunteer));
+              Mockito.when(volunteerRepository.save(updatedVolunteer)).thenReturn(updatedVolunteer);
+
+              Volunteer returnedVolunteer = volunteerService.updateVolunteer(1L, updatedVolunteer);
+
+              assertNotNull(returnedVolunteer);
+              assertEquals(updatedVolunteer.getId(), returnedVolunteer.getId());
+              assertEquals(updatedVolunteer.getName(), returnedVolunteer.getName());
+              assertEquals(updatedVolunteer.getUsername(), returnedVolunteer.getUsername());
+              assertEquals(updatedVolunteer.getPhone(), returnedVolunteer.getPhone());
+              assertEquals(updatedVolunteer.getChatId(), returnedVolunteer.getChatId());
+
+
+              Mockito.verify(volunteerRepository, Mockito.times(1)).findById(1L);
+              Mockito.verify(volunteerRepository, Mockito.times(1)).save(updatedVolunteer);
+    }
+
 
     @Test
-    void getById() {
+    public void testGetRandomVolunteer() {
         Volunteer volunteer = new Volunteer();
         volunteer.setId(1L);
         volunteer.setName("John");
         volunteer.setUsername("john123");
         volunteer.setPhone("1234567890");
-        volunteer.setChatId(12345L);
-        volunteer.setUserId(67890L);
+        volunteer.setChatId(123456L);
 
-        Mockito.when(volunteerRepository.findById(1L)).thenReturn(Optional.of(volunteer));
+        Mockito.when(volunteerRepository.getVolunteerById()).thenReturn(Optional.of(volunteer));
 
-        Volunteer foundVolunteer = volunteerService.getById(1L);
+        Volunteer result = volunteerService.getRandomVolunteer();
 
-        assertNotNull(foundVolunteer);
-        assertEquals(volunteer.getId(), foundVolunteer.getId());
-        assertEquals(volunteer.getName(), foundVolunteer.getName());
-        assertEquals(volunteer.getUsername(), foundVolunteer.getUsername());
-        assertEquals(volunteer.getPhone(), foundVolunteer.getPhone());
-        assertEquals(volunteer.getChatId(), foundVolunteer.getChatId());
-        assertEquals(volunteer.getUserId(), foundVolunteer.getUserId());
-
-        Mockito.verify(volunteerRepository, Mockito.times(1)).findById(1L);
-    }
-
-    @Test
-    void updateVolunteer() {
-        Volunteer volunteer = new Volunteer();
-        volunteer.setId(1L);
-        volunteer.setName("John");
-        volunteer.setUsername("john123");
-        volunteer.setPhone("1234567890");
-        volunteer.setChatId(12345L);
-        volunteer.setUserId(67890L);
-
-        Volunteer updatedVolunteer = new Volunteer();
-        updatedVolunteer.setId(1L);
-        updatedVolunteer.setName("John Doe");
-        updatedVolunteer.setUsername("johndoe123");
-        updatedVolunteer.setPhone("0987654321");
-        updatedVolunteer.setChatId(54321L);
-        updatedVolunteer.setUserId(98760L);
-
-        Mockito.when(volunteerRepository.findById(1L)).thenReturn(Optional.of(volunteer));
-        Mockito.when(volunteerRepository.save(updatedVolunteer)).thenReturn(updatedVolunteer);
-
-        Volunteer returnedVolunteer = volunteerService.updateVolunteer(1L, updatedVolunteer);
-
-        assertNotNull(returnedVolunteer);
-        assertEquals(updatedVolunteer.getId(), returnedVolunteer.getId());
-        assertEquals(updatedVolunteer.getName(), returnedVolunteer.getName());
-        assertEquals(updatedVolunteer.getUsername(), returnedVolunteer.getUsername());
-        assertEquals(updatedVolunteer.getPhone(), returnedVolunteer.getPhone());
-        assertEquals(updatedVolunteer.getChatId(), returnedVolunteer.getChatId());
-        assertEquals(updatedVolunteer.getUserId(), returnedVolunteer.getUserId());
-
-        Mockito.verify(volunteerRepository, Mockito.times(1)).findById(1L);
-        Mockito.verify(volunteerRepository, Mockito.times(1)).save(updatedVolunteer);
-    }
-
-    @Test
-    void getRandomVolunteer() {
-        Volunteer volunteer = new Volunteer();
-        volunteer.setId(1L);
-        volunteer.setName("John");
-        volunteer.setUsername("john123");
-        volunteer.setPhone("1234567890");
-        volunteer.setChatId(12345L);
-        volunteer.setUserId(67890L);
-
-        Mockito.when(volunteerRepository.getRandomVolunteer()).thenReturn(Optional.of(volunteer));
-
-        Volunteer returnedVolunteer = volunteerService.getRandomVolunteer();
-
-        assertNotNull(returnedVolunteer);
-        assertEquals(volunteer.getId(), returnedVolunteer.getId());
-        assertEquals(volunteer.getName(), returnedVolunteer.getName());
-        assertEquals(volunteer.getUsername(), returnedVolunteer.getUsername());
-        assertEquals(volunteer.getPhone(), returnedVolunteer.getPhone());
-        assertEquals(volunteer.getChatId(), returnedVolunteer.getChatId());
-        assertEquals(volunteer.getUserId(), returnedVolunteer.getUserId());
-
-        Mockito.verify(volunteerRepository, Mockito.times(1)).getRandomVolunteer();
+        assertNotNull(result);
+        assertEquals(volunteer.getId(), result.getId());
+        assertEquals(volunteer.getName(), result.getName());
+        assertEquals(volunteer.getUsername(), result.getUsername());
+        assertEquals(volunteer.getPhone(), result.getPhone());
+        assertEquals(volunteer.getChatId(), result.getChatId());
     }
 }

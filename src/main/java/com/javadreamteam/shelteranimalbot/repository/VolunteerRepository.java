@@ -22,4 +22,5 @@ public interface VolunteerRepository extends JpaRepository<Volunteer, Long> {
 
 Optional <Volunteer> getVolunteerById ();
 
+
 }

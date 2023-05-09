@@ -1,8 +1,11 @@
 package com.javadreamteam.shelteranimalbot.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.javadreamteam.shelteranimalbot.model.Dog;
 import com.javadreamteam.shelteranimalbot.repository.DogRepository;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,7 +18,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-
+@SpringBootTest
 class DogServiceTest {
 
     @Test
@@ -32,10 +35,6 @@ class DogServiceTest {
         verify(mockRepository, times(1)).save(dog);
         assertEquals(1L, (long) createdDog.getId());
     }
-
-
-
-
     @Test
     void getById() {
         DogRepository repository = mock(DogRepository.class);

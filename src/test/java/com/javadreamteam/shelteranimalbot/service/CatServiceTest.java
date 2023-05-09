@@ -1,4 +1,5 @@
 package com.javadreamteam.shelteranimalbot.service;
+
 import com.javadreamteam.shelteranimalbot.exceptions.CatException;
 import com.javadreamteam.shelteranimalbot.model.Cat;
 import com.javadreamteam.shelteranimalbot.repository.CatRepository;
@@ -15,7 +16,8 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+
+
 @SpringBootTest
 class CatServiceTest {
     @Mock
@@ -144,5 +146,4 @@ class CatServiceTest {
 
         verify(catRepository, times(1)).findAll();
     }
-
 }

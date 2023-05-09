@@ -1,11 +1,15 @@
 package com.javadreamteam.shelteranimalbot.service;
 
+import static org.junit.jupiter.api.Assertions.*;
 import com.javadreamteam.shelteranimalbot.keyboard.ReportStatus;
+import com.javadreamteam.shelteranimalbot.model.ClientCat;
 import com.javadreamteam.shelteranimalbot.model.ReportCat;
 import com.javadreamteam.shelteranimalbot.model.ReportDog;
+import com.javadreamteam.shelteranimalbot.repository.ClientCatRepository;
 import com.javadreamteam.shelteranimalbot.repository.ReportCatRepository;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -22,20 +26,22 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.*;
 @SpringBootTest
+
 class ReportCatServiceTest {
     @Mock
     private ReportCatRepository reportRepository;
+    @Mock
+    private ClientCatRepository clientCatRepository;
     @InjectMocks
     private ReportCatService reportService;
 
     @Test
-      void createReport() {
+    void createReport() {
 
 
         ReportCat reportCat = new ReportCat();
         reportCat.setChatId(123456789L);
         reportCat.setRation("Dry food");
-        reportCat.setHealth("Good");
         reportCat.setHabits("Likes to play fetch");
         reportCat.setInfo("Report on Cat's daily routine");
         reportCat.setPhoto(new byte[] {0x00, 0x01, 0x02});
@@ -48,61 +54,70 @@ class ReportCatServiceTest {
 
         Assert.assertEquals(reportCat, result);
     }
-
     @Test
     void downloadReport() {
-        // Создаем тестовые данные
-        Long chatId = 123456789L;
-        String ration = "Test ration";
-        String health = "Test health";
-        String habits = "Test habits";
-        LocalDate lastMessage = LocalDate.now();
-        byte[] photo = new byte[]{1, 2, 3};
-
-        // Задаем поведение mock объекта reportRepository
+        // Создание объекта ReportCat
         ReportCat report = new ReportCat();
+        report.setId(1L);
+        report.setChatId(123456789L);
+        report.setRation("Some ration");
+        report.setHabits("Some habits");
+        report.setInfo("Some info");
+        report.setPhoto(new byte[]{1, 2, 3});
+        report.setLastMessage(LocalDate.now());
+        report.setReportStatus(ReportStatus.POSTED);
+
+        // Задание поведения зависимости clientCatRepository
+        when(clientCatRepository.findByChatId(123456789L)).thenReturn(new ClientCat());
+
+        // Задание поведения зависимости reportCatRepository
         when(reportRepository.save(any(ReportCat.class))).thenReturn(report);
 
-        // Вызываем метод downloadReport()
-        ReportCat downloadedReport = reportService.downloadReport(chatId, ration, health, habits, lastMessage, photo);
+        // Вызов метода downloadReport
+        ReportCat result = reportService.downloadReport(123456789L, "Some ration", "Some info", "Some habits",
+                LocalDate.now(), new byte[]{1, 2, 3});
 
-        // Проверяем, что созданный отчет не null и содержит правильные данные
-        assertNotNull(downloadedReport);
-        assertNotNull(downloadedReport.getId());
-        assertEquals(chatId, downloadedReport.getChatId());
-        assertEquals(ration, downloadedReport.getRation());
-        assertEquals(health, downloadedReport.getHealth());
-        assertEquals(habits, downloadedReport.getHabits());
-        assertEquals(lastMessage, downloadedReport.getLastMessage());
-        assertArrayEquals(photo, downloadedReport.getPhoto());
-        assertEquals(ReportStatus.POSTED, downloadedReport.getReportStatus());
+        // Проверка, что метод findByChatId был вызван один раз
+        verify(clientCatRepository, times(1)).findByChatId(123456789L);
 
-        // Проверяем, что метод save() был вызван у mock объекта reportRepository
-        verify(reportRepository, times(1)).save(any(ReportCat.class));
+        // Проверка, что метод save был вызван один раз с переданным объектом ReportCat
+        ArgumentCaptor<ReportCat> argumentCaptor = ArgumentCaptor.forClass(ReportCat.class);
+        verify(reportRepository, times(1)).save(argumentCaptor.capture());
+        ReportCat savedReport = argumentCaptor.getValue();
+        assertEquals(123456789L, savedReport.getChatId());
+        assertEquals("Some ration", savedReport.getRation());
+        assertEquals("Some info", savedReport.getInfo());
+        assertEquals("Some habits", savedReport.getHabits());
+        assertEquals(LocalDate.now(), savedReport.getLastMessage());
+        assertArrayEquals(new byte[]{1, 2, 3}, savedReport.getPhoto());
+
+        // Проверка, что результат равен созданному объекту ReportCat
+        assertEquals(report, result);
     }
-//
+
+    //
     @Test
     void findReportById() {
 // Создаем тестовые данные
-Long id = 1L;
-    ReportCat report = new ReportCat();
+        Long id = 1L;
+        ReportCat report = new ReportCat();
         report.setId(id);
 
-    // Задаем поведение mock объекта reportRepository
-    when(reportRepository.findById(id)).thenReturn(Optional.of(report));
+        // Задаем поведение mock объекта reportRepository
+        when(reportRepository.findById(id)).thenReturn(Optional.of(report));
 
-    // Вызываем метод findReportById()
-    ReportCat foundReport = reportService.findReportById(id);
+        // Вызываем метод findReportById()
+        ReportCat foundReport = reportService.findReportById(id);
 
-    // Проверяем, что найденный отчет не null и содержит правильный id
-    assertNotNull(foundReport);
-    assertEquals(id, foundReport.getId());
+        // Проверяем, что найденный отчет не null и содержит правильный id
+        assertNotNull(foundReport);
+        assertEquals(id, foundReport.getId());
 
-    // Проверяем, что метод findById() был вызван у mock объекта reportRepository
-    verify(reportRepository, times(1)).findById(id);
-}
+        // Проверяем, что метод findById() был вызван у mock объекта reportRepository
+        verify(reportRepository, times(1)).findById(id);
+    }
 
-//
+    //
     @Test
     void updateReport() {
         // Создаем тестовые данные
@@ -130,17 +145,17 @@ Long id = 1L;
 
     @Test
     void deleteReport() {
-Long id = 1L;
+        Long id = 1L;
 
-    ReportCat report = new ReportCat();
+        ReportCat report = new ReportCat();
         report.setId(id);
 
-    when(reportRepository.findById(id)).thenReturn(Optional.of(report));
+        when(reportRepository.findById(id)).thenReturn(Optional.of(report));
 
         reportService.deleteReport(id);
 
-    verify(reportRepository).deleteById(id);
-}
+        verify(reportRepository).deleteById(id);
+    }
 
 
     @Test
@@ -149,7 +164,6 @@ Long id = 1L;
         report1.setId(1L);
         report1.setChatId(123456L);
         report1.setRation("Dry food");
-        report1.setHealth("Good");
         report1.setHabits("Likes to play fetch");
         report1.setInfo("Report for the week of 10/25/2021");
         report1.setPhoto(new byte[] {0, 1, 2});
@@ -160,7 +174,6 @@ Long id = 1L;
         report2.setId(2L);
         report2.setChatId(789012L);
         report2.setRation("Wet food");
-        report2.setHealth("Needs to lose weight");
         report2.setHabits("Sleeps a lot");
         report2.setInfo("Report for the week of 10/18/2021");
         report2.setPhoto(new byte[] {3, 4, 5});
@@ -178,5 +191,4 @@ Long id = 1L;
         assertEquals(2, result.size());
         assertEquals("Dry food", result.iterator().next().getRation());
     }
-    }
-
+}

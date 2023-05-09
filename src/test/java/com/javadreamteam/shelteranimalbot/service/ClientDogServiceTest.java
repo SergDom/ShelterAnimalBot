@@ -1,5 +1,6 @@
 package com.javadreamteam.shelteranimalbot.service;
 
+import com.javadreamteam.shelteranimalbot.keyboard.ClientStatus;
 import com.javadreamteam.shelteranimalbot.keyboard.ReportStatus;
 import com.javadreamteam.shelteranimalbot.model.*;
 import com.javadreamteam.shelteranimalbot.model.ClientDog;
@@ -20,6 +21,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.*;
+
+import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class ClientDogServiceTest {
     @Mock
@@ -33,9 +36,7 @@ class ClientDogServiceTest {
         clientDog.setName("Buddy");
         clientDog.setChatId(123456789L);
         clientDog.setPhoneNumber("+1234567890");
-        clientDog.setEmail("buddy@example.com");
-        clientDog.setYearOfBirth(2015);
-        clientDog.setStatus(ReportStatus.PENDING);
+        clientDog.setStatus(ClientStatus.APPROVED);
 
         // Create a mock Dog object
         Dog dog = new Dog();
@@ -51,7 +52,7 @@ class ClientDogServiceTest {
         when(repository.save(clientDog)).thenReturn(clientDog);
 
         // Call the service method and assert that it returns the same ClientDog object
-        ClientDog savedClientDog = service.create(clientDog);
+        ClientDog savedClientDog = service.create(clientDog,ClientStatus.APPROVED);
         assertEquals(clientDog, savedClientDog);
 
         // Verify that the repository.save() method was called exactly once with the same ClientDog object
@@ -66,9 +67,8 @@ class ClientDogServiceTest {
         clientDog.setName("Alice");
         clientDog.setChatId(12345L);
         clientDog.setPhoneNumber("1234567890");
-        clientDog.setEmail("alice@example.com");
-        clientDog.setYearOfBirth(1990);
-        clientDog.setStatus(ReportStatus.PENDING);
+
+        clientDog.setStatus(ClientStatus.APPROVED);
 
         Dog dog = new Dog();
         dog.setId(1L);
@@ -88,8 +88,6 @@ class ClientDogServiceTest {
         assertEquals(clientDog.getName(), returnedClientDog.getName());
         assertEquals(clientDog.getChatId(), returnedClientDog.getChatId());
         assertEquals(clientDog.getPhoneNumber(), returnedClientDog.getPhoneNumber());
-        assertEquals(clientDog.getEmail(), returnedClientDog.getEmail());
-        assertEquals(clientDog.getYearOfBirth(), returnedClientDog.getYearOfBirth());
         assertEquals(clientDog.getStatus(), returnedClientDog.getStatus());
         assertEquals(clientDog.getDog().getName(), returnedClientDog.getDog().getName());
         assertEquals(clientDog.getDog().getAge(), returnedClientDog.getDog().getAge());
@@ -105,34 +103,53 @@ class ClientDogServiceTest {
 
     @Test
     void update() {
-        // создание объекта ClientDog и заполнение его полями
+
+        // создаем объекты
         ClientDog clientDog = new ClientDog();
         clientDog.setId(1L);
-        clientDog.setName("Buddy");
-        clientDog.setChatId(123456789L);
-        clientDog.setPhoneNumber("+1234567890");
-        clientDog.setEmail("buddy@example.com");
-        clientDog.setYearOfBirth(2018);
-        clientDog.setStatus(ReportStatus.NEW);
+        clientDog.setName("Alice");
+        clientDog.setChatId(12345L);
+        clientDog.setPhoneNumber("1234567890");
 
-        Dog dog = new Dog();
-        dog.setId(1L);
-        dog.setName("Buddy's Dog");
-        clientDog.setDog(dog);
+        clientDog.setStatus(ClientStatus.APPROVED);
 
-        // мокирование метода repository.findById() для возврата созданного объекта ClientDog
+        Dog Dog = new Dog();
+        Dog.setId(1L);
+        Dog.setName("Fluffy");
+        Dog.setAge(3);
+        Dog.setBreed("Persian");
+        clientDog.setDog(Dog);
+
+        // имитируем получение объекта из репозитория
         Mockito.when(repository.findById(1L)).thenReturn(Optional.of(clientDog));
 
-        // вызов метода update() с измененным полем name
-        clientDog.setName("Charlie");
-        ClientDog updatedClientDog = service.update(clientDog);
+        // имитируем сохранение объекта в репозитории
+        Mockito.when(repository.save(clientDog)).thenReturn(clientDog);
 
-        // проверка, что возвращается тот же объект ClientDog
-        Assert.assertEquals(clientDog, updatedClientDog);
+        // вызываем метод update() и проверяем результат
+        ClientDog returnedClientDog = service.update(clientDog);
 
-        // проверка, что метод repository.save() был вызван ровно один раз с указанным объектом ClientDog
+        assertNotNull(returnedClientDog);
+        assertEquals(clientDog.getName(), returnedClientDog.getName());
+        assertEquals(clientDog.getChatId(), returnedClientDog.getChatId());
+        assertEquals(clientDog.getPhoneNumber(), returnedClientDog.getPhoneNumber());
+        assertEquals(clientDog.getStatus(), returnedClientDog.getStatus());
+        assertEquals(clientDog.getDog().getName(), returnedClientDog.getDog().getName());
+        assertEquals(clientDog.getDog().getAge(), returnedClientDog.getDog().getAge());
+        assertEquals(clientDog.getDog().getBreed(), returnedClientDog.getDog().getBreed());
+
+
+        // проверяем, что метод findById() был вызван один раз с нужным аргументом
+        Mockito.verify(repository, Mockito.times(1)).findById(1L);
+
+        // проверяем, что метод save() был вызван один раз с нужным аргументом
         Mockito.verify(repository, Mockito.times(1)).save(clientDog);
 
+        // проверяем, что метод findById() был вызван только один раз
+        Mockito.verify(repository, Mockito.times(1)).findById(Mockito.anyLong());
+
+        // проверяем, что метод save() был вызван только один раз
+        Mockito.verify(repository, Mockito.times(1)).save(Mockito.any(ClientDog.class));
 
     }
 
@@ -144,9 +161,8 @@ class ClientDogServiceTest {
         clientDog.setName("Alice");
         clientDog.setChatId(12345L);
         clientDog.setPhoneNumber("1234567890");
-        clientDog.setEmail("alice@example.com");
-        clientDog.setYearOfBirth(1990);
-        clientDog.setStatus(ReportStatus.PENDING);
+
+        clientDog.setStatus((ClientStatus.APPROVED));
 
         Dog dog = new Dog();
         dog.setId(1L);
@@ -161,9 +177,6 @@ class ClientDogServiceTest {
         // вызываем метод removeById()
         service.removeById(1L);
 
-        // проверяем, что метод findById() был вызван один раз с нужным аргументом
-        Mockito.verify(repository, Mockito.times(1)).findById(1L);
-
         // проверяем, что метод deleteById() был вызван один раз с нужным аргументом
         Mockito.verify(repository, Mockito.times(1)).deleteById(1L);
     }
@@ -174,7 +187,7 @@ class ClientDogServiceTest {
         clientDog1.setName("John");
         clientDog1.setChatId(123456789L);
         clientDog1.setPhoneNumber("+1234567890");
-        clientDog1.setStatus(ReportStatus.NEW);
+        clientDog1.setStatus((ClientStatus.APPROVED));
 
         Dog dog1 = new Dog();
         dog1.setName("Tom");
@@ -185,9 +198,7 @@ class ClientDogServiceTest {
         ClientDog2.setName("Alice");
         ClientDog2.setChatId(987654321L);
         ClientDog2.setPhoneNumber("+0987654321");
-        ClientDog2.setEmail("alice@example.com");
-        ClientDog2.setYearOfBirth(1990);
-        ClientDog2.setStatus(ReportStatus.PENDING);
+        ClientDog2.setStatus((ClientStatus.APPROVED));
 
         Dog dog2 = new Dog();
         dog2.setName("Luna");
@@ -211,11 +222,11 @@ class ClientDogServiceTest {
         clientDog.setName("John");
         clientDog.setChatId(chatId);
         clientDog.setPhoneNumber("+1234567890");
-        clientDog.setStatus(ReportStatus.NEW);
+        clientDog.setStatus((ClientStatus.APPROVED));
 
         Dog dog = new Dog();
         dog.setName("Tom");
-         dog.setBreed("Siamese");
+        dog.setBreed("Siamese");
         clientDog.setDog(dog);
 
         Mockito.when(repository.findByChatId(chatId)).thenReturn(clientDog);
