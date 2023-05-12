@@ -74,6 +74,11 @@ public class ReportCat {
         this.reportStatus = ReportStatus.POSTED;
     }
 
+    public ReportCat(Long chat_id, byte[] photo, String ration, String info, String habits, LocalDate dateMessage) {
+
+    }
+
+
     public String getInfo() {
         return info;
     }

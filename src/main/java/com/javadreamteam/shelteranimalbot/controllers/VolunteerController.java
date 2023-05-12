@@ -86,7 +86,7 @@ public class VolunteerController {
                     )
             }
     )
-    @PutMapping("{volunteerId}")
+    @PutMapping("/{volunteerId}")
     public Volunteer updateVolunteer(@PathVariable long volunteerId,
                                      @RequestBody Volunteer volunteer) {
         return volunteerService.updateVolunteer(volunteerId, volunteer);

@@ -28,7 +28,7 @@ public class ClientDogService {
      */
 
     public ClientDog create(ClientDog clientDog, ClientStatus status) {
-        logger.info("Was invoked method to create a personDog");
+        logger.info("Was invoked method to create a clientDog");
         clientDog.setStatus(status);
         return repository.save(clientDog);
     }
@@ -44,7 +44,7 @@ public class ClientDogService {
     }
 
     public ClientDog update(ClientDog clientDog) {
-        logger.info("Was invoked method to update a personDog");
+        logger.info("Was invoked method to update a clientDog");
         if (clientDog.getId() != null) {
             if (getById(clientDog.getId()) != null) {
                 return repository.save(clientDog);

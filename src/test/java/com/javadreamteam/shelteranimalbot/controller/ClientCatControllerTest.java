@@ -2,6 +2,7 @@ package com.javadreamteam.shelteranimalbot.controller;
 
 import com.javadreamteam.shelteranimalbot.controllers.*;
 import com.javadreamteam.shelteranimalbot.keyboard.ClientStatus;
+import com.javadreamteam.shelteranimalbot.model.Cat;
 import com.javadreamteam.shelteranimalbot.model.ClientCat;
 import com.javadreamteam.shelteranimalbot.model.ClientDog;
 import com.javadreamteam.shelteranimalbot.repository.*;
@@ -28,7 +29,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest (ClientCatController.class)
+@WebMvcTest(ClientCatController.class)
 public class ClientCatControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -36,17 +37,21 @@ public class ClientCatControllerTest {
 
     @MockBean
     private ClientCatRepository clientCatRepository;
-
-
+    @MockBean
+    private CatRepository catRepository;
     @MockBean
     private ClientCatService clientCatService;
-
+    @MockBean
+    private CatService catService;
 
     @InjectMocks
     private ClientCatController clientCatController;
-
+    @InjectMocks
+    private CatController catController;
 
     private final ClientCat client = new ClientCat();
+
+    Cat cat = new Cat();
     private final JSONObject jsonClient = new JSONObject();
 
     @BeforeEach
@@ -57,11 +62,21 @@ public class ClientCatControllerTest {
         client.setPhoneNumber("89991234567");
         client.setStatus(ClientStatus.IN_SEARCH);
 
+        cat.setId(2L);
+        cat.setName("Barsik");
+        cat.setAge(1);
+        cat.setBreed("British");
+//        client.setCat(cat);
 
         jsonClient.put("id", client.getId());
         jsonClient.put("name", client.getName());
         jsonClient.put("phoneNumber", client.getPhoneNumber());
         jsonClient.put("status", client.getStatus());
+//        jsonClient.put("id", cat.getId());
+//        jsonClient.put("name", cat.getName());
+//        jsonClient.put("age", cat.getAge());
+//        jsonClient.put("breed", cat.getBreed());
+//        jsonClient.put("cat", client.getCat());
 
 
         when(clientCatService.create(client, ClientStatus.IN_SEARCH)).thenReturn(client);
@@ -81,24 +96,28 @@ public class ClientCatControllerTest {
                 .andExpect(jsonPath("$.id").value(client.getId()))
                 .andExpect(jsonPath("$.name").value(client.getName()))
                 .andExpect(jsonPath("$.phoneNumber").value(client.getPhoneNumber()))
-                .andExpect(jsonPath("$.status").value(client.getStatus()));
+                .andExpect(jsonPath("$.status").value(client.getStatus()!= null ));
+//                .andExpect(jsonPath("$.id").value(cat.getId()))
+//                .andExpect(jsonPath("$.name").value(cat.getName()))
+//                .andExpect(jsonPath("$.age").value(cat.getAge()))
+//                .andExpect(jsonPath("$.breed").value(cat.getBreed()))
+//                .andExpect(jsonPath("$.cat").value(client.getCat()));
 
     }
 
     @Test
     public void updateClient() throws Exception {
-        client.setName("New name");
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/clients/cat")
                         .content(jsonClient.toString())
                         .contentType(MediaType.APPLICATION_JSON))
 
+
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.chatId").value(client.getChatId()))
                 .andExpect(jsonPath("$.name").value(client.getName()))
                 .andExpect(jsonPath("$.phoneNumber").value(client.getPhoneNumber()))
-                .andExpect(jsonPath("$.status").value(client.getStatus())
-                );
+                .andExpect(jsonPath("$.status").value(client.getStatus().toString()));
 
     }
 

@@ -45,11 +45,11 @@ public class ClientDog {
         this.phoneNumber = phoneNumber;
     }
 
-    public ClientDog(String name, String phone, long finalChatId) {
-
-    }
-
-    public ClientDog(String john, long l, String s) {
+    public ClientDog(Long id, String name, String phoneNumber, ClientStatus status) {
+        this.id = id;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.status = status;
     }
 
     public Long getId() {
