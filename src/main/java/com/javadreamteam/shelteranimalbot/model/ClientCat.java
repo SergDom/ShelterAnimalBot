@@ -36,7 +36,8 @@ public class ClientCat {
     @JoinColumn(name = "cat_id")
     private Cat cat;
 
-
+    @Column(name = "report_days")
+    private Long reportDays;
 
     public ClientCat() {
     }
@@ -58,6 +59,14 @@ public class ClientCat {
         this.chatId = chatId;
         this.name = firstName;
         this.phoneNumber = phoneNumber;
+    }
+
+    public Long getReportDays() {
+        return reportDays;
+    }
+
+    public void setReportDays(Long reportDays) {
+        this.reportDays = reportDays;
     }
 
     public Long getId() {
@@ -117,18 +126,17 @@ public class ClientCat {
         this.cat = cat;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ClientCat clientCat = (ClientCat) o;
-        return Objects.equals(id, clientCat.id);
+        return Objects.equals(id, clientCat.id) && Objects.equals(name, clientCat.name) && Objects.equals(chatId, clientCat.chatId) && Objects.equals(phoneNumber, clientCat.phoneNumber) && Objects.equals(age, clientCat.age) && status == clientCat.status && Objects.equals(cat, clientCat.cat) && Objects.equals(reportDays, clientCat.reportDays);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, name, chatId, phoneNumber, age, status, cat, reportDays);
     }
 
     @Override
@@ -139,8 +147,9 @@ public class ClientCat {
                 ", chatId=" + chatId +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", age=" + age +
-                ", status='" + status + '\'' +
+                ", status=" + status +
                 ", cat=" + cat +
+                ", reportDays=" + reportDays +
                 '}';
     }
 }

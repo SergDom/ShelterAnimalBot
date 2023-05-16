@@ -2,6 +2,7 @@ package com.javadreamteam.shelteranimalbot.controllers;
 
 
 import com.javadreamteam.shelteranimalbot.keyboard.ClientStatus;
+import com.javadreamteam.shelteranimalbot.model.ClientCat;
 import com.javadreamteam.shelteranimalbot.model.ClientDog;
 import com.javadreamteam.shelteranimalbot.model.Dog;
 import com.javadreamteam.shelteranimalbot.service.ClientDogService;
@@ -176,5 +177,105 @@ public class ClientDogController {
     @GetMapping("/find-client-by-chatId")
     public ResponseEntity getClientById(@RequestParam Long chatId) {
         return ResponseEntity.ok(clientDogService.getByChatId(chatId));
+    }
+
+    @Operation(
+            summary = "Увеличение дней испытательного срока",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Измененный клиент",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ClientDog.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Клиент не найден",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ClientDog.class))
+                    )
+            })
+
+    @PutMapping("/days/{id}")
+    public ResponseEntity<ClientDog> changeDays(@Parameter(description = "Введите id клиента", example = "1")
+                                                @PathVariable Long id,
+                                                @Parameter(description = "1 - увеличить испытательный срок на 14 дней." +
+                                                        "2  - увеличить испытательный срок на 30 дней", example = "1")
+                                                @RequestParam Long numberDays) {
+        ClientDog clientDog = clientDogService.changeNumberOfReportDays(id, numberDays);
+        if (clientDog == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(clientDog);
+    }
+
+    @Operation(
+            summary = "Изменение статуса клиента",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Измененный клиент",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ClientDog.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Клиент не найден",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ClientDog.class))
+                    )
+            }
+    )
+    @PutMapping("/status/{id}")
+    public ResponseEntity<ClientDog> updateStatus(@Parameter(description = "Введите id клиента", example = "1")
+                                                  @PathVariable Long id,
+                                                  @Parameter(description = "Выберете статус клиента", example = "IN_SEARCH")
+                                                  @RequestParam (name = "Статус") ClientStatus status) {
+        ClientDog clientDog = clientDogService.updateStatus(id, status);
+        if (clientDog == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(clientDog);
+    }
+
+    @Operation(
+            summary = "Уведомление клиенту от волонтера",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Уведомляемый клиент",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ClientDog.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Клиент не найден",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ClientDog.class))
+                    )
+            }
+    )
+
+    @PutMapping("/probation/{id}")
+    public ResponseEntity<ClientDog> noticeToOwners(@Parameter(description = "Введите id клиента", example = "1")
+                                                    @PathVariable Long id,
+                                                    @Parameter(description = "1 - отчет плохо заполнен. " +
+                                                            "2  - прошел испытальельный срок. 3 - не прошел испытательный срок",
+                                                            example = "1")
+                                                    @RequestParam Long number) {
+        ClientDog clientDog = clientDogService.noticeToClient(id, number);
+        if (clientDog == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(clientDog);
     }
 }

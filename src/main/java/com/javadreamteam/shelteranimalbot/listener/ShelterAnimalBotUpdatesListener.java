@@ -140,13 +140,7 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                     case REPORT_STORE:
                         sendMessage(chatId, "Отправьте фото питомца с описанием в подписи к фото");
 
-//                        if (update.message() != null) {
-//                            if (update.message().photo() != null || update.message().caption() != null) {
-//                                sendReport.downloadReport(update);
-//                            } else {
-//                                shareMessage(update);
-//                            }
-//                        }
+
                         break;
 // Меню о приюте
                     case CONTACTS:
@@ -163,6 +157,10 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                         } catch (URISyntaxException | IOException e) {
                             throw new RuntimeException(e);
                         }
+                        break;
+
+                    case CAR_PASS:
+                        sendMessage(chatId, PASS);
                         break;
 // Меню как взять питомца
                     case HOW_ADOPT:

@@ -39,7 +39,8 @@ public class KeyboardConstant {
 
     public static final String CALL_VOLUNTEERS = "Волонтер вам поможет, мы перешлем ему Ваш запрос !";
 
-    public static final String HOW_TAKE_A_PET = "....";
+    public static final String PASS = "Для оформления пропуска позвоните по номеру:\n" +
+            "+7‒702‒123‒45‒77";
 
 
     public static final String REPORT_LIST = """

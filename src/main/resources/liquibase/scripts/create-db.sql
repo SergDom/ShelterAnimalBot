@@ -101,3 +101,7 @@ CREATE TABLE users
 -- changeset sergeyd:5
 ALTER TABLE report_cat DROP COLUMN health;
 ALTER TABLE report_dog DROP COLUMN health;
+
+-- changeset sergeyd:6
+ALTER TABLE client_dog ADD COLUMN report_days BIGINT;
+ALTER TABLE client_cat ADD COLUMN report_days BIGINT;

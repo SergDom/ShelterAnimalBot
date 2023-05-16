@@ -35,6 +35,9 @@ public class ClientDog {
     @JoinColumn(name = "dog_id")
     private Dog dog;
 
+    @Column(name = "report_days")
+    private Long reportDays;
+
 
     public ClientDog() {
     }
@@ -50,6 +53,14 @@ public class ClientDog {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.status = status;
+    }
+
+    public Long getReportDays() {
+        return reportDays;
+    }
+
+    public void setReportDays(Long reportDays) {
+        this.reportDays = reportDays;
     }
 
     public Long getId() {
@@ -114,12 +125,12 @@ public class ClientDog {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ClientDog clientDog = (ClientDog) o;
-        return Objects.equals(id, clientDog.id);
+        return Objects.equals(id, clientDog.id) && Objects.equals(name, clientDog.name) && Objects.equals(chatId, clientDog.chatId) && Objects.equals(phoneNumber, clientDog.phoneNumber) && Objects.equals(age, clientDog.age) && status == clientDog.status && Objects.equals(dog, clientDog.dog) && Objects.equals(reportDays, clientDog.reportDays);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, name, chatId, phoneNumber, age, status, dog, reportDays);
     }
 
     @Override
@@ -130,8 +141,9 @@ public class ClientDog {
                 ", chatId=" + chatId +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", age=" + age +
-                ", status='" + status + '\'' +
+                ", status=" + status +
                 ", dog=" + dog +
+                ", reportDays=" + reportDays +
                 '}';
     }
 }

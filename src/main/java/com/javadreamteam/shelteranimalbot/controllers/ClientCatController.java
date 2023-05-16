@@ -175,4 +175,105 @@ public class ClientCatController {
     public ResponseEntity getClientById(@RequestParam Long chatId) {
         return ResponseEntity.ok(clientCatService.getByChatId(chatId));
     }
+
+    @Operation(
+            summary = "Увеличение дней испытательного срока",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Измененный клиент",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ClientCat.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Клиент не найден",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ClientCat.class))
+                    )
+            })
+
+    @PutMapping("/days/{id}")
+    public ResponseEntity<ClientCat> changeDays(@Parameter(description = "Введите id клиента", example = "1")
+                                               @PathVariable Long id,
+                                               @Parameter(description = "1 - увеличить испытательный срок на 14 дней." +
+                                                       "2  - увеличить испытательный срок на 30 дней", example = "1")
+                                               @RequestParam Long numberDays) {
+        ClientCat clientCat = clientCatService.changeNumberOfReportDays(id, numberDays);
+        if (clientCat == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(clientCat);
+    }
+
+    @Operation(
+            summary = "Изменение статуса клиента",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Измененный клиент",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ClientCat.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Клиент не найден",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ClientCat.class))
+                    )
+            }
+    )
+    @PutMapping("/status/{id}")
+    public ResponseEntity<ClientCat> updateStatus(@Parameter(description = "Введите id клиента", example = "1")
+                                                 @PathVariable Long id,
+                                                 @Parameter(description = "Выберете статус клиента", example = "IN_SEARCH")
+                                                 @RequestParam (name = "Статус") ClientStatus status) {
+        ClientCat clientCat = clientCatService.updateStatus(id, status);
+        if (clientCat == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(clientCat);
+    }
+
+    @Operation(
+            summary = "Уведомление клиенту от волонтера",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Уведомляемый клиент",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ClientCat.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Клиент не найден",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ClientCat.class))
+                    )
+            }
+            )
+
+    @PutMapping("/probation/{id}")
+    public ResponseEntity<ClientCat> noticeToOwners(@Parameter(description = "Введите id клиента", example = "1")
+                                                   @PathVariable Long id,
+                                                   @Parameter(description = "1 - отчет плохо заполнен. " +
+                                                           "2  - прошел испытальельный срок. 3 - не прошел испытательный срок",
+                                                           example = "1")
+                                                   @RequestParam Long number) {
+        ClientCat clientCat = clientCatService.noticeToClient(id, number);
+        if (clientCat == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(clientCat);
+    }
+
 }

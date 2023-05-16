@@ -46,7 +46,7 @@ public class ClientCatControllerTest {
 
     @InjectMocks
     private ClientCatController clientCatController;
-    @InjectMocks
+    @MockBean
     private CatController catController;
 
     private final ClientCat client = new ClientCat();

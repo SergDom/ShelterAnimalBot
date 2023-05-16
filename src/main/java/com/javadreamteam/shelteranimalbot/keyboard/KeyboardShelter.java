@@ -45,7 +45,13 @@ public class KeyboardShelter {
     public static final String CONTACTS = "Контакты";
     public static final String SEND_CONTACTS = "Оставить контакты";
 
+    public static final String CAR_PASS = "Пропуск для автомобиля";
+
     public static final String TOP_MENU = "Вернуться в меню выбора приюта";
+
+
+
+
 
 
     public static final String RULES_SHELTER = "Правила поведения";
@@ -67,8 +73,6 @@ public class KeyboardShelter {
     public static final String CAT = "Хочу взять кошку !";
 
 
-    private static final long telegramChatVolunteer = 426343815L; //SergeyD
-
     private final TelegramBot telegramBot;
     private final VolunteerRepository volunteerRepository;
     private final VolunteerService volunteerService;
@@ -84,7 +88,7 @@ public class KeyboardShelter {
     }
 
     /**
-     * Главное Меню
+     * Главное Меню с выбором приюта
      *
      * @param chatId
      */
@@ -125,7 +129,8 @@ public class KeyboardShelter {
         logger.info("Method MenuInfoShelter has been run: {}, {}", chatId, "Вызвано Информация о приюте");
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(
                 new KeyboardButton(CONTACTS),
-                new KeyboardButton(RULES_SHELTER));
+                new KeyboardButton(RULES_SHELTER),
+                new KeyboardButton(CAR_PASS));
         replyKeyboardMarkup.addRow(
                 new KeyboardButton(SEND_CONTACTS).requestContact(true),
                 new KeyboardButton(REQUEST_VOLUNTEER));
@@ -153,7 +158,7 @@ public class KeyboardShelter {
     }
 
     /**
-     * Меню с рекомендациями
+     * Меню с рекомендациями для собак
      *
      * @param chatId
      */
@@ -174,6 +179,12 @@ public class KeyboardShelter {
         replyKeyboardMarkup.addRow(new KeyboardButton(MAIN_MENU));
         returnResponseReplyKeyboardMarkup(replyKeyboardMarkup, chatId, ADVISE);
     }
+
+    /**
+     * Меню с рекомендациями для кошек
+     *
+     * @param chatId
+     */
     public void menuAdviseAnimalCat(long chatId) {
         logger.info("Method menuAdviseAnimalCat has been run: {}, {}", chatId, "вызвали Советы и рекомендации");
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(
@@ -216,6 +227,13 @@ public class KeyboardShelter {
         telegramBot.execute(sendPhoto);
     }
 
+    /**
+     * Метод обработки документов и отправки в чат
+     *
+     * @param update
+     * @param name
+     * @param text
+     */
     public void sendDocument(Update update, String name, String text) throws IOException{
         String path = "src/main/resources/static/";
         File doc = new File(path + name);
@@ -225,17 +243,17 @@ public class KeyboardShelter {
     }
 
 
-    public void sendForwardMessage(Long chatId, Integer messageId) {
-        ForwardMessage forwardMessage = new ForwardMessage(volunteerService.getRandomVolunteer() ,chatId, messageId);
-        telegramBot.execute(forwardMessage);
-    }
-
-    public SendMessage volunteerMessage (Update update) {
-        logger.info("Launched method: volunteer, for user with id: " +
-                update.message().chat().id());
-
-        return new SendMessage(volunteerService.getRandomVolunteer(), "Волонтер скоро с вами свяжется");
-    }
+//    public void sendForwardMessage(Long chatId, Integer messageId) {
+//        ForwardMessage forwardMessage = new ForwardMessage(volunteerService.getRandomVolunteer() ,chatId, messageId);
+//        telegramBot.execute(forwardMessage);
+//    }
+//
+//    public SendMessage volunteerMessage (Update update) {
+//        logger.info("Launched method: volunteer, for user with id: " +
+//                update.message().chat().id());
+//
+//        return new SendMessage(volunteerService.getRandomVolunteer(), "Волонтер скоро с вами свяжется");
+//    }
 
 
     /**
