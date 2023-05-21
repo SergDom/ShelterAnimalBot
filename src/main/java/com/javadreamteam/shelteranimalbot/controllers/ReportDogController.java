@@ -64,7 +64,7 @@ public class ReportDogController {
                     )
             }
     )
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ReportDog> findReport(
             @Parameter(description = "Идентификатор отчета", example = "1")
             @PathVariable Long id) {
@@ -95,7 +95,7 @@ public class ReportDogController {
             }
     )
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<ReportDog> updateReport(@RequestBody ReportDog reportDog) {
 
         ReportDog updatedReportDog = reportDogService.updateReport(reportDog);
@@ -120,7 +120,7 @@ public class ReportDogController {
             }
     )
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ReportDog> deleteReport(
             @Parameter(description = "Идентификатор отчета")
             @PathVariable long id) {

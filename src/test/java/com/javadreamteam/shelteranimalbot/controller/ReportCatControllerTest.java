@@ -39,9 +39,6 @@ public class ReportCatControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private ClientCatController clientCatController;
-
-    @MockBean
     private ReportCatRepository repository;
 
     @MockBean
@@ -53,53 +50,73 @@ public class ReportCatControllerTest {
 
     @InjectMocks
     private ReportCatController controller;
-    private final JSONObject jsonOwner = new JSONObject();
-    private final JSONObject jsonAnimal = new JSONObject();
-    private final JSONObject jsonReport = new JSONObject();
+//    private final JSONObject jsonOwner = new JSONObject();
+//    private final JSONObject jsonAnimal = new JSONObject();
+//    private final JSONObject jsonReport = new JSONObject();
+//
+//    private final ReportCat report = new ReportCat();
+//    private final ClientCat clientCat = new ClientCat();
+//    private final Cat cat = new Cat();
 
-    private final ReportCat report = new ReportCat();
-    private final ClientCat clientCat = new ClientCat();
-    private final Cat cat = new Cat();
+
+    //    @BeforeEach
+    @Test
+    public void testList() throws Exception {
+        final long id = 1L;
+        final String ration = "ration";
+        final String info = "info";
+        final String habits = "habits";
+        final ReportStatus reportStatus = ReportStatus.APPROVED;
+        final Long chat_id = 12345L;
+        final LocalDate dateMessage = LocalDate.now();
+        final byte[] photo = new byte[]{0};
+        final ClientCat clientCat = new ClientCat(1L, "owner", "+123456789");
 
 
-    @BeforeEach
-    public void setup() throws Exception {
-//        final long id = 1L;
-//        final String ration = "ration";
-//        final String info = "info";
-//        final String habits = "habits";
-//        final ReportStatus reportStatus = ReportStatus.POSTED;
-//        final Long chat_id = 12345L;
-//        final LocalDate dateMessage = LocalDate.now();
-//        final byte[] photo = new byte[]{0};
-//        final ClientCat clientCat = new ClientCat(1L, "owner", "+1234567");
+        JSONObject owner = new JSONObject();
+        owner.put("chatId", 1L);
+        owner.put("name", "owner");
+        owner.put("phoneNumber", "+123456789");
 
-        clientCat.setChatId(1L);
-        clientCat.setName("Ivan");
-        clientCat.setPhoneNumber("+123456789");
+//        clientCat.setChatId(1L);
+//        clientCat.setName("Ivan");
+//        clientCat.setPhoneNumber("+123456789");
 
 //        cat.setId(1L);
 //        cat.setName("Mur-Mur");
 
 
-        report.setId(1L);
-        report.setRation("ration");
-        report.setInfo("Well Being");
-        report.setHabits("Good");
-        report.setLastMessage(LocalDate.now());
-        report.setClientCat(clientCat);
+//        report.setId(1L);
+//        report.setRation("ration");
+//        report.setInfo("Well Being");
+//        report.setHabits("Good");
+//        report.setLastMessage(LocalDate.now());
+//        report.setClientCat(clientCat);
+//
+//
+//        jsonOwner.put("chatId", report.getClientCat().getId());
+//        jsonOwner.put("name", report.getClientCat().getName());
+//        jsonOwner.put("phone", report.getClientCat().getPhoneNumber());
+
+        JSONObject jsonObject = new JSONObject();
 
 
-        jsonOwner.put("chatId", report.getClientCat().getId());
-        jsonOwner.put("name", report.getClientCat().getName());
-        jsonOwner.put("phone", report.getClientCat().getPhoneNumber());
+        jsonObject.put("id", id);
+        jsonObject.put("ration", ration);
+        jsonObject.put("info", info);
+        jsonObject.put("habits", habits);
+        jsonObject.put("reportStatus", reportStatus);
+        jsonObject.put("chatId", chat_id);
+        jsonObject.put("dateMessage", dateMessage);
+        jsonObject.put("photo", Arrays.toString(photo));
+        jsonObject.put("owner", owner);
 
-        jsonReport.put("id", report.getId());
-        jsonReport.put("ration", report.getRation());
-        jsonReport.put("info", report.getInfo());
-        jsonReport.put("habits", report.getHabits());
-        jsonReport.put("dateMessage", report.getLastMessage());
-        jsonReport.put("clientCat", report.getClientCat());
+//        jsonReport.put("id", report.getId());
+//        jsonReport.put("ration", report.getRation());
+//        jsonReport.put("info", report.getInfo());
+//        jsonReport.put("habits", report.getHabits());
+//        jsonReport.put("dateMessage", report.getLastMessage());
+//        jsonReport.put("clientCat", report.getClientCat());
 
 
 //
@@ -113,34 +130,69 @@ public class ReportCatControllerTest {
 //        jsonAnimal.put("photo", Arrays.toString(photo));
 //        jsonAnimal.put("clientCat", jsonOwner);
 //
-//        ReportCat report = new ReportCat(chat_id, photo, ration, info,
-//                habits, dateMessage);
-//        report.setId(id);
-//        report.setReportStatus(reportStatus);
-//        report.setClientCat(clientCat);
+        ReportCat report = new ReportCat(chat_id, photo, ration, info,
+                habits, dateMessage);
+        report.setId(id);
+        report.setReportStatus(reportStatus);
+        report.setClientCat(clientCat);
 
-
-        when(repository.findById(any())).thenReturn(Optional.of(report));
-        when(repository.findAll()).thenReturn(List.of(report));
         when(repository.save(any())).thenReturn(report);
+        when(repository.findById(any())).thenReturn(Optional.of(report));
+        when(repository.existsById(eq(id))).thenReturn(true);
+        when(clientCatRepository.findByChatId(anyLong())).thenReturn(clientCat);
 
-    }
+//        when(repository.findById(any())).thenReturn(Optional.of(report));
+//        when(repository.findAll()).thenReturn(List.of(report));
+//        when(repository.save(any())).thenReturn(report);
 
-    @Test
-    public void findReportById() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/report_cat/"))
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/report_cat/" + id)
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(report.getId()))
-                .andExpect(jsonPath("$.ration").value(report.getRation()))
-                .andExpect(jsonPath("$.info").value(report.getInfo()))
-                .andExpect(jsonPath("$.dateMessage").value(report.getLastMessage().toString()))
-                .andExpect(jsonPath("$.habits").value(report.getHabits()))
-                .andExpect(jsonPath("$.clientCat.id").value(report.getClientCat().getId()))
-                .andExpect(jsonPath("$.clientCat.name").value(report.getClientCat().getName()))
-                .andExpect(jsonPath("$.clientCat.phone").value(report.getClientCat().getPhoneNumber()));
-    }
+                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.ration").value(ration))
+                .andExpect(jsonPath("$.info").value(info))
+                .andExpect(jsonPath("$.habits").value(habits))
+                .andExpect(jsonPath("$.reportStatus").value(reportStatus.toString()))
+                .andExpect(jsonPath("$.chatId").value(chat_id))
+                .andExpect(jsonPath("$.dateMessage").value(dateMessage.toString()))
+                .andExpect(jsonPath("$.clientCatCat").value(clientCat));
 
-    //    @Test
+        report.setReportStatus(ReportStatus.REFUSED);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/report_cat/" + id)
+                        .content(jsonObject.toString())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .param("Статус", String.valueOf(ReportStatus.REFUSED)))
+
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.ration").value(ration))
+                .andExpect(jsonPath("$.info").value(info))
+                .andExpect(jsonPath("$.habits").value(habits))
+                .andExpect(jsonPath("$.reportStatus").value(ReportStatus.REFUSED.toString()))
+                .andExpect(jsonPath("$.chatId").value(chat_id))
+                .andExpect(jsonPath("$.dateMessage").value(dateMessage.toString()))
+                .andExpect(jsonPath("$.clientCatCat").value(clientCat));
+
+
+//    @Test
+//    public void findReportById() throws Exception {
+//        mockMvc.perform(MockMvcRequestBuilders.get("/report_cat/" + report.getId()))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.id").value(report.getId()))
+//                .andExpect(jsonPath("$.ration").value(report.getRation()))
+//                .andExpect(jsonPath("$.info").value(report.getInfo()))
+//                .andExpect(jsonPath("$.dateMessage").value(report.getLastMessage().toString()))
+//                .andExpect(jsonPath("$.habits").value(report.getHabits()))
+//                .andExpect(jsonPath("$.clientCat.id").value(report.getClientCat().getId()))
+//                .andExpect(jsonPath("$.clientCat.name").value(report.getClientCat().getName()))
+//                .andExpect(jsonPath("$.clientCat.phone").value(report.getClientCat().getPhoneNumber()));
+//    }
+
+        //    @Test
 //    public void createReport() throws Exception {
 //        mockMvc.perform(MockMvcRequestBuilders
 //                        .get("/report_cat/")
@@ -177,18 +229,16 @@ public class ReportCatControllerTest {
 //                .andExpect(jsonPath("$.dateMessage").value(dateMessage.toString()))
 //                .andExpect(jsonPath("$.ownerCat").value(ownerCat));
 //    }
-//
-    @Test
-    public void deleteById() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/report_cat/1"))
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/report_cat/" + id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/report_cat")
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
-
-//
-//        mockMvc.perform(MockMvcRequestBuilders
-//                        .get("/report_cat")
-//                        .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk());
-//    }
-
 }

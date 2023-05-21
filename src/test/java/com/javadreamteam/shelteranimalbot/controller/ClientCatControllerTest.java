@@ -54,6 +54,7 @@ public class ClientCatControllerTest {
     Cat cat = new Cat();
     private final JSONObject jsonClient = new JSONObject();
 
+
     @BeforeEach
     public void setup() throws Exception {
 
@@ -77,6 +78,7 @@ public class ClientCatControllerTest {
 //        jsonClient.put("age", cat.getAge());
 //        jsonClient.put("breed", cat.getBreed());
 //        jsonClient.put("cat", client.getCat());
+
 
 
         when(clientCatService.create(client, ClientStatus.IN_SEARCH)).thenReturn(client);
@@ -144,6 +146,27 @@ public class ClientCatControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
+    @Test
+    public void updatedClientDays() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/clients/cat/days/{id}", 1))
+                        .andExpect(status().isBadRequest());
 
+    }
+
+    @Test
+    public void updatedClientStatus() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/clients/cat/status/{id}", 1))
+                .andExpect(status().isBadRequest());
+
+    }
+    @Test
+    public void updatedClientProbation() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/clients/cat/probation/{id}", 1))
+                .andExpect(status().isBadRequest());
+
+    }
 }
 

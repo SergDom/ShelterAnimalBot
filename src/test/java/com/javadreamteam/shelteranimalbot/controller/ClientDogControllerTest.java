@@ -102,7 +102,7 @@ public class ClientDogControllerTest {
 
     @Test
     public void updateClient() throws Exception {
-        client.setName("New name");
+
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/clients")
                         .content(jsonClient.toString())
@@ -112,7 +112,8 @@ public class ClientDogControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.chatId").value(client.getChatId()))
                 .andExpect(jsonPath("$.name").value(client.getName()))
-                .andExpect(jsonPath("$.phoneNumber").value(client.getPhoneNumber()));
+                .andExpect(jsonPath("$.phoneNumber").value(client.getPhoneNumber()))
+                .andExpect(jsonPath("$.status").value(client.getStatus().toString()));
 
     }
 
@@ -138,6 +139,30 @@ public class ClientDogControllerTest {
                         .get("/clients/find-all-records")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+
+    @Test
+    public void updatedClientDays() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/clients/days/{id}", 1))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    public void updatedClientStatus() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/clients/status/{id}", 1))
+                .andExpect(status().isBadRequest());
+
+    }
+    @Test
+    public void updatedClientProbation() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/clients/probation/{id}", 1))
+                .andExpect(status().isBadRequest());
+
     }
 
 }

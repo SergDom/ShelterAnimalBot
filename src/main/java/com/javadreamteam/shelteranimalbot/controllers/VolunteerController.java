@@ -60,7 +60,7 @@ public class VolunteerController {
                     )
             }
     )
-    @GetMapping("{volunteerId}")
+    @GetMapping("/{volunteerId}")
     public ResponseEntity<Volunteer> readVolunteer(@PathVariable long volunteerId) {
         Volunteer findVolunteer = volunteerService.getById(volunteerId);
         if (findVolunteer == null) {

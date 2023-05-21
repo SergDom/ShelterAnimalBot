@@ -268,13 +268,12 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                     case REQUEST_VOLUNTEER:
                         sendMessage(chatId, CALL_VOLUNTEERS);
                         keyboardShelter.callVolunteer(update);
-//                        keyboardShelter.sendForwardMessage(chatId, messageId);
+
                         break;
 
                     case SEND_CONTACTS:
                         sendMessage(chatId, "Оставьте ваши контактные данные");
-//                        if (update.message() != null && update.message().contact() != null) {
-//                        shareContactInDB(update);}
+
                         break;
 
                     case MAIN_MENU:
