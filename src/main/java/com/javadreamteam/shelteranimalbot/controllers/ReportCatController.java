@@ -1,5 +1,6 @@
 package com.javadreamteam.shelteranimalbot.controllers;
 
+import com.javadreamteam.shelteranimalbot.keyboard.ReportStatus;
 import com.javadreamteam.shelteranimalbot.model.ReportCat;
 import com.javadreamteam.shelteranimalbot.model.ReportDog;
 import com.javadreamteam.shelteranimalbot.service.ReportCatService;
@@ -98,13 +99,15 @@ public class ReportCatController {
     )
 
     @PutMapping
-    public ResponseEntity<ReportCat> updateReport(@RequestBody ReportCat reportCat) {
-
-        ReportCat updatedReportCat = reportCatService.updateReport(reportCat);
-        if (updatedReportCat == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(updatedReportCat);
+    public ResponseEntity<ReportCat> updateReport(
+        @PathVariable Long id,
+        @Parameter(description = "Введите статус отчета")
+        @RequestParam(name = "Статус") ReportStatus status){
+            ReportCat reportCat = reportCatService.updateReport(id, status);
+            if(reportCat == null){
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(reportCat);
     }
 
     @Operation(

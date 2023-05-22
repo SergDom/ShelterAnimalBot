@@ -2,6 +2,7 @@ package com.javadreamteam.shelteranimalbot.service;
 
 import com.javadreamteam.shelteranimalbot.exceptions.ReportException;
 import com.javadreamteam.shelteranimalbot.keyboard.ReportStatus;
+import com.javadreamteam.shelteranimalbot.model.ReportCat;
 import com.javadreamteam.shelteranimalbot.model.ReportDog;
 import com.javadreamteam.shelteranimalbot.repository.ClientDogRepository;
 import com.javadreamteam.shelteranimalbot.repository.ReportDogRepository;
@@ -79,22 +80,24 @@ public class ReportDogService {
     /**
      * Изменение данных отчета в БД
      * Используется метод репозитория {@link ReportDogRepository#save(Object)}
-     * @param reportDog отчет
+     * @param id id отчета
+     * @param status статус отчета
      * @throws ReportException, если отчет не найден в БД
      * @return измененный отчет
      */
-    public ReportDog updateReport (ReportDog reportDog){
-        logger.info("Was invoked method - updateReport {}", reportDog);
-        if(reportDog.getId() != null) {
-            if(findReportById(reportDog.getId()) !=null){
-                reportDogRepository.save(reportDog);
+    public ReportDog updateReport (Long id, ReportStatus status){
+        logger.info("Was invoked method - updateReport {}", id);
+        if(id != null) {
+            ReportDog reportDog = findReportById(id);
+            if(reportDog !=null){
+                reportDog.setReportStatus(status);
+                return reportDogRepository.save(reportDog);
             }
         }
-        else {
-            logger.error("Request report is not found");
-            throw new ReportException();}
-        return reportDog;
-        }
+        logger.error("Request report is not found");
+        throw new ReportException();
+
+    }
 
     /**
      * Метод удаляет сущность {@link ReportDog} по-указанному id.

@@ -1,5 +1,6 @@
 package com.javadreamteam.shelteranimalbot.controllers;
 
+import com.javadreamteam.shelteranimalbot.keyboard.ReportStatus;
 import com.javadreamteam.shelteranimalbot.model.ReportDog;
 import com.javadreamteam.shelteranimalbot.service.ReportDogService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,7 +22,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping("report_dog")
 public class ReportDogController {
-    private  final ReportDogService reportDogService;
+    private final ReportDogService reportDogService;
 
     public ReportDogController(ReportDogService reportDogService) {
         this.reportDogService = reportDogService;
@@ -42,7 +43,7 @@ public class ReportDogController {
     )
 
     @PostMapping
-    public ReportDog createReport(@RequestBody ReportDog reportDog){
+    public ReportDog createReport(@RequestBody ReportDog reportDog) {
         return reportDogService.createReport(reportDog);
     }
 
@@ -96,13 +97,15 @@ public class ReportDogController {
     )
 
     @PutMapping("/{id}")
-    public ResponseEntity<ReportDog> updateReport(@RequestBody ReportDog reportDog) {
-
-        ReportDog updatedReportDog = reportDogService.updateReport(reportDog);
-        if (updatedReportDog == null) {
+    public ResponseEntity<ReportDog> updateReport(
+            @PathVariable Long id,
+            @Parameter(description = "Введите статус отчета")
+            @RequestParam(name = "Статус") ReportStatus status) {
+        ReportDog reportDog = reportDogService.updateReport(id, status);
+        if (reportDog == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(updatedReportDog);
+        return ResponseEntity.ok(reportDog);
     }
 
     @Operation(
