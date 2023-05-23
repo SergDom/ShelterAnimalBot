@@ -20,7 +20,7 @@ import java.util.Collection;
  * работает с сущностью {@link ReportDogService}.
  */
 @RestController
-@RequestMapping("report_dog")
+@RequestMapping("/report_dog")
 public class ReportDogController {
     private final ReportDogService reportDogService;
 
@@ -28,24 +28,24 @@ public class ReportDogController {
         this.reportDogService = reportDogService;
     }
 
-    @Operation(
-            summary = "Добавление отчета в БД",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "Добавленный отчет",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ReportDog.class)
-                            )
-                    )
-            }
-    )
-
-    @PostMapping
-    public ReportDog createReport(@RequestBody ReportDog reportDog) {
-        return reportDogService.createReport(reportDog);
-    }
+//    @Operation(
+//            summary = "Добавление отчета в БД",
+//            responses = {
+//                    @ApiResponse(
+//                            responseCode = "200",
+//                            description = "Добавленный отчет",
+//                            content = @Content(
+//                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+//                                    schema = @Schema(implementation = ReportDog.class)
+//                            )
+//                    )
+//            }
+//    )
+//
+//    @PostMapping
+//    public ReportDog createReport(@RequestBody ReportDog reportDog) {
+//        return reportDogService.createReport(reportDog);
+//    }
 
 
     @Operation(

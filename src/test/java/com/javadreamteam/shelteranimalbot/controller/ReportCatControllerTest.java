@@ -14,12 +14,16 @@ import com.javadreamteam.shelteranimalbot.service.ReportCatService;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -33,7 +37,9 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ReportCatController.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class ReportCatControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -50,6 +56,7 @@ public class ReportCatControllerTest {
 
     @InjectMocks
     private ReportCatController controller;
+
 //    private final JSONObject jsonOwner = new JSONObject();
 //    private final JSONObject jsonAnimal = new JSONObject();
 //    private final JSONObject jsonReport = new JSONObject();
@@ -136,8 +143,8 @@ public class ReportCatControllerTest {
         report.setReportStatus(reportStatus);
         report.setClientCat(clientCat);
 
-        when(repository.save(any())).thenReturn(report);
-        when(repository.findById(any())).thenReturn(Optional.of(report));
+        when(repository.save(any(ReportCat.class))).thenReturn(report);
+        when(repository.findById(any(Long.class))).thenReturn(Optional.of(report));
         when(repository.existsById(eq(id))).thenReturn(true);
         when(clientCatRepository.findByChatId(anyLong())).thenReturn(clientCat);
 

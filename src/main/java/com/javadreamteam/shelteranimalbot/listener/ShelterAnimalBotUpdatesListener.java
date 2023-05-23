@@ -218,51 +218,41 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
                         break;
 
                     case PUPPY_INFO:
-                        if (userRepository.findUserByChatId(update.message().chat().id()).isDog()) {
-                            try {
+                        try {
+                            if (userRepository.findUserByChatId(update.message().chat().id()).isDog()) {
                                 keyboardShelter.sendDocument(update, "/advice/" + "PUPPY_INFO.pdf", PUPPY);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        } else {
-                            try {
+                            } else {
                                 keyboardShelter.sendDocument(update, "/advice/" + "PUPPY_CAT_INFO.pdf", PUPPY);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
                             }
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
                         }
                         break;
 
                     case ADULT_INFO:
-                        if (userRepository.findUserByChatId(update.message().chat().id()).isDog()) {
-                            try {
+                        try {
+                            if (userRepository.findUserByChatId(update.message().chat().id()).isDog()) {
                                 keyboardShelter.sendDocument(update, "/advice/" + "ADULT_INFO.pdf", ADULT);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        } else {
-                            try {
+                            } else {
                                 keyboardShelter.sendDocument(update, "/advice/" + "ADULT_CAT.pdf", ADULT);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
                             }
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
                         }
+
                         break;
 
                     case DISABLED_INFO:
-                        if (userRepository.findUserByChatId(update.message().chat().id()).isDog()) {
-                            try {
+                        try {
+                            if (userRepository.findUserByChatId(update.message().chat().id()).isDog()) {
                                 keyboardShelter.sendDocument(update, "/advice/" + "DISABLED_DOG.pdf", DISABLE_PET);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        } else {
-                            try {
+                            } else {
                                 keyboardShelter.sendDocument(update, "/advice/" + "DISABLED_CAT.pdf", DISABLE_PET);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
                             }
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
                         }
+
                         break;
 // Общие кнопки
                     case REQUEST_VOLUNTEER:
@@ -318,7 +308,6 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
     }
 
 
-
     public void shareMessage(Update update) {
         if (update.message().contact() != null) {
             shareContactInDB(update);
@@ -328,19 +317,19 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
         }
     }
 
-    private void shareContactInDB(Update update){
+    private void shareContactInDB(Update update) {
         logger.info("Created owner in database: " +
                 update.message().chat().id());
 
         Long chatId = update.message().chat().id();
 
         if (userRepository.findUserByChatId(update.message().chat().id()).isDog() &&
-                clientDogRepository.findByChatId(chatId) == null){
+                clientDogRepository.findByChatId(chatId) == null) {
             clientDogService.create(new ClientDog(chatId,
                             update.message().contact().firstName(),
                             update.message().contact().phoneNumber()),
-                    ClientStatus.IN_SEARCH);}
-        else if(clientCatRepository.findByChatId(chatId) == null){
+                    ClientStatus.IN_SEARCH);
+        } else if (clientCatRepository.findByChatId(chatId) == null) {
             clientCatService.create(new ClientCat(chatId,
                             update.message().contact().firstName(),
                             update.message().contact().phoneNumber()),

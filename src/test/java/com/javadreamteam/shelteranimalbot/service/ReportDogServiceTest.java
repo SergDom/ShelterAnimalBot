@@ -113,7 +113,7 @@ class ReportDogServiceTest {
         updatedReport.setLastMessage(LocalDate.now());
         updatedReport.setReportStatus(ReportStatus.POSTED);
 
-        ReportDog result = reportDogService.updateReport(updatedReport);
+        ReportDog result = reportDogService.updateReport(1L, ReportStatus.POSTED);
 
         // Проверка результата
         assertEquals(updatedReport, result);

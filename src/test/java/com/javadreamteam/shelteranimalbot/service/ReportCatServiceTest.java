@@ -124,13 +124,15 @@ class ReportCatServiceTest {
         Long id = 1L;
         ReportCat report = new ReportCat();
         report.setId(id);
+        report.setReportStatus(ReportStatus.APPROVED);
+
 
         // Задаем поведение mock объекта reportRepository
         when(reportRepository.findById(id)).thenReturn(Optional.of(report));
         when(reportRepository.save(report)).thenReturn(report);
 
         // Вызываем метод updateReport()
-        ReportCat updatedReport = reportService.updateReport(report);
+        ReportCat updatedReport = reportService.updateReport(1L, ReportStatus.APPROVED);
 
         // Проверяем, что обновленный отчет не null и содержит правильный id
         assertNotNull(updatedReport);

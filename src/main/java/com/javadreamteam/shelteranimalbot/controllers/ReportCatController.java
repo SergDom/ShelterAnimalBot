@@ -22,7 +22,7 @@ import java.util.Collection;
  * работает с сущностью {@link ReportCatService}.
  */
 @RestController
-@RequestMapping("report_cat")
+@RequestMapping("/report_cat")
 public class ReportCatController {
     private  final ReportCatService reportCatService;
 
@@ -30,24 +30,24 @@ public class ReportCatController {
         this.reportCatService = reportCatService;
     }
 
-    @Operation(
-            summary = "Добавление отчета в БД",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "Добавленный отчет",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ReportCat.class)
-                            )
-                    )
-            }
-    )
-
-    @PostMapping
-    public ReportCat createReport(@RequestBody ReportCat ReportCat){
-        return reportCatService.createReport(ReportCat);
-    }
+//    @Operation(
+//            summary = "Добавление отчета в БД",
+//            responses = {
+//                    @ApiResponse(
+//                            responseCode = "200",
+//                            description = "Добавленный отчет",
+//                            content = @Content(
+//                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+//                                    schema = @Schema(implementation = ReportCat.class)
+//                            )
+//                    )
+//            }
+//    )
+//
+//    @PostMapping
+//    public ReportCat createReport(@RequestBody ReportCat ReportCat){
+//        return reportCatService.createReport(ReportCat);
+//    }
 
 
     @Operation(
@@ -67,7 +67,7 @@ public class ReportCatController {
                     )
             }
     )
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ReportCat> findReport(
             @Parameter(description = "Идентификатор отчета", example = "1")
             @PathVariable Long id) {
@@ -98,7 +98,7 @@ public class ReportCatController {
             }
     )
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<ReportCat> updateReport(
         @PathVariable Long id,
         @Parameter(description = "Введите статус отчета")
@@ -125,7 +125,7 @@ public class ReportCatController {
             }
     )
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ReportCat> deleteReport(
             @Parameter(description = "Идентификатор отчета")
             @PathVariable long id) {
