@@ -61,6 +61,16 @@ public class ClientCat {
         this.phoneNumber = phoneNumber;
     }
 
+    public ClientCat(Long id, String name, Long chatId, String phoneNumber, Integer age, ClientStatus status, Long reportDays) {
+        this.id = id;
+        this.name = name;
+        this.chatId = chatId;
+        this.phoneNumber = phoneNumber;
+        this.age = age;
+        this.status = status;
+        this.reportDays = reportDays;
+    }
+
     public Long getReportDays() {
         return reportDays;
     }

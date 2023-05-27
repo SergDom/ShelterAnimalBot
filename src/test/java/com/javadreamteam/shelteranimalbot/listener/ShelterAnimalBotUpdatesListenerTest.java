@@ -43,6 +43,15 @@ class ShelterAnimalBotUpdatesListenerTest {
     }
 
     @Test
+    public void carPassTest() {
+        var update = BotTestUtils.getUpdate(CHAT_ID, CAR_PASS);
+        var sendMessage = BotTestUtils.getSendMessage(telegramBot, listener, update);
+        assertNotNull(sendMessage);
+        assertEquals(CHAT_ID, (Long) sendMessage.getParameters().get("chat_id"));
+        assertEquals(PASS, sendMessage.getParameters().get("text"));
+    }
+
+    @Test
     public void reportFromCommandTest() {
         var update = BotTestUtils.getUpdate(CHAT_ID, REPORT_FORM);
         var sendMessage = BotTestUtils.getSendMessage(telegramBot, listener, update);

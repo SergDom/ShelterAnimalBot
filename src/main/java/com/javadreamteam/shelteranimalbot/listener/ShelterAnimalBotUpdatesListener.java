@@ -302,20 +302,20 @@ public class ShelterAnimalBotUpdatesListener implements UpdatesListener {
         telegramBot.execute(message);
     }
 
-    public void sendForwardMessage(Long chatId, Integer messageId) {
-        ForwardMessage forwardMessage = new ForwardMessage(telegramChatVolunteer, chatId, messageId);
-        telegramBot.execute(forwardMessage);
-    }
-
-
-    public void shareMessage(Update update) {
-        if (update.message().contact() != null) {
-            shareContactInDB(update);
-            return;
-        } else if (update.message().text() == null) {
-            return;
-        }
-    }
+//    public void sendForwardMessage(Long chatId, Integer messageId) {
+//        ForwardMessage forwardMessage = new ForwardMessage(telegramChatVolunteer, chatId, messageId);
+//        telegramBot.execute(forwardMessage);
+//    }
+//
+//
+//    public void shareMessage(Update update) {
+//        if (update.message().contact() != null) {
+//            shareContactInDB(update);
+//            return;
+//        } else if (update.message().text() == null) {
+//            return;
+//        }
+//    }
 
     private void shareContactInDB(Update update) {
         logger.info("Created owner in database: " +

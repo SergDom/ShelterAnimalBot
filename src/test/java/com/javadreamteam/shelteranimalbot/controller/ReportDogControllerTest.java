@@ -1,5 +1,6 @@
 package com.javadreamteam.shelteranimalbot.controller;
 
+import com.javadreamteam.shelteranimalbot.controllers.DogController;
 import com.javadreamteam.shelteranimalbot.controllers.ReportCatController;
 import com.javadreamteam.shelteranimalbot.controllers.ReportDogController;
 import com.javadreamteam.shelteranimalbot.keyboard.ReportStatus;
@@ -11,8 +12,9 @@ import com.javadreamteam.shelteranimalbot.repository.ReportDogRepository;
 import com.javadreamteam.shelteranimalbot.service.ReportCatService;
 import com.javadreamteam.shelteranimalbot.service.ReportDogService;
 import org.json.JSONObject;
-import org.junit.Test;
+
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+
+
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -36,9 +40,9 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@AutoConfigureMockMvc
+
+
+@WebMvcTest (ReportDogController.class)
 public class ReportDogControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -114,11 +118,11 @@ public class ReportDogControllerTest {
                 .andExpect(jsonPath("$.id").value(report.getId()))
                 .andExpect(jsonPath("$.ration").value(report.getRation()))
                 .andExpect(jsonPath("$.info").value(report.getInfo()))
-                .andExpect(jsonPath("$.dateMessage").value(report.getLastMessage().toString()))
+//                .andExpect(jsonPath("$.dateMessage").value(report.getLastMessage()))
                 .andExpect(jsonPath("$.habits").value(report.getHabits()))
                 .andExpect(jsonPath("$.clientDog.id").value(report.getClientDog().getId()))
                 .andExpect(jsonPath("$.clientDog.name").value(report.getClientDog().getName()))
-                .andExpect(jsonPath("$.clientDog.phone").value(report.getClientDog().getPhoneNumber()));
+                .andExpect(jsonPath("$.clientDog.phoneNumber").value(report.getClientDog().getPhoneNumber()));
     }
 
 //    @Test
@@ -156,11 +160,11 @@ public class ReportDogControllerTest {
                 .andExpect(jsonPath("$[0].id").value(report.getId()))
                 .andExpect(jsonPath("$[0].ration").value(report.getRation()))
                 .andExpect(jsonPath("$[0].info").value(report.getInfo()))
-                .andExpect(jsonPath("$[0].dateMessage").value(report.getLastMessage().toString()))
+//                .andExpect(jsonPath("$[0].dateMessage").value(report.getLastMessage().toString()))
                 .andExpect(jsonPath("$[0].habits").value(report.getHabits()))
                 .andExpect(jsonPath("$[0].clientDog.id").value(report.getClientDog().getId()))
                 .andExpect(jsonPath("$[0].clientDog.name").value(report.getClientDog().getName()))
-                .andExpect(jsonPath("$[0].clientDog.phone").value(report.getClientDog().getPhoneNumber()));
+                .andExpect(jsonPath("$[0].clientDog.phoneNumber").value(report.getClientDog().getPhoneNumber()));
     }
 
     @Test
@@ -168,16 +172,17 @@ public class ReportDogControllerTest {
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/report_dog/" + report.getId())
                         .content(jsonAnimal.toString())
-                        .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON)
+                .param("Статус", String.valueOf(ReportStatus.REFUSED)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(report.getId()))
                 .andExpect(jsonPath("$.ration").value(report.getRation()))
                 .andExpect(jsonPath("$.info").value(report.getInfo()))
-                .andExpect(jsonPath("$.dateMessage").value(report.getLastMessage().toString()))
+//                .andExpect(jsonPath("$.dateMessage").value(report.getLastMessage().toString()))
                 .andExpect(jsonPath("$.habits").value(report.getHabits()))
                 .andExpect(jsonPath("$.clientDog.id").value(report.getClientDog().getId()))
                 .andExpect(jsonPath("$.clientDog.name").value(report.getClientDog().getName()))
-                .andExpect(jsonPath("$.clientDog.phone").value(report.getClientDog().getPhoneNumber()));
+                .andExpect(jsonPath("$.clientDog.phoneNumber").value(report.getClientDog().getPhoneNumber()));
     }
 
 

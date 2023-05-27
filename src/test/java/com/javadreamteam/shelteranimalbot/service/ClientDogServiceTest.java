@@ -1,5 +1,6 @@
 package com.javadreamteam.shelteranimalbot.service;
 
+import com.javadreamteam.shelteranimalbot.exceptions.ClientException;
 import com.javadreamteam.shelteranimalbot.keyboard.ClientStatus;
 import com.javadreamteam.shelteranimalbot.keyboard.ReportStatus;
 import com.javadreamteam.shelteranimalbot.model.*;
@@ -235,4 +236,51 @@ class ClientDogServiceTest {
 
         Assert.assertEquals(clientDog, result);
     }
+    @Test
+    void updateOwnerCatTest() {
+
+        ClientDog clientDog = new ClientDog();
+        clientDog.setId(1L);
+        clientDog.setName("Alice");
+        clientDog.setChatId(12345L);
+        clientDog.setPhoneNumber("1234567890");
+        clientDog.setAge(18);
+        clientDog.setStatus(ClientStatus.APPROVED);
+        clientDog.setReportDays(14L);
+
+        when(repository.findById(any(Long.class))).thenReturn(Optional.ofNullable(clientDog));
+        when(repository.save(any(ClientDog.class))).thenReturn(clientDog);
+        clientDog.setId(2L);
+        ClientDog expected = clientDog;
+        assertEquals(expected,service.update(clientDog));
+    }
+
+    @Test
+    public void shouldGetExceptionWhenUpdate(){
+        ClientDog clientDog = new ClientDog();
+        clientDog.setId(null);
+        assertThrows(ClientException.class,
+                () -> service.update(clientDog));
+    }
+
+    @Test
+    public void shouldGetExceptionsWhenNotFound(){
+        when(repository.findById(anyLong())).thenThrow(new ClientException());
+        assertThrows(ClientException.class, () -> service.getById(anyLong()));
+    }
+    @Test
+    void updateOwnerCatByStatusTest() {
+        ClientDog clientDog = new ClientDog();
+        clientDog.setChatId(12345L);
+        clientDog.setStatus(ClientStatus.IN_SEARCH);
+
+
+        when(repository.findById(any(Long.class))).thenReturn(Optional.of(clientDog));
+        when(repository.save(any(ClientDog.class))).thenReturn(clientDog);
+        clientDog.setStatus(ClientStatus.APPROVED);
+        ClientDog expected = clientDog;
+        assertEquals(expected, service.updateStatus(clientDog.getChatId(), ClientStatus.APPROVED));
+    }
+
+
 }

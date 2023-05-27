@@ -1,5 +1,6 @@
 package com.javadreamteam.shelteranimalbot.service;
 
+import com.javadreamteam.shelteranimalbot.exceptions.ClientException;
 import com.javadreamteam.shelteranimalbot.keyboard.ClientStatus;
 import com.javadreamteam.shelteranimalbot.keyboard.ReportStatus;
 import com.javadreamteam.shelteranimalbot.model.Cat;
@@ -235,6 +236,51 @@ class ClientCatServiceTest {
         ClientCat result = service.getByChatId(chatId);
 
         Assert.assertEquals(clientCat, result);
+    }
+    @Test
+    void updateOwnerCatTest() {
+
+        ClientCat clientCat = new ClientCat();
+        clientCat.setId(1L);
+        clientCat.setName("Alice");
+        clientCat.setChatId(12345L);
+        clientCat.setPhoneNumber("1234567890");
+        clientCat.setAge(18);
+        clientCat.setStatus(ClientStatus.APPROVED);
+        clientCat.setReportDays(14L);
+
+        when(repository.findById(any(Long.class))).thenReturn(Optional.ofNullable(clientCat));
+        when(repository.save(any(ClientCat.class))).thenReturn(clientCat);
+        clientCat.setId(2L);
+        ClientCat expected = clientCat;
+        assertEquals(expected,service.update(clientCat));
+    }
+
+    @Test
+    public void shouldGetExceptionWhenUpdate(){
+        ClientCat clientCat = new ClientCat();
+        clientCat.setId(null);
+        assertThrows(ClientException.class,
+                () -> service.update(clientCat));
+    }
+
+    @Test
+    public void shouldGetExceptionsWhenNotFound(){
+        when(repository.findById(anyLong())).thenThrow(new ClientException());
+        assertThrows(ClientException.class, () -> service.getById(anyLong()));
+    }
+    @Test
+    void updateOwnerCatByStatusTest() {
+        ClientCat clientCat = new ClientCat();
+        clientCat.setChatId(12345L);
+        clientCat.setStatus(ClientStatus.IN_SEARCH);
+
+
+        when(repository.findById(any(Long.class))).thenReturn(Optional.of(clientCat));
+        when(repository.save(any(ClientCat.class))).thenReturn(clientCat);
+        clientCat.setStatus(ClientStatus.APPROVED);
+        ClientCat expected = clientCat;
+        assertEquals(expected, service.updateStatus(clientCat.getChatId(), ClientStatus.APPROVED));
     }
 
 }

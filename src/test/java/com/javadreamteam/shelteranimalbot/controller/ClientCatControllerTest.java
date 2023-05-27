@@ -2,6 +2,7 @@ package com.javadreamteam.shelteranimalbot.controller;
 
 import com.javadreamteam.shelteranimalbot.controllers.*;
 import com.javadreamteam.shelteranimalbot.keyboard.ClientStatus;
+import com.javadreamteam.shelteranimalbot.keyboard.ReportStatus;
 import com.javadreamteam.shelteranimalbot.model.Cat;
 import com.javadreamteam.shelteranimalbot.model.ClientCat;
 import com.javadreamteam.shelteranimalbot.model.ClientDog;
@@ -92,6 +93,7 @@ public class ClientCatControllerTest {
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/clients/cat")
                         .content(jsonClient.toString())
+                        .param("Статус", String.valueOf(ClientStatus.PROBATION))
                         .contentType(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isOk())

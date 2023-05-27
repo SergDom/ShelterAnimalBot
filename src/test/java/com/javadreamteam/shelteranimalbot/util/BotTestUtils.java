@@ -5,6 +5,7 @@ import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.request.SendDocument;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.mockito.ArgumentCaptor;
 
@@ -32,4 +33,5 @@ public class BotTestUtils {
         listener.process(List.of(update));
         return requestCaptor.getValue();
     }
+
 }
